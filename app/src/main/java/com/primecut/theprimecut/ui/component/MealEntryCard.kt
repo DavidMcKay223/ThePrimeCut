@@ -34,11 +34,26 @@ fun MealEntryCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = mealEntryItem.mealName,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = VividBlue
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = mealEntryItem.mealName,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = VividBlue
+                    )
+                    IconButton(
+                        onClick = { onDelete(mealEntryItem) },
+                        modifier = Modifier.padding(start = 8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete",
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -80,17 +95,6 @@ fun MealEntryCard(
                         color = OffWhite
                     )
                 }
-            }
-
-            IconButton(
-                onClick = { onDelete(mealEntryItem) },
-                modifier = Modifier.padding(start = 8.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete",
-                    tint = MaterialTheme.colorScheme.error
-                )
             }
         }
     }

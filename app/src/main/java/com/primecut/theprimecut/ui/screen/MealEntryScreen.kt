@@ -23,6 +23,10 @@ import java.time.ZoneId
 import java.time.ZoneOffset
 import java.util.*
 import com.primecut.theprimecut.ui.component.MealEntryCard
+import android.app.DatePickerDialog
+import androidx.activity.ComponentActivity
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +40,7 @@ fun MealEntryScreen(
     val mealEntries by mealEntryViewModel.mealEntries.collectAsState()
     val foodItems by foodItemViewModel.foodItems.collectAsState()
 
+    val calendar = remember { Calendar.getInstance() }
     var selectedDate by remember {
         mutableStateOf(SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date()))
     }
@@ -43,7 +48,6 @@ fun MealEntryScreen(
     var foodName by remember { mutableStateOf("") }
     var portion by remember { mutableStateOf("1") }
 
-    // For autocomplete
     var foodExpanded by remember { mutableStateOf(false) }
     var filteredFoodItems by remember { mutableStateOf(foodItems.map { it.recipeName }) }
 
@@ -53,38 +57,36 @@ fun MealEntryScreen(
             .padding(16.dp)
     ) {
         Column {
-            Row(Modifier.fillMaxWidth()) {
-                OutlinedTextField(
-                    value = selectedDate,
-                    onValueChange = {},
-                    label = { Text("Date") },
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 8.dp)
-                        .clickable {
-                            val initialLocalDate = LocalDate.parse(selectedDate)
-                            val initialSelectionMillis =
-                                initialLocalDate.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
-
-                            val picker = MaterialDatePicker.Builder.datePicker()
-                                .setSelection(initialSelectionMillis)
-                                .build()
-
-                            picker.addOnPositiveButtonClickListener { utcMillis ->
-                                val newLocalDate = Instant.ofEpochMilli(utcMillis)
-                                    .atZone(ZoneId.of("UTC"))
-                                    .toLocalDate()
-                                selectedDate = newLocalDate.toString()
-                                mealEntryViewModel.refreshMealEntries()
+            Row(Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Box(modifier = Modifier.weight(1f)) {
+                    OutlinedTextField(
+                        value = selectedDate,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Date") },
+                        trailingIcon = {
+                            IconButton(onClick = {
+                                val datePicker = DatePickerDialog(
+                                    context,
+                                    { _, year, month, dayOfMonth ->
+                                        calendar.set(year, month, dayOfMonth)
+                                        selectedDate =
+                                            SimpleDateFormat("yyyy-MM-dd", Locale.US).format(
+                                                calendar.time
+                                            )
+                                    },
+                                    calendar.get(Calendar.YEAR),
+                                    calendar.get(Calendar.MONTH),
+                                    calendar.get(Calendar.DAY_OF_MONTH)
+                                )
+                                datePicker.show()
+                            }) {
+                                Icon(Icons.Default.DateRange, contentDescription = "Pick date")
                             }
-
-                            picker.show(
-                                (context as androidx.fragment.app.FragmentActivity)
-                                    .supportFragmentManager, "date_picker"
-                            )
-                        },
-                    readOnly = true
-                )
+                        }
+                    )
+                }
 
                 var mealExpanded by remember { mutableStateOf(false) }
                 ExposedDropdownMenuBox(
@@ -120,7 +122,8 @@ fun MealEntryScreen(
 
             Spacer(Modifier.height(8.dp))
 
-            Row(Modifier.fillMaxWidth()) {
+            Row(Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 ExposedDropdownMenuBox(
                     expanded = foodExpanded,
                     onExpandedChange = { foodExpanded = !foodExpanded },
