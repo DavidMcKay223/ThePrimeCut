@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -40,6 +42,15 @@ android {
 }
 
 dependencies {
+
+    val hiltVersion = "2.57.1"
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+    kapt("com.google.dagger:hilt-compiler:$hiltVersion")
+
+    // For AndroidX Hilt extensions (optional)
+    val androidxHiltVersion = "1.2.0"
+    implementation("androidx.hilt:hilt-work:$androidxHiltVersion")
+    kapt("androidx.hilt:hilt-compiler:$androidxHiltVersion")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
