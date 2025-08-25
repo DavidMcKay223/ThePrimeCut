@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 @HiltViewModel
 class FoodItemViewModel @Inject constructor(
@@ -19,7 +20,7 @@ class FoodItemViewModel @Inject constructor(
 
     // StateFlow for Compose to collect
     private val _foodItems = MutableStateFlow<List<FoodItem>>(emptyList())
-    val foodItems: StateFlow<List<FoodItem>> = _foodItems
+    val foodItems: StateFlow<List<FoodItem>> = _foodItems.asStateFlow()
 
     init {
         refreshFoodItems()

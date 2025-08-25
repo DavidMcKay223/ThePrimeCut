@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -18,7 +19,7 @@ class MealEntryViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _mealEntries = MutableStateFlow<List<MealEntry>>(emptyList())
-    val mealEntries: StateFlow<List<MealEntry>> = _mealEntries
+    val mealEntries: StateFlow<List<MealEntry>> = _mealEntries.asStateFlow()
 
     init {
         refreshMealEntries()

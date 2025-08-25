@@ -12,6 +12,7 @@ import javax.inject.Inject
 import androidx.compose.runtime.State
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
@@ -19,7 +20,7 @@ class UserProfileViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _userProfile = MutableStateFlow<UserProfile?>(null)
-    val userProfile: StateFlow<UserProfile?> get() = _userProfile
+    val userProfile: StateFlow<UserProfile?> get() = _userProfile.asStateFlow()
 
     init {
         loadProfile("defaultUser")
