@@ -25,12 +25,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.primecut.theprimecut.ui.screen.FoodListScreen
 import dagger.hilt.android.HiltAndroidApp
 import android.app.Application
+import androidx.compose.material.icons.filled.Add
+import com.primecut.theprimecut.ui.screen.MealEntryScreen
 
 sealed class Screen(val title: String, val icon: ImageVector) {
     object Home : Screen("Home", Icons.Default.Home)
     object Profile : Screen("Profile", Icons.Default.Person)
     object Settings : Screen("Settings", Icons.Default.Settings)
     object FoodList : Screen("Food List", Icons.Default.Info)
+    object MealEntry : Screen("Meal Entry", Icons.Default.Add)
 }
 
 @HiltAndroidApp
@@ -53,7 +56,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen() {
     var currentScreen by remember { mutableStateOf<Screen>(Screen.Home) }
-    val tabs: List<Screen> = remember { listOf(Screen.Home, Screen.FoodList, Screen.Profile) }
+    val tabs: List<Screen> = remember { listOf(Screen.Home, Screen.FoodList, Screen.MealEntry, Screen.Profile) }
 
     Scaffold(
         topBar = {
@@ -98,6 +101,7 @@ fun MainScreen() {
                 Screen.Profile -> ProfileScreen()
                 Screen.Settings -> SettingsScreen()
                 Screen.FoodList -> FoodListScreen()
+                Screen.MealEntry -> MealEntryScreen()
             }
         }
     }
