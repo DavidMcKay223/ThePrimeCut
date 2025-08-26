@@ -27,6 +27,8 @@ import android.app.DatePickerDialog
 import androidx.activity.ComponentActivity
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
+import com.primecut.theprimecut.ui.component.DateSelector
+import com.primecut.theprimecut.ui.component.DropdownSelector
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,64 +61,13 @@ fun MealEntryScreen(
         Column {
             Row(Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Box(modifier = Modifier.weight(1f)) {
-                    OutlinedTextField(
-                        value = selectedDate,
-                        onValueChange = {},
-                        readOnly = true,
-                        label = { Text("Date") },
-                        trailingIcon = {
-                            IconButton(onClick = {
-                                val datePicker = DatePickerDialog(
-                                    context,
-                                    { _, year, month, dayOfMonth ->
-                                        calendar.set(year, month, dayOfMonth)
-                                        selectedDate =
-                                            SimpleDateFormat("yyyy-MM-dd", Locale.US).format(
-                                                calendar.time
-                                            )
-                                    },
-                                    calendar.get(Calendar.YEAR),
-                                    calendar.get(Calendar.MONTH),
-                                    calendar.get(Calendar.DAY_OF_MONTH)
-                                )
-                                datePicker.show()
-                            }) {
-                                Icon(Icons.Default.DateRange, contentDescription = "Pick date")
-                            }
-                        }
-                    )
-                }
 
-                var mealExpanded by remember { mutableStateOf(false) }
-                ExposedDropdownMenuBox(
-                    expanded = mealExpanded,
-                    onExpandedChange = { mealExpanded = !mealExpanded },
-                    modifier = Modifier.weight(1f)
+                DateSelector(selectedDate = selectedDate){ selectedDate = it }
+
+                DropdownSelector("Meal Type", mealType,
+                    listOf("Breakfast", "Lunch", "Dinner", "Snack")
                 ) {
-                    OutlinedTextField(
-                        value = mealType,
-                        onValueChange = {},
-                        label = { Text("Meal Type") },
-                        modifier = Modifier
-                            .menuAnchor()
-                            .fillMaxWidth(),
-                        readOnly = true
-                    )
-                    ExposedDropdownMenu(
-                        expanded = mealExpanded,
-                        onDismissRequest = { mealExpanded = false }
-                    ) {
-                        listOf("Breakfast", "Lunch", "Dinner", "Snack").forEach { type ->
-                            DropdownMenuItem(
-                                text = { Text(type) },
-                                onClick = {
-                                    mealType = type
-                                    mealExpanded = false
-                                }
-                            )
-                        }
-                    }
+                    mealType = it
                 }
             }
 

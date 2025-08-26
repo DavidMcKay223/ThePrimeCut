@@ -18,15 +18,13 @@ class FoodItemViewModel @Inject constructor(
     private val repository: FoodItemRepository
 ) : ViewModel() {
 
-    // StateFlow for Compose to collect
     private val _foodItems = MutableStateFlow<List<FoodItem>>(emptyList())
-    val foodItems: StateFlow<List<FoodItem>> = _foodItems.asStateFlow()
+    val foodItems: StateFlow<List<FoodItem>> = _foodItems
 
     init {
         refreshFoodItems()
     }
 
-    // Load current items from DB
     private fun refreshFoodItems() {
         viewModelScope.launch {
             val items = repository.getAll() // suspend function
@@ -34,7 +32,6 @@ class FoodItemViewModel @Inject constructor(
         }
     }
 
-    // Sync from assets, insert all, then refresh StateFlow
     fun syncFoodItemsFromAssets(
         newItems: List<FoodItem>,
         onComplete: (() -> Unit)? = null

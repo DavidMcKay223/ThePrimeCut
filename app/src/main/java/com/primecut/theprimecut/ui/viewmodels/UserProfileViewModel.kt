@@ -20,7 +20,7 @@ class UserProfileViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _userProfile = MutableStateFlow<UserProfile?>(null)
-    val userProfile: StateFlow<UserProfile?> get() = _userProfile.asStateFlow()
+    val userProfile: StateFlow<UserProfile?> get() = _userProfile
 
     init {
         loadProfile("defaultUser")

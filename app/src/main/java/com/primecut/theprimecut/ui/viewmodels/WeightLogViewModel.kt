@@ -19,7 +19,11 @@ class WeightLogViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _logs = MutableStateFlow<List<WeightLog>>(emptyList())
-    val logs: StateFlow<List<WeightLog>> = _logs.asStateFlow()
+    val logs: StateFlow<List<WeightLog>> = _logs
+
+    init {
+        loadUserLogs("defaultUser")
+    }
 
     fun loadUserLogs(userId: String, showProjection: Boolean = false) {
         viewModelScope.launch {

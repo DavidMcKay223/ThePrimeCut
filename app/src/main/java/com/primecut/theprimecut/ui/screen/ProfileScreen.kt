@@ -19,12 +19,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.primecut.theprimecut.ui.component.DateSelector
 import java.time.Instant
 import java.time.ZoneId
 
@@ -47,38 +49,17 @@ fun ProfileScreen(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        OutlinedTextField(
-            value = dateInput,
-            onValueChange = { dateInput = it },
-            label = { Text("Date") },
-            modifier = Modifier.fillMaxWidth(),
-            readOnly = true,
-            trailingIcon = {
-                IconButton(onClick = {
-                    val picker = MaterialDatePicker.Builder.datePicker()
-                        .setTitleText("Select Date")
-                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                        .build()
-                    picker.show((context as androidx.fragment.app.FragmentActivity).supportFragmentManager, "date_picker")
-                    picker.addOnPositiveButtonClickListener { selection ->
-                        val date = Instant.ofEpochMilli(selection)
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate()
-                        dateInput = date.toString()
-                    }
-                }) {
-                    Icon(Icons.Default.DateRange, contentDescription = "Pick Date")
-                }
-            }
-        )
+        Row(modifier = Modifier.fillMaxWidth()){
 
-        OutlinedTextField(
-            value = weightInput,
-            onValueChange = { weightInput = it },
-            label = { Text("Weight (lbs)") },
-            modifier = Modifier.fillMaxWidth()
-        )
+            DateSelector(selectedDate = dateInput){ dateInput = it }
 
+            OutlinedTextField(
+                value = weightInput,
+                onValueChange = { weightInput = it },
+                label = { Text("Weight (lbs)") },
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
         Button(
             onClick = {
                 val weight = weightInput.toFloatOrNull()
@@ -97,7 +78,10 @@ fun ProfileScreen(
         }
 
         if (logs.isNotEmpty()) {
-
+            Text("Weight Logs:")
+            logs.forEach { log ->
+                Text("${log.date}: ${log.weightLbs} lbs")
+            }
         } else {
             Text("No weight logs yet")
         }

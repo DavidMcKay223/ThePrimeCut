@@ -19,7 +19,7 @@ class MealEntryViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _mealEntries = MutableStateFlow<List<MealEntry>>(emptyList())
-    val mealEntries: StateFlow<List<MealEntry>> = _mealEntries.asStateFlow()
+    val mealEntries: StateFlow<List<MealEntry>> = _mealEntries
 
     init {
         refreshMealEntries()
