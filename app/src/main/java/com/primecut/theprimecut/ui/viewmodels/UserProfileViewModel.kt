@@ -9,10 +9,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import androidx.compose.runtime.State
+import com.primecut.theprimecut.util.AppSession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
@@ -23,7 +22,7 @@ class UserProfileViewModel @Inject constructor(
     val userProfile: StateFlow<UserProfile?> get() = _userProfile
 
     init {
-        loadProfile("defaultUser")
+        loadProfile(AppSession.userName)
     }
 
     fun loadProfile(userName: String) {

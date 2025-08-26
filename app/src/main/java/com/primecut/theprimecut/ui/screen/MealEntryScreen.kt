@@ -1,7 +1,6 @@
 package com.primecut.theprimecut.ui.screen
 
 import android.widget.Toast
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,22 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.primecut.theprimecut.data.model.FoodItem
 import com.primecut.theprimecut.data.model.MealEntry
 import com.primecut.theprimecut.ui.viewmodels.MealEntryViewModel
 import com.primecut.theprimecut.ui.viewmodels.FoodItemViewModel
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.ZoneOffset
 import java.util.*
 import com.primecut.theprimecut.ui.component.MealEntryCard
-import android.app.DatePickerDialog
-import androidx.activity.ComponentActivity
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
 import com.primecut.theprimecut.ui.component.DateSelector
 import com.primecut.theprimecut.ui.component.DropdownSelector
 

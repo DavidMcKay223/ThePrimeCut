@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.primecut.theprimecut.data.model.WeightLog
 import com.primecut.theprimecut.data.repository.WeightLogRepository
+import com.primecut.theprimecut.util.AppSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -22,7 +22,7 @@ class WeightLogViewModel @Inject constructor(
     val logs: StateFlow<List<WeightLog>> = _logs
 
     init {
-        loadUserLogs("defaultUser")
+        loadUserLogs(AppSession.userName)
     }
 
     fun loadUserLogs(userId: String, showProjection: Boolean = false) {

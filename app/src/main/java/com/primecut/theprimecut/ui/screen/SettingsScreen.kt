@@ -1,10 +1,8 @@
 package com.primecut.theprimecut.ui.screen
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
@@ -32,6 +30,7 @@ import com.primecut.theprimecut.data.model.UserProfile
 import com.primecut.theprimecut.ui.component.DropdownSelector
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.runtime.LaunchedEffect
 
 @Composable
 fun SettingsScreen(
@@ -48,14 +47,27 @@ fun SettingsScreen(
     val goals = listOf("Maintain", "Lose0.5", "Lose1", "Lose2", "Gain0.5", "Gain1")
     val diets = DietType.entries.map { it.name }
 
-    var userName by remember { mutableStateOf(profile?.userName ?: "defaultUser") }
-    var age by remember { mutableStateOf(profile?.age?.toString() ?: "") }
-    var height by remember { mutableStateOf(profile?.heightInches?.toString() ?: "") }
-    var weight by remember { mutableStateOf(profile?.weightPounds?.toString() ?: "") }
-    var sex by remember { mutableStateOf(profile?.sex?.name ?: sexes.first()) }
-    var activity by remember { mutableStateOf(profile?.activityLevel ?: activityLevels.first()) }
-    var goal by remember { mutableStateOf(profile?.goalType ?: goals.first()) }
-    var diet by remember { mutableStateOf(profile?.dietType?.name ?: diets.first()) }
+    var userName by remember { mutableStateOf("") }
+    var age by remember { mutableStateOf("") }
+    var height by remember { mutableStateOf("") }
+    var weight by remember { mutableStateOf("") }
+    var sex by remember { mutableStateOf("") }
+    var activity by remember { mutableStateOf("") }
+    var goal by remember { mutableStateOf("") }
+    var diet by remember { mutableStateOf("") }
+
+    LaunchedEffect(profile) {
+        profile?.let {
+            userName = it.userName
+            age = it.age.toInt().toString()
+            height = it.heightInches.toInt().toString()
+            weight = it.weightPounds.toInt().toString()
+            sex = it.sex.name
+            activity = it.activityLevel
+            goal = it.goalType
+            diet = it.dietType.name
+        }
+    }
 
     Column(modifier = Modifier
         .fillMaxSize()

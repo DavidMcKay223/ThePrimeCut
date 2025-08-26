@@ -5,13 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.primecut.theprimecut.data.model.FoodItem
 import com.primecut.theprimecut.data.repository.FoodItemRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 @HiltViewModel
 class FoodItemViewModel @Inject constructor(

@@ -23,12 +23,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.primecut.theprimecut.ui.component.DateSelector
-import java.time.Instant
-import java.time.ZoneId
+import com.primecut.theprimecut.util.AppSession
 
 @Composable
 fun ProfileScreen(
@@ -66,7 +62,7 @@ fun ProfileScreen(
                 if (dateInput.isBlank() || weight == null) {
                     Toast.makeText(context, "Enter valid date and weight", Toast.LENGTH_SHORT).show()
                 } else {
-                    viewModel.addOrUpdateLog("DefaultUser", dateInput, weight)
+                    viewModel.addOrUpdateLog(AppSession.userName, dateInput, weight)
                     dateInput = ""
                     weightInput = ""
                     Toast.makeText(context, "Weight added!", Toast.LENGTH_SHORT).show()
