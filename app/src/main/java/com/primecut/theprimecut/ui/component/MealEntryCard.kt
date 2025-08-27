@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.primecut.theprimecut.data.model.MealEntry
-import com.primecut.theprimecut.ui.theme.DarkCharcoal
 import com.primecut.theprimecut.ui.theme.OffWhite
+import com.primecut.theprimecut.ui.theme.SlateGray
 import com.primecut.theprimecut.ui.theme.VividBlue
 
 @Composable
@@ -24,7 +24,7 @@ fun MealEntryCard(
             .fillMaxWidth()
             .padding(8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = DarkCharcoal
+            containerColor = SlateGray
         )
     ) {
         Row(
