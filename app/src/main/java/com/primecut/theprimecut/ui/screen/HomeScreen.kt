@@ -12,10 +12,5 @@ import com.primecut.theprimecut.ui.view.MacroProgressView
 
 @Composable
 fun HomeScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize().padding(16.dp)
-    ) {
-        Text("Today Macro's:")
-        MacroProgressView()
-    }
+    MacroProgressView()
 }
