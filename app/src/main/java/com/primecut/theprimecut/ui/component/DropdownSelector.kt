@@ -1,7 +1,6 @@
 package com.primecut.theprimecut.ui.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -12,14 +11,15 @@ fun DropdownSelector(
     label: String,
     selected: String,
     options: List<String>,
-    onSelected: (String) -> Unit
+    onSelected: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier
     ) {
         OutlinedTextField(
             value = selected,
@@ -29,14 +29,12 @@ fun DropdownSelector(
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
-            modifier = Modifier.menuAnchor()
+            modifier = Modifier.menuAnchor().fillMaxWidth()
         )
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentSize()
+            modifier = Modifier.fillMaxWidth()
         ) {
             options.forEach { option ->
                 DropdownMenuItem(

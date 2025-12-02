@@ -54,11 +54,13 @@ fun MealEntryScreen(
 
                 DateSelector(selectedDate = selectedDate){ selectedDate = it }
 
-                DropdownSelector("Meal Type", mealType,
-                    listOf("Breakfast", "Lunch", "Dinner", "Snack")
-                ) {
-                    mealType = it
-                }
+                DropdownSelector(
+                    label = "Meal Type",
+                    selected = mealType,
+                    options = listOf("Breakfast", "Lunch", "Dinner", "Snack"),
+                    onSelected = { mealType = it },
+                    modifier = Modifier.weight(1f)
+                )
             }
 
             Spacer(Modifier.height(8.dp))
