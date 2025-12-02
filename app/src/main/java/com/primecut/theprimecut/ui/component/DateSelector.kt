@@ -2,22 +2,23 @@ package com.primecut.theprimecut.ui.component
 
 import android.app.DatePickerDialog
 import android.content.Context
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import java.text.SimpleDateFormat
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateSelector(
-    label: String = "Date",
     selectedDate: String,
+    modifier: Modifier = Modifier,
+    label: String = "Date",
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
     onDateSelected: (String) -> Unit
 ) {
     val context: Context = LocalContext.current
@@ -49,6 +50,7 @@ fun DateSelector(
                 Icon(Icons.Default.DateRange, contentDescription = "Pick date")
             }
         },
-        modifier = Modifier.width(180.dp)
+        modifier = modifier.fillMaxWidth(),
+        colors = colors
     )
 }

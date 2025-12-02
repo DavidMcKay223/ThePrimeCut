@@ -12,7 +12,8 @@ fun DropdownSelector(
     selected: String,
     options: List<String>,
     onSelected: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -29,7 +30,8 @@ fun DropdownSelector(
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
-            modifier = Modifier.menuAnchor().fillMaxWidth()
+            modifier = Modifier.menuAnchor().fillMaxWidth(),
+            colors = colors
         )
         ExposedDropdownMenu(
             expanded = expanded,
