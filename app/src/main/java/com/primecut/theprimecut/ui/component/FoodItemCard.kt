@@ -53,9 +53,15 @@ fun FoodItemCard(
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
-                    if (foodItem.brandType.isNotEmpty()) {
+                    
+                    val subtitle = listOfNotNull(
+                        foodItem.brandType.takeIf { it.isNotEmpty() },
+                        foodItem.groupName?.takeIf { it.isNotEmpty() }
+                    ).joinToString(" • ")
+
+                    if (subtitle.isNotEmpty()) {
                         Text(
-                            text = foodItem.brandType,
+                            text = subtitle,
                             style = MaterialTheme.typography.labelMedium,
                             color = OffWhite.copy(alpha = 0.7f)
                         )
