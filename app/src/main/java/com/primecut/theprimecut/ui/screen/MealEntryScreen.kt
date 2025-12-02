@@ -4,11 +4,13 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.primecut.theprimecut.data.model.FoodItem
@@ -20,6 +22,8 @@ import java.util.*
 import com.primecut.theprimecut.ui.component.MealEntryCard
 import com.primecut.theprimecut.ui.component.DateSelector
 import com.primecut.theprimecut.ui.component.DropdownSelector
+import com.primecut.theprimecut.ui.theme.OffWhite
+import com.primecut.theprimecut.ui.theme.VividBlue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,12 +32,10 @@ fun MealEntryScreen(
     foodItemViewModel: FoodItemViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
 
     val mealEntries by mealEntryViewModel.mealEntries.collectAsState()
     val foodItems by foodItemViewModel.foodItems.collectAsState()
 
-    val calendar = remember { Calendar.getInstance() }
     var selectedDate by remember {
         mutableStateOf(SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date()))
     }
@@ -43,6 +45,17 @@ fun MealEntryScreen(
 
     var foodExpanded by remember { mutableStateOf(false) }
     var filteredFoodItems by remember { mutableStateOf(foodItems.map { it.recipeName }) }
+
+    // Derived state for daily totals
+    val todaysEntries = remember(mealEntries, selectedDate) {
+        mealEntries.filter { it.date == selectedDate }
+    }
+    
+    val totalCalories = remember(todaysEntries) { todaysEntries.sumOf { it.calories.toInt() } }
+    val totalProtein = remember(todaysEntries) { todaysEntries.sumOf { it.protein.toInt() } }
+    val totalFiber = remember(todaysEntries) { todaysEntries.sumOf { it.fiber.toInt() } }
+    val totalCarbs = remember(todaysEntries) { todaysEntries.sumOf { it.carbs.toInt() } }
+    val totalFats = remember(todaysEntries) { todaysEntries.sumOf { it.fats.toInt() } }
 
     Column(
         modifier = Modifier
@@ -193,16 +206,14 @@ fun MealEntryScreen(
             }
         }
 
-        // List Section
+        // List & Summary Section
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = "Today's Entries",
+                text = "Daily Summary",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
-
-            val todaysEntries = mealEntries.filter { it.date == selectedDate }
 
             if (todaysEntries.isEmpty()) {
                 Box(
@@ -218,22 +229,95 @@ fun MealEntryScreen(
                     )
                 }
             } else {
+                // Totals Card
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    colors = CardDefaults.cardColors(containerColor = VividBlue),
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(4.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text("Total Calories", style = MaterialTheme.typography.labelMedium, color = OffWhite.copy(0.8f))
+                            Text("$totalCalories", style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold), color = OffWhite)
+                        }
+                        
+                        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            SummaryMacro("Protein", "${totalProtein}g")
+                            SummaryMacro("Carbs", "${totalCarbs}g")
+                            SummaryMacro("Fats", "${totalFats}g")
+                            SummaryMacro("Fiber", "${totalFiber}g")
+                        }
+                    }
+                }
+
+                // Grouped Meal List
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                     contentPadding = PaddingValues(bottom = 16.dp)
                 ) {
-                    items(todaysEntries) { entry ->
-                        MealEntryCard(
-                            mealEntryItem = entry,
-                            onDelete = { mealToDelete ->
-                                mealEntryViewModel.deleteMealEntry(mealToDelete)
+                    val groupedEntries = todaysEntries.groupBy { it.mealType }
+                    val mealOrder = listOf("Breakfast", "Lunch", "Dinner", "Snack")
+                    
+                    mealOrder.forEach { type ->
+                        val entries = groupedEntries[type]
+                        if (!entries.isNullOrEmpty()) {
+                            item {
+                                Text(
+                                    text = type,
+                                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                                    color = MaterialTheme.colorScheme.secondary,
+                                    modifier = Modifier.padding(start = 4.dp, top = 4.dp)
+                                )
                             }
-                        )
+                            items(entries) { entry ->
+                                MealEntryCard(
+                                    mealEntryItem = entry,
+                                    onDelete = { mealToDelete ->
+                                        mealEntryViewModel.deleteMealEntry(mealToDelete)
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    
+                    val otherEntries = todaysEntries.filter { it.mealType !in mealOrder }
+                    if (otherEntries.isNotEmpty()) {
+                        item {
+                             Text(
+                                text = "Other",
+                                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                                color = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.padding(start = 4.dp, top = 4.dp)
+                            )
+                        }
+                        items(otherEntries) { entry ->
+                            MealEntryCard(
+                                mealEntryItem = entry,
+                                onDelete = { mealEntryViewModel.deleteMealEntry(it) }
+                            )
+                        }
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun SummaryMacro(label: String, value: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(value, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = OffWhite)
+        Text(label, style = MaterialTheme.typography.labelSmall, color = OffWhite.copy(0.7f))
     }
 }
 
