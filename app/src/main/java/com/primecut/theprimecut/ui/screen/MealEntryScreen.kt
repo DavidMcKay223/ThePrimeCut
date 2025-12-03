@@ -1,6 +1,7 @@
 package com.primecut.theprimecut.ui.screen
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -75,7 +76,7 @@ fun MealEntryScreen(
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 shape = MaterialTheme.shapes.medium,
-                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(
                     modifier = Modifier
@@ -138,7 +139,8 @@ fun MealEntryScreen(
 
                             ExposedDropdownMenu(
                                 expanded = foodExpanded && filteredFoodItems.isNotEmpty(),
-                                onDismissRequest = { foodExpanded = false }
+                                onDismissRequest = { foodExpanded = false },
+                                modifier = Modifier.exposedDropdownSize()
                             ) {
                                 filteredFoodItems.forEach { itemName ->
                                     DropdownMenuItem(
@@ -205,6 +207,8 @@ fun MealEntryScreen(
                 }
             }
         }
+
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
         // List & Summary Section
         Column(modifier = Modifier.weight(1f)) {

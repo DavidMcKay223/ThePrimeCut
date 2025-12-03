@@ -1,8 +1,10 @@
 package com.primecut.theprimecut.ui.screen
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -65,27 +67,30 @@ fun SettingsScreen(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Text(
             text = "Settings",
             style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(bottom = 8.dp)
+            color = MaterialTheme.colorScheme.primary
         )
 
         // --- Personal Information Section ---
         Card(
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            shape = MaterialTheme.shapes.medium,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
                     text = "Personal Information",
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.primary
                 )
 
                 OutlinedTextField(
@@ -93,7 +98,11 @@ fun SettingsScreen(
                     onValueChange = { userName = it },
                     label = { Text("Username") },
                     modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                    )
                 )
 
                 Row(
@@ -105,14 +114,22 @@ fun SettingsScreen(
                         onValueChange = { if (it.all { char -> char.isDigit() }) age = it },
                         label = { Text("Age") },
                         modifier = Modifier.weight(1f),
-                        singleLine = true
+                        singleLine = true,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                        )
                     )
                     DropdownSelector(
                         label = "Sex",
                         selected = sex,
                         options = sexes,
                         onSelected = { sex = it },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                        )
                     )
                 }
 
@@ -125,14 +142,22 @@ fun SettingsScreen(
                         onValueChange = { if (it.all { char -> char.isDigit() || char == '.' }) height = it },
                         label = { Text("Height (in)") },
                         modifier = Modifier.weight(1f),
-                        singleLine = true
+                        singleLine = true,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                        )
                     )
                     OutlinedTextField(
                         value = weight,
                         onValueChange = { if (it.all { char -> char.isDigit() || char == '.' }) weight = it },
                         label = { Text("Weight (lbs)") },
                         modifier = Modifier.weight(1f),
-                        singleLine = true
+                        singleLine = true,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                        )
                     )
                 }
             }
@@ -140,16 +165,20 @@ fun SettingsScreen(
 
         // --- Goals & Preferences Section ---
         Card(
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            shape = MaterialTheme.shapes.medium,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
                     text = "Goals & Preferences",
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.primary
                 )
 
                 DropdownSelector(
@@ -157,7 +186,11 @@ fun SettingsScreen(
                     selected = activity,
                     options = activityLevels,
                     onSelected = { activity = it },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                    )
                 )
 
                 Row(
@@ -169,14 +202,22 @@ fun SettingsScreen(
                         selected = goal,
                         options = goals,
                         onSelected = { goal = it },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                        )
                     )
                     DropdownSelector(
                         label = "Diet",
                         selected = diet,
                         options = diets,
                         onSelected = { diet = it },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                        )
                     )
                 }
             }
@@ -203,7 +244,8 @@ fun SettingsScreen(
                     Toast.makeText(context, "Profile saved!", Toast.LENGTH_SHORT).show()
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.medium
         ) {
             Text("Save Profile")
         }
@@ -215,7 +257,8 @@ fun SettingsScreen(
                         Toast.makeText(context, "Goals recalculated!", Toast.LENGTH_SHORT).show()
                     }
                 },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                shape = MaterialTheme.shapes.medium
             ) {
                 Text("Recalc Goals")
             }
@@ -225,11 +268,12 @@ fun SettingsScreen(
                     scope.launch {
                         val items = loadFoodItemsFromAssets(context)
                         foodItemViewModel.syncFoodItemsFromAssets(items) {
-                            Toast.makeText(context, "Sync Complete", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Sync DB", Toast.LENGTH_SHORT).show()
                         }
                     }
                 },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                shape = MaterialTheme.shapes.medium
             ) {
                 Text("Sync DB")
             }
@@ -238,7 +282,9 @@ fun SettingsScreen(
         // --- Current Targets Display ---
         profile?.let {
             Card(
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+                shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
             ) {
                 Column(

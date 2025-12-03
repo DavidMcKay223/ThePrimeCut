@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Person
@@ -22,6 +23,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.primecut.theprimecut.ui.component.DateSelector
 import com.primecut.theprimecut.ui.viewmodels.WeightLogViewModel
 import com.primecut.theprimecut.util.AppSession
+import com.primecut.theprimecut.ui.theme.OffWhite
+import com.primecut.theprimecut.ui.theme.SlateGray
+import com.primecut.theprimecut.ui.theme.VividBlue
 
 @Composable
 fun ProfileScreen(
@@ -74,68 +78,70 @@ fun ProfileScreen(
             }
         }
 
-        Divider()
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
         // Weight Input Section
-        Text(
-            text = "Log New Weight",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(
+                text = "Log New Weight",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
 
-        Card(
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            shape = MaterialTheme.shapes.medium,
-            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+            Card(
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                shape = MaterialTheme.shapes.medium,
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Box(modifier = Modifier.weight(1f)) {
-                        DateSelector(
-                            selectedDate = dateInput,
-                            onDateSelected = { dateInput = it }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(modifier = Modifier.weight(1f)) {
+                            DateSelector(
+                                selectedDate = dateInput,
+                                onDateSelected = { dateInput = it }
+                            )
+                        }
+
+                        OutlinedTextField(
+                            value = weightInput,
+                            onValueChange = { weightInput = it },
+                            label = { Text("Weight (lbs)") },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true,
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                            )
                         )
                     }
 
-                    OutlinedTextField(
-                        value = weightInput,
-                        onValueChange = { weightInput = it },
-                        label = { Text("Weight (lbs)") },
-                        modifier = Modifier.weight(1f),
-                        singleLine = true,
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.surface,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
-                        )
-                    )
-                }
-
-                Button(
-                    onClick = {
-                        val weight = weightInput.toFloatOrNull()
-                        if (dateInput.isBlank() || weight == null) {
-                            Toast.makeText(context, "Enter valid date and weight", Toast.LENGTH_SHORT).show()
-                        } else {
-                            viewModel.addOrUpdateLog(AppSession.userName, dateInput, weight)
-                            dateInput = ""
-                            weightInput = ""
-                            Toast.makeText(context, "Entry added!", Toast.LENGTH_SHORT).show()
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = MaterialTheme.shapes.medium
-                ) {
-                    Text("Add Entry")
+                    Button(
+                        onClick = {
+                            val weight = weightInput.toFloatOrNull()
+                            if (dateInput.isBlank() || weight == null) {
+                                Toast.makeText(context, "Enter valid date and weight", Toast.LENGTH_SHORT).show()
+                            } else {
+                                viewModel.addOrUpdateLog(AppSession.userName, dateInput, weight)
+                                dateInput = ""
+                                weightInput = ""
+                                Toast.makeText(context, "Entry added!", Toast.LENGTH_SHORT).show()
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = MaterialTheme.shapes.medium
+                    ) {
+                        Text("Add Entry")
+                    }
                 }
             }
         }
@@ -157,8 +163,10 @@ fun ProfileScreen(
                 ) {
                     items(logs) { log ->
                         Card(
+                            shape = RoundedCornerShape(16.dp),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                             colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceContainer
+                                containerColor = SlateGray
                             ),
                             modifier = Modifier.fillMaxWidth()
                         ) {
@@ -173,20 +181,20 @@ fun ProfileScreen(
                                     Icon(
                                         imageVector = Icons.Default.DateRange,
                                         contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.size(18.dp)
+                                        tint = VividBlue,
+                                        modifier = Modifier.size(20.dp)
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Text(
                                         text = log.date,
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        color = MaterialTheme.colorScheme.onSurface
+                                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                                        color = OffWhite
                                     )
                                 }
                                 Text(
                                     text = "${log.weightLbs} lbs",
                                     style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.primary,
+                                    color = VividBlue,
                                     fontWeight = FontWeight.Bold
                                 )
                             }

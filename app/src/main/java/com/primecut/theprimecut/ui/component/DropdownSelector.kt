@@ -36,7 +36,7 @@ fun DropdownSelector(
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.exposedDropdownSize()
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
