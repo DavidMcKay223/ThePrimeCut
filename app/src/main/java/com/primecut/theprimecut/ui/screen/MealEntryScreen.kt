@@ -23,6 +23,7 @@ import java.util.*
 import com.primecut.theprimecut.ui.component.MealEntryCard
 import com.primecut.theprimecut.ui.component.DateSelector
 import com.primecut.theprimecut.ui.component.DropdownSelector
+import com.primecut.theprimecut.ui.component.ResponsiveInputRow
 import com.primecut.theprimecut.ui.theme.OffWhite
 import com.primecut.theprimecut.ui.theme.VividBlue
 
@@ -58,171 +59,179 @@ fun MealEntryScreen(
     val totalCarbs = remember(todaysEntries) { todaysEntries.sumOf { it.carbs.toInt() } }
     val totalFats = remember(todaysEntries) { todaysEntries.sumOf { it.fats.toInt() } }
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         // Input Section
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(
-                text = "Log a Meal",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
+        item {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(
+                    text = "Log a Meal",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
 
-            Card(
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                shape = MaterialTheme.shapes.medium,
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                Card(
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    shape = MaterialTheme.shapes.medium,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        Box(modifier = Modifier.weight(1f)) {
-                            DateSelector(selectedDate = selectedDate) { selectedDate = it }
-                        }
-
-                        DropdownSelector(
-                            label = "Meal Type",
-                            selected = mealType,
-                            options = listOf("Breakfast", "Lunch", "Dinner", "Snack"),
-                            onSelected = { mealType = it },
-                            modifier = Modifier.weight(1f),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
-                            )
-                        )
-                    }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        ExposedDropdownMenuBox(
-                            expanded = foodExpanded,
-                            onExpandedChange = { foodExpanded = !foodExpanded },
-                            modifier = Modifier.weight(1.5f)
-                        ) {
-                            OutlinedTextField(
-                                value = foodName,
-                                onValueChange = {
-                                    foodName = it
-                                    filteredFoodItems = if (it.isBlank()) {
-                                        foodItems.map { item -> item.recipeName }
-                                    } else {
-                                        foodItems.map { item -> item.recipeName }
-                                            .filter { name -> name.contains(it, ignoreCase = true) }
-                                    }
-                                    foodExpanded = true
-                                },
-                                label = { Text("Food Item") },
-                                modifier = Modifier
-                                    .menuAnchor()
-                                    .fillMaxWidth(),
-                                singleLine = true,
-                                colors = OutlinedTextFieldDefaults.colors(
-                                    focusedContainerColor = MaterialTheme.colorScheme.surface,
-                                    unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                        ResponsiveInputRow(
+                            content1 = { modifier ->
+                                DateSelector(
+                                    selectedDate = selectedDate,
+                                    onDateSelected = { selectedDate = it },
+                                    modifier = modifier
                                 )
-                            )
-
-                            ExposedDropdownMenu(
-                                expanded = foodExpanded && filteredFoodItems.isNotEmpty(),
-                                onDismissRequest = { foodExpanded = false },
-                                modifier = Modifier.exposedDropdownSize()
-                            ) {
-                                filteredFoodItems.forEach { itemName ->
-                                    DropdownMenuItem(
-                                        text = { Text(itemName) },
-                                        onClick = {
-                                            foodName = itemName
-                                            // auto-fill portion if match
-                                            val item = foodItems.find { it.recipeName == itemName }
-                                            if (item != null) portion = item.servings.toString()
-                                            foodExpanded = false
-                                        }
+                            },
+                            content2 = { modifier ->
+                                DropdownSelector(
+                                    label = "Meal Type",
+                                    selected = mealType,
+                                    options = listOf("Breakfast", "Lunch", "Dinner", "Snack"),
+                                    onSelected = { mealType = it },
+                                    modifier = modifier,
+                                    colors = OutlinedTextFieldDefaults.colors(
+                                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                        unfocusedContainerColor = MaterialTheme.colorScheme.surface
                                     )
-                                }
-                            }
-                        }
-
-                        OutlinedTextField(
-                            value = portion,
-                            onValueChange = { portion = it },
-                            label = { Text("Portion") },
-                            modifier = Modifier.weight(1f),
-                            singleLine = true,
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
-                            )
-                        )
-                    }
-
-                    Button(
-                        onClick = {
-                            val portionVal = portion.toFloatOrNull() ?: 1f
-                            val foodItem: FoodItem? = foodItems.find { it.recipeName == foodName }
-                            if (foodItem != null) {
-                                val entry = MealEntry(
-                                    date = selectedDate,
-                                    day = SimpleDateFormat("EEEE", Locale.US)
-                                        .format(SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(selectedDate)!!),
-                                    mealType = mealType,
-                                    mealName = foodItem.recipeName,
-                                    groupName = foodItem.groupName,
-                                    portionEaten = portionVal,
-                                    measurementServings = foodItem.measurementServings,
-                                    measurementType = foodItem.measurementType,
-                                    calories = foodItem.caloriesPerServing * portionVal,
-                                    protein = foodItem.protein * portionVal,
-                                    carbs = foodItem.carbs * portionVal,
-                                    fats = foodItem.fats * portionVal,
-                                    fiber = foodItem.fiber * portionVal
                                 )
-                                mealEntryViewModel.addMealEntry(entry)
-                                foodName = ""
-                                portion = "1"
-                                Toast.makeText(context, "Meal added!", Toast.LENGTH_SHORT).show()
-                            } else {
-                                Toast.makeText(context, "Food item not found", Toast.LENGTH_SHORT).show()
                             }
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = MaterialTheme.shapes.medium
-                    ) {
-                        Text("Add Meal")
+                        )
+
+                        ResponsiveInputRow(
+                            content1 = { modifier ->
+                                ExposedDropdownMenuBox(
+                                    expanded = foodExpanded,
+                                    onExpandedChange = { foodExpanded = !foodExpanded },
+                                    modifier = modifier
+                                ) {
+                                    OutlinedTextField(
+                                        value = foodName,
+                                        onValueChange = {
+                                            foodName = it
+                                            filteredFoodItems = if (it.isBlank()) {
+                                                foodItems.map { item -> item.recipeName }
+                                            } else {
+                                                foodItems.map { item -> item.recipeName }
+                                                    .filter { name -> name.contains(it, ignoreCase = true) }
+                                            }
+                                            foodExpanded = true
+                                        },
+                                        label = { Text("Food Item") },
+                                        modifier = Modifier
+                                            .menuAnchor()
+                                            .fillMaxWidth(),
+                                        singleLine = true,
+                                        colors = OutlinedTextFieldDefaults.colors(
+                                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                                        )
+                                    )
+
+                                    ExposedDropdownMenu(
+                                        expanded = foodExpanded && filteredFoodItems.isNotEmpty(),
+                                        onDismissRequest = { foodExpanded = false },
+                                        modifier = Modifier.exposedDropdownSize()
+                                    ) {
+                                        filteredFoodItems.forEach { itemName ->
+                                            DropdownMenuItem(
+                                                text = { Text(itemName) },
+                                                onClick = {
+                                                    foodName = itemName
+                                                    // auto-fill portion if match
+                                                    val item = foodItems.find { it.recipeName == itemName }
+                                                    if (item != null) portion = item.servings.toString()
+                                                    foodExpanded = false
+                                                }
+                                            )
+                                        }
+                                    }
+                                }
+                            },
+                            content2 = { modifier ->
+                                OutlinedTextField(
+                                    value = portion,
+                                    onValueChange = { portion = it },
+                                    label = { Text("Portion") },
+                                    modifier = modifier,
+                                    singleLine = true,
+                                    colors = OutlinedTextFieldDefaults.colors(
+                                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                        unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                                    )
+                                )
+                            }
+                        )
+
+                        Button(
+                            onClick = {
+                                val portionVal = portion.toFloatOrNull() ?: 1f
+                                val foodItem: FoodItem? = foodItems.find { it.recipeName == foodName }
+                                if (foodItem != null) {
+                                    val entry = MealEntry(
+                                        date = selectedDate,
+                                        day = SimpleDateFormat("EEEE", Locale.US)
+                                            .format(SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(selectedDate)!!),
+                                        mealType = mealType,
+                                        mealName = foodItem.recipeName,
+                                        groupName = foodItem.groupName,
+                                        portionEaten = portionVal,
+                                        measurementServings = foodItem.measurementServings,
+                                        measurementType = foodItem.measurementType,
+                                        calories = foodItem.caloriesPerServing * portionVal,
+                                        protein = foodItem.protein * portionVal,
+                                        carbs = foodItem.carbs * portionVal,
+                                        fats = foodItem.fats * portionVal,
+                                        fiber = foodItem.fiber * portionVal
+                                    )
+                                    mealEntryViewModel.addMealEntry(entry)
+                                    foodName = ""
+                                    portion = "1"
+                                    Toast.makeText(context, "Meal added!", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(context, "Food item not found", Toast.LENGTH_SHORT).show()
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = MaterialTheme.shapes.medium
+                        ) {
+                            Text("Add Meal")
+                        }
                     }
                 }
             }
         }
 
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+        item {
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+        }
 
         // List & Summary Section
-        Column(modifier = Modifier.weight(1f)) {
+        item {
             Text(
                 text = "Daily Summary",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
+        }
 
-            if (todaysEntries.isEmpty()) {
+        if (todaysEntries.isEmpty()) {
+            item {
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
                         .padding(32.dp),
                     contentAlignment = Alignment.Center
                 ) {
@@ -232,8 +241,10 @@ fun MealEntryScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-            } else {
-                // Totals Card
+            }
+        } else {
+            // Totals Card
+            item {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -262,55 +273,49 @@ fun MealEntryScreen(
                         }
                     }
                 }
+            }
 
-                // Grouped Meal List
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    contentPadding = PaddingValues(bottom = 16.dp)
-                ) {
-                    val groupedEntries = todaysEntries.groupBy { it.mealType }
-                    val mealOrder = listOf("Breakfast", "Lunch", "Dinner", "Snack")
-                    
-                    mealOrder.forEach { type ->
-                        val entries = groupedEntries[type]
-                        if (!entries.isNullOrEmpty()) {
-                            item {
-                                Text(
-                                    text = type,
-                                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                                    color = MaterialTheme.colorScheme.secondary,
-                                    modifier = Modifier.padding(start = 4.dp, top = 4.dp)
-                                )
-                            }
-                            items(entries) { entry ->
-                                MealEntryCard(
-                                    mealEntryItem = entry,
-                                    onDelete = { mealToDelete ->
-                                        mealEntryViewModel.deleteMealEntry(mealToDelete)
-                                    }
-                                )
-                            }
-                        }
+            // Grouped Meal List
+            val groupedEntries = todaysEntries.groupBy { it.mealType }
+            val mealOrder = listOf("Breakfast", "Lunch", "Dinner", "Snack")
+            
+            mealOrder.forEach { type ->
+                val entries = groupedEntries[type]
+                if (!entries.isNullOrEmpty()) {
+                    item {
+                        Text(
+                            text = type,
+                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.padding(start = 4.dp, top = 4.dp)
+                        )
                     }
-                    
-                    val otherEntries = todaysEntries.filter { it.mealType !in mealOrder }
-                    if (otherEntries.isNotEmpty()) {
-                        item {
-                             Text(
-                                text = "Other",
-                                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                                color = MaterialTheme.colorScheme.secondary,
-                                modifier = Modifier.padding(start = 4.dp, top = 4.dp)
-                            )
-                        }
-                        items(otherEntries) { entry ->
-                            MealEntryCard(
-                                mealEntryItem = entry,
-                                onDelete = { mealEntryViewModel.deleteMealEntry(it) }
-                            )
-                        }
+                    items(entries) { entry ->
+                        MealEntryCard(
+                            mealEntryItem = entry,
+                            onDelete = { mealToDelete ->
+                                mealEntryViewModel.deleteMealEntry(mealToDelete)
+                            }
+                        )
                     }
+                }
+            }
+            
+            val otherEntries = todaysEntries.filter { it.mealType !in mealOrder }
+            if (otherEntries.isNotEmpty()) {
+                item {
+                     Text(
+                        text = "Other",
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.padding(start = 4.dp, top = 4.dp)
+                    )
+                }
+                items(otherEntries) { entry ->
+                    MealEntryCard(
+                        mealEntryItem = entry,
+                        onDelete = { mealEntryViewModel.deleteMealEntry(it) }
+                    )
                 }
             }
         }

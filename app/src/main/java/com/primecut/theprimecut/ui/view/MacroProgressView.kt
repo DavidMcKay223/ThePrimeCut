@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -41,35 +42,43 @@ fun MacroProgressView(
 
     if (profile != null) {
         val userProfile = profile!!
-        Card(
+        // Use LazyColumn to allow scrolling on small screens if content overflows
+        LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
-            )
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = "Daily Nutrition Goals",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(20.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = "Daily Nutrition Goals",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
 
-                MacroProgressRow("Calories", summary.calories, userProfile.calorieGoal, " cal")
-                MacroProgressRow("Protein", summary.protein, userProfile.proteinGoal, " g")
-                MacroProgressRow("Carbs", summary.carbs, userProfile.carbsGoal, " g")
-                MacroProgressRow("Fat", summary.fats, userProfile.fatGoal, " g")
-                MacroProgressRow("Fiber", summary.fiber, userProfile.fiberGoal, " g")
+                        MacroProgressRow("Calories", summary.calories, userProfile.calorieGoal, " cal")
+                        MacroProgressRow("Protein", summary.protein, userProfile.proteinGoal, " g")
+                        MacroProgressRow("Carbs", summary.carbs, userProfile.carbsGoal, " g")
+                        MacroProgressRow("Fat", summary.fats, userProfile.fatGoal, " g")
+                        MacroProgressRow("Fiber", summary.fiber, userProfile.fiberGoal, " g")
+                    }
+                }
             }
         }
     } else {

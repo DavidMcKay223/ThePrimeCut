@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -18,6 +19,7 @@ import com.primecut.theprimecut.data.model.DietType
 import com.primecut.theprimecut.data.model.Sex
 import com.primecut.theprimecut.data.model.UserProfile
 import com.primecut.theprimecut.ui.component.DropdownSelector
+import com.primecut.theprimecut.ui.component.ResponsiveInputRow
 import com.primecut.theprimecut.ui.viewmodels.FoodItemViewModel
 import com.primecut.theprimecut.ui.viewmodels.UserProfileViewModel
 import com.primecut.theprimecut.util.loadFoodItemsFromAssets
@@ -29,9 +31,13 @@ fun SettingsScreen(
     userProfileViewModel: UserProfileViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val configuration = LocalConfiguration.current
     val scope = rememberCoroutineScope()
 
     val profile by userProfileViewModel.userProfile.collectAsState()
+
+    // Breakpoint for responsive layout
+    val isCompact = configuration.screenWidthDp < 480
 
     val sexes = listOf("Male", "Female")
     val activityLevels = listOf("Sedentary", "Lightly Active", "Moderately Active", "Very Active", "Super Active")
@@ -105,61 +111,63 @@ fun SettingsScreen(
                     )
                 )
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    OutlinedTextField(
-                        value = age,
-                        onValueChange = { if (it.all { char -> char.isDigit() }) age = it },
-                        label = { Text("Age") },
-                        modifier = Modifier.weight(1f),
-                        singleLine = true,
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.surface,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                ResponsiveInputRow(
+                    content1 = { modifier ->
+                        OutlinedTextField(
+                            value = age,
+                            onValueChange = { if (it.all { char -> char.isDigit() }) age = it },
+                            label = { Text("Age") },
+                            modifier = modifier,
+                            singleLine = true,
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                            )
                         )
-                    )
-                    DropdownSelector(
-                        label = "Sex",
-                        selected = sex,
-                        options = sexes,
-                        onSelected = { sex = it },
-                        modifier = Modifier.weight(1f),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.surface,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                    },
+                    content2 = { modifier ->
+                        DropdownSelector(
+                            label = "Sex",
+                            selected = sex,
+                            options = sexes,
+                            onSelected = { sex = it },
+                            modifier = modifier,
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                            )
                         )
-                    )
-                }
+                    }
+                )
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    OutlinedTextField(
-                        value = height,
-                        onValueChange = { if (it.all { char -> char.isDigit() || char == '.' }) height = it },
-                        label = { Text("Height (in)") },
-                        modifier = Modifier.weight(1f),
-                        singleLine = true,
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.surface,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                ResponsiveInputRow(
+                    content1 = { modifier ->
+                        OutlinedTextField(
+                            value = height,
+                            onValueChange = { if (it.all { char -> char.isDigit() || char == '.' }) height = it },
+                            label = { Text("Height (in)") },
+                            modifier = modifier,
+                            singleLine = true,
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                            )
                         )
-                    )
-                    OutlinedTextField(
-                        value = weight,
-                        onValueChange = { if (it.all { char -> char.isDigit() || char == '.' }) weight = it },
-                        label = { Text("Weight (lbs)") },
-                        modifier = Modifier.weight(1f),
-                        singleLine = true,
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.surface,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                    },
+                    content2 = { modifier ->
+                        OutlinedTextField(
+                            value = weight,
+                            onValueChange = { if (it.all { char -> char.isDigit() || char == '.' }) weight = it },
+                            label = { Text("Weight (lbs)") },
+                            modifier = modifier,
+                            singleLine = true,
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                            )
                         )
-                    )
-                }
+                    }
+                )
             }
         }
 
@@ -193,33 +201,34 @@ fun SettingsScreen(
                     )
                 )
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    DropdownSelector(
-                        label = "Goal",
-                        selected = goal,
-                        options = goals,
-                        onSelected = { goal = it },
-                        modifier = Modifier.weight(1f),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.surface,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                ResponsiveInputRow(
+                    content1 = { modifier ->
+                        DropdownSelector(
+                            label = "Goal",
+                            selected = goal,
+                            options = goals,
+                            onSelected = { goal = it },
+                            modifier = modifier,
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                            )
                         )
-                    )
-                    DropdownSelector(
-                        label = "Diet",
-                        selected = diet,
-                        options = diets,
-                        onSelected = { diet = it },
-                        modifier = Modifier.weight(1f),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.surface,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                    },
+                    content2 = { modifier ->
+                        DropdownSelector(
+                            label = "Diet",
+                            selected = diet,
+                            options = diets,
+                            onSelected = { diet = it },
+                            modifier = modifier,
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                            )
                         )
-                    )
-                }
+                    }
+                )
             }
         }
 
@@ -297,14 +306,37 @@ fun SettingsScreen(
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        TargetItem("Calories", "${it.calorieGoal}")
-                        TargetItem("Protein", "${it.proteinGoal}g")
-                        TargetItem("Carbs", "${it.carbsGoal}g")
-                        TargetItem("Fat", "${it.fatGoal}g")
+
+                    if (isCompact) {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                TargetItem("Calories", "${it.calorieGoal.toInt()}")
+                                TargetItem("Protein", "${it.proteinGoal.toInt()}g")
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                TargetItem("Carbs", "${it.carbsGoal.toInt()}g")
+                                TargetItem("Fat", "${it.fatGoal.toInt()}g")
+                            }
+                        }
+                    } else {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            TargetItem("Calories", "${it.calorieGoal.toInt()}")
+                            TargetItem("Protein", "${it.proteinGoal.toInt()}g")
+                            TargetItem("Carbs", "${it.carbsGoal.toInt()}g")
+                            TargetItem("Fat", "${it.fatGoal.toInt()}g")
+                        }
                     }
                 }
             }
