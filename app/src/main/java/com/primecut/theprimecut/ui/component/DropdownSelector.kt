@@ -13,6 +13,7 @@ fun DropdownSelector(
     options: List<String>,
     onSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
+    shape: androidx.compose.ui.graphics.Shape = OutlinedTextFieldDefaults.shape,
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -31,6 +32,7 @@ fun DropdownSelector(
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
             modifier = Modifier.menuAnchor().fillMaxWidth(),
+            shape = shape,
             colors = colors
         )
         ExposedDropdownMenu(

@@ -1,19 +1,24 @@
 package com.primecut.theprimecut.ui.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.primecut.theprimecut.data.model.MealEntry
 import com.primecut.theprimecut.ui.theme.OffWhite
-import com.primecut.theprimecut.ui.theme.SlateGray
 import com.primecut.theprimecut.ui.theme.VividBlue
 
 @Composable
@@ -22,111 +27,83 @@ fun MealEntryCard(
     onDelete: (MealEntry) -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp),
+            .padding(vertical = 4.dp),
         colors = CardDefaults.cardColors(
-            containerColor = SlateGray
+            containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            // Header: Name, Calories, Delete
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top
+            // Icon/Avatar placeholder
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .background(VividBlue.copy(alpha = 0.1f)),
+                contentAlignment = Alignment.Center
             ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = mealEntryItem.mealName,
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Bold
-                        ),
-                        color = VividBlue,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    
-                    val subtitle = listOfNotNull(
-                        mealEntryItem.mealType,
-                        mealEntryItem.groupName?.takeIf { it.isNotEmpty() }
-                    ).joinToString(" • ")
+                Icon(
+                    imageVector = Icons.Default.Restaurant,
+                    contentDescription = null,
+                    tint = VividBlue,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
 
-                    if (subtitle.isNotEmpty()) {
-                        Text(
-                            text = subtitle,
-                            style = MaterialTheme.typography.labelMedium,
-                            color = OffWhite.copy(alpha = 0.7f)
-                        )
-                    }
-                }
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = mealEntryItem.mealName,
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = (-0.3).sp
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
                 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Surface(
-                        color = VividBlue.copy(alpha = 0.15f),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Text(
-                            text = "${mealEntryItem.calories.toInt()} kcal",
-                            style = MaterialTheme.typography.labelLarge.copy(
-                                fontWeight = FontWeight.Bold,
-                                color = VividBlue
-                            ),
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                        )
-                    }
-                    
-                    IconButton(
-                        onClick = { onDelete(mealEntryItem) },
-                        modifier = Modifier.size(24.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Delete",
-                            tint = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.size(20.dp)
-                        )
-                    }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "${mealEntryItem.calories.toInt()} kcal",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = VividBlue,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = " • ${mealEntryItem.portionEaten} portions",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
 
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = 12.dp),
-                color = OffWhite.copy(alpha = 0.1f)
-            )
-
-            // Macros Row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+            IconButton(
+                onClick = { onDelete(mealEntryItem) },
+                modifier = Modifier
+                    .size(36.dp)
+                    .background(MaterialTheme.colorScheme.error.copy(alpha = 0.1f), CircleShape)
             ) {
-                MacroItem(label = "Protein", value = "${mealEntryItem.protein.toInt()}g")
-                MacroItem(label = "Carbs", value = "${mealEntryItem.carbs.toInt()}g")
-                MacroItem(label = "Fats", value = "${mealEntryItem.fats.toInt()}g")
-                MacroItem(label = "Fiber", value = "${mealEntryItem.fiber.toInt()}g")
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete",
+                    tint = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.size(18.dp)
+                )
             }
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            // Serving Info footer
-            Text(
-                text = "${mealEntryItem.portionEaten} portion(s) • ${mealEntryItem.measurementServings} ${mealEntryItem.measurementType}",
-                style = MaterialTheme.typography.bodySmall,
-                color = OffWhite.copy(alpha = 0.5f),
-                modifier = Modifier.align(Alignment.End)
-            )
         }
     }
 }
+
 
 @Composable
 private fun MacroItem(label: String, value: String) {

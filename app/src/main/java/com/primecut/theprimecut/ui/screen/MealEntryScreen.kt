@@ -1,19 +1,32 @@
 package com.primecut.theprimecut.ui.screen
 
 import android.widget.Toast
+import androidx.compose.animation.*
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Restaurant
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.primecut.theprimecut.PrimeCutApplication
 import com.primecut.theprimecut.ui.viewmodels.ViewModelFactory
@@ -53,8 +66,6 @@ fun MealEntryScreen(
     var foodName by remember { mutableStateOf("") }
     var portion by remember { mutableFloatStateOf(1f) }
 
-    var foodExpanded by remember { mutableStateOf(false) }
-    var filteredFoodItems by remember { mutableStateOf(foodItems.map { it.recipeName }) }
     var showFoodSearchSheet by remember { mutableStateOf(false) }
 
     val todayEntries = remember(mealEntries, selectedDate) {
@@ -73,186 +84,201 @@ fun MealEntryScreen(
     val totalCarbs = remember(todayEntries) { todayEntries.sumOf { it.carbs.toInt() } }
     val totalFats = remember(todayEntries) { todayEntries.sumOf { it.fats.toInt() } }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp)
-    ) {
-        item {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(
-                    text = "Log a Meal",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary
+    Column(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+        // Header
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 20.dp)
+        ) {
+            Text(
+                text = "Log Meal",
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = (-0.5).sp
+                ),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = "Track your intake for today",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 32.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            // Summary Card
+            item {
+                SummaryCard(
+                    calories = totalCalories,
+                    protein = totalProtein,
+                    carbs = totalCarbs,
+                    fats = totalFats,
+                    fiber = totalFiber
                 )
+            }
 
-                Card(
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                    shape = MaterialTheme.shapes.medium,
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+            // Entry Form
+            item {
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        ResponsiveInputRow(
-                            content1 = { modifier ->
-                                DateSelector(
-                                    selectedDate = selectedDate,
-                                    onDateSelected = { selectedDate = it },
-                                    modifier = modifier
-                                )
-                            },
-                            content2 = { modifier ->
-                                DropdownSelector(
-                                    label = "Meal Type",
-                                    selected = mealType,
-                                    options = listOf("Breakfast", "Lunch", "Dinner", "Snack"),
-                                    onSelected = { mealType = it },
-                                    modifier = modifier,
-                                    colors = OutlinedTextFieldDefaults.colors(
-                                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                                        unfocusedContainerColor = MaterialTheme.colorScheme.surface
-                                    )
-                                )
-                            }
+                        Text(
+                            text = "New Entry",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
                         )
-
-                        OutlinedButton(
-                            onClick = { showFoodSearchSheet = true },
-                            modifier = Modifier.fillMaxWidth(),
+                        
+                        // Date Display/Selector Trigger
+                        Surface(
+                            onClick = { /* Could open a date picker here if DateSelector doesn't handle it */ },
                             shape = RoundedCornerShape(12.dp),
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                contentColor = MaterialTheme.colorScheme.onSurface
-                            )
+                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                         ) {
-                            Text(
-                                text = foodName.ifBlank { "Select Food Item" },
-                                style = MaterialTheme.typography.bodyLarge,
-                                modifier = Modifier.padding(vertical = 8.dp)
-                            )
-                        }
-
-                        if (showFoodSearchSheet) {
-                            ModalBottomSheet(
-                                onDismissRequest = { showFoodSearchSheet = false }
+                            Row(
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                FoodSearchSheetContent(
-                                    foodItems = foodItems,
-                                    onFoodSelected = { selectedFood ->
-                                        foodName = selectedFood.recipeName
-                                        portion = selectedFood.servings
-                                        showFoodSearchSheet = false
-                                    }
-                                )
+                                Icon(Icons.Default.DateRange, contentDescription = null, modifier = Modifier.size(16.dp))
+                                Text(selectedDate, style = MaterialTheme.typography.labelLarge)
                             }
                         }
+                    }
 
-                        NutritionPortionSlider(
-                            foodItem = currentFoodItem,
-                            portion = portion,
-                            onPortionChange = { portion = it },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        Button(
-                            onClick = {
-                                val portionVal = portion
-                                val foodItem: FoodItem? = foodItems.find { it.recipeName == foodName }
-                                if (foodItem != null) {
-                                    val entry = MealEntry(
-                                        date = selectedDate,
-                                        day = LocalDate.parse(selectedDate).dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() },
-                                        mealType = mealType,
-                                        mealName = foodItem.recipeName,
-                                        groupName = foodItem.groupName,
-                                        portionEaten = portionVal,
-                                        measurementServings = foodItem.measurementServings,
-                                        measurementType = foodItem.measurementType,
-                                        calories = foodItem.caloriesPerServing * portionVal,
-                                        protein = foodItem.protein * portionVal,
-                                        carbs = foodItem.carbs * portionVal,
-                                        fats = foodItem.fats * portionVal,
-                                        fiber = foodItem.fiber * portionVal
-                                    )
-                                    mealEntryViewModel.addMealEntry(entry)
-                                    foodName = ""
-                                    portion = 1f
-                                    Toast.makeText(context, "Meal added!", Toast.LENGTH_SHORT).show()
-                                } else {
-                                    Toast.makeText(context, "Food item not found", Toast.LENGTH_SHORT).show()
-                                }
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = MaterialTheme.shapes.medium
+                    Card(
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                        shape = RoundedCornerShape(20.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
-                            Text("Add Meal")
+                            DropdownSelector(
+                                label = "Meal Type",
+                                selected = mealType,
+                                options = listOf("Breakfast", "Lunch", "Dinner", "Snack"),
+                                onSelected = { mealType = it },
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+
+                            Button(
+                                onClick = { showFoodSearchSheet = true },
+                                modifier = Modifier.fillMaxWidth().height(56.dp),
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                ),
+                                elevation = null
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Icon(Icons.Default.Restaurant, contentDescription = null, modifier = Modifier.size(20.dp))
+                                        Spacer(Modifier.width(12.dp))
+                                        Text(
+                                            text = foodName.ifBlank { "Select Food Item" },
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            fontWeight = if (foodName.isEmpty()) FontWeight.Normal else FontWeight.Bold
+                                        )
+                                    }
+                                    Icon(Icons.Default.KeyboardArrowDown, contentDescription = null)
+                                }
+                            }
+
+                            if (showFoodSearchSheet) {
+                                ModalBottomSheet(
+                                    onDismissRequest = { showFoodSearchSheet = false },
+                                    dragHandle = { BottomSheetDefaults.DragHandle() },
+                                    containerColor = MaterialTheme.colorScheme.surface
+                                ) {
+                                    FoodSearchSheetContent(
+                                        foodItems = foodItems,
+                                        onFoodSelected = { selectedFood ->
+                                            foodName = selectedFood.recipeName
+                                            portion = selectedFood.servings
+                                            showFoodSearchSheet = false
+                                        }
+                                    )
+                                }
+                            }
+
+                            AnimatedVisibility(visible = currentFoodItem != null) {
+                                NutritionPortionSlider(
+                                    foodItem = currentFoodItem,
+                                    portion = portion,
+                                    onPortionChange = { portion = it },
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+
+                            Button(
+                                onClick = {
+                                    val foodItem = currentFoodItem
+                                    if (foodItem != null) {
+                                        val entry = MealEntry(
+                                            date = selectedDate,
+                                            day = LocalDate.parse(selectedDate).dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() },
+                                            mealType = mealType,
+                                            mealName = foodItem.recipeName,
+                                            groupName = foodItem.groupName,
+                                            portionEaten = portion,
+                                            measurementServings = foodItem.measurementServings,
+                                            measurementType = foodItem.measurementType,
+                                            calories = foodItem.caloriesPerServing * portion,
+                                            protein = foodItem.protein * portion,
+                                            carbs = foodItem.carbs * portion,
+                                            fats = foodItem.fats * portion,
+                                            fiber = foodItem.fiber * portion
+                                        )
+                                        mealEntryViewModel.addMealEntry(entry)
+                                        foodName = ""
+                                        portion = 1f
+                                        Toast.makeText(context, "Meal Logged", Toast.LENGTH_SHORT).show()
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth().height(52.dp),
+                                shape = RoundedCornerShape(12.dp),
+                                enabled = currentFoodItem != null,
+                                colors = ButtonDefaults.buttonColors(containerColor = VividBlue)
+                            ) {
+                                Icon(Icons.Default.Add, contentDescription = null)
+                                Spacer(Modifier.width(8.dp))
+                                Text("Log to Diary", fontWeight = FontWeight.Bold)
+                            }
                         }
                     }
                 }
             }
-        }
 
-        item {
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        }
-
-        item {
-            Text(
-                text = "Daily Summary",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
-        }
-
-        if (todayEntries.isEmpty()) {
+            // Entries List
             item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(32.dp),
-                    contentAlignment = Alignment.Center
-                ) {
+                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                     Text(
-                        text = "No meals logged for this date.",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        text = "Today's History",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 12.dp)
                     )
-                }
-            }
-        } else {
-            item {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp),
-                    colors = CardDefaults.cardColors(containerColor = VividBlue),
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(4.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text("Total Calories", style = MaterialTheme.typography.labelMedium, color = OffWhite.copy(0.8f))
-                            Text("$totalCalories", style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold), color = OffWhite)
-                        }
 
-                        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                            SummaryMacro("Protein", "${totalProtein}g")
-                            SummaryMacro("Carbs", "${totalCarbs}g")
-                            SummaryMacro("Fats", "${totalFats}g")
-                            SummaryMacro("Fiber", "${totalFiber}g")
-                        }
+                    if (todayEntries.isEmpty()) {
+                        EmptyHistoryState()
                     }
                 }
             }
@@ -266,42 +292,105 @@ fun MealEntryScreen(
                     item {
                         Text(
                             text = type,
-                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.secondary,
-                            modifier = Modifier.padding(start = 4.dp, top = 4.dp)
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.ExtraBold,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
                         )
                     }
                     items(entries) { entry ->
-                        MealEntryCard(
-                            mealEntryItem = entry,
-                            onDelete = { mealToDelete ->
-                                mealEntryViewModel.deleteMealEntry(mealToDelete)
-                            }
-                        )
+                        Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
+                            MealEntryCard(
+                                mealEntryItem = entry,
+                                onDelete = { mealEntryViewModel.deleteMealEntry(it) }
+                            )
+                        }
                     }
-                }
-            }
-
-            val otherEntries = todayEntries.filter { it.mealType !in mealOrder }
-            if (otherEntries.isNotEmpty()) {
-                item {
-                    Text(
-                        text = "Other",
-                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.padding(start = 4.dp, top = 4.dp)
-                    )
-                }
-                items(otherEntries) { entry ->
-                    MealEntryCard(
-                        mealEntryItem = entry,
-                        onDelete = { mealEntryViewModel.deleteMealEntry(it) }
-                    )
                 }
             }
         }
     }
 }
+
+@Composable
+private fun SummaryCard(
+    calories: Int,
+    protein: Int,
+    carbs: Int,
+    fats: Int,
+    fiber: Int
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        colors = CardDefaults.cardColors(containerColor = VividBlue),
+        shape = RoundedCornerShape(24.dp),
+        elevation = CardDefaults.cardElevation(8.dp)
+    ) {
+        Column(modifier = Modifier.padding(24.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text("Total Calories", style = MaterialTheme.typography.labelLarge, color = OffWhite.copy(0.7f))
+                    Text(
+                        "$calories",
+                        style = MaterialTheme.typography.headlineLarge.copy(
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 36.sp
+                        ),
+                        color = OffWhite
+                    )
+                }
+                Icon(
+                    Icons.Default.History,
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp),
+                    tint = OffWhite.copy(alpha = 0.2f)
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                SummaryMacro("Protein", "${protein}g")
+                SummaryMacro("Carbs", "${carbs}g")
+                SummaryMacro("Fats", "${fats}g")
+                SummaryMacro("Fiber", "${fiber}g")
+            }
+        }
+    }
+}
+
+@Composable
+private fun EmptyHistoryState() {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+    ) {
+        Column(
+            modifier = Modifier.padding(32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(Icons.Default.Restaurant, contentDescription = null, tint = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.size(48.dp))
+            Spacer(Modifier.height(12.dp))
+            Text(
+                "No meals logged yet",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
 
 @Composable
 private fun SummaryMacro(label: String, value: String) {

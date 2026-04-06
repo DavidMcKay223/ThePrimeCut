@@ -11,6 +11,12 @@ import androidx.compose.ui.unit.dp
 import com.primecut.theprimecut.ui.view.MacroProgressView
 
 @Composable
-fun HomeScreen() {
-    MacroProgressView()
+fun HomeScreen(
+    onProfileClick: () -> Unit = {},
+    onSettingsClick: () -> Unit = {}
+) {
+    MacroProgressView(
+        onProfileClick = onProfileClick,
+        onSettingsClick = onSettingsClick
+    )
 }

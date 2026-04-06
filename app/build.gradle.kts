@@ -47,8 +47,7 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
     implementation("com.google.code.gson:gson:2.11.0")
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    implementation("com.github.bumptech.glide:okhttp3-integration:4.16.0")
+    implementation(libs.coil.compose)
 
     implementation("androidx.work:work-runtime-ktx:2.10.0")
 

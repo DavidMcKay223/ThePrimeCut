@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.dp
 import com.primecut.theprimecut.ui.screen.HomeScreen
 import com.primecut.theprimecut.ui.screen.ProfileScreen
 import com.primecut.theprimecut.ui.screen.SettingsScreen
@@ -61,38 +62,24 @@ class MainActivity : ComponentActivity() {
 fun MainScreen() {
     var currentScreen by remember { mutableStateOf<Screen>(Screen.Home) }
     val tabs: List<Screen> = remember { listOf(Screen.Home, Screen.FoodList, Screen.MealEntry, Screen.Profile) }
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text(currentScreen.title) },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                actions = {
-                    IconButton(onClick = { currentScreen = Screen.Settings }) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Settings"
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior
-            )
-        },
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                containerColor = MaterialTheme.colorScheme.surface,
+                tonalElevation = 8.dp
+            ) {
                 tabs.forEach { screen ->
                     NavigationBarItem(
                         selected = currentScreen == screen,
                         onClick = { currentScreen = screen },
                         icon = { Icon(imageVector = screen.icon, contentDescription = screen.title) },
                         label = { Text(screen.title) },
-
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = MaterialTheme.colorScheme.primary,
+                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            indicatorColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                        )
                     )
                 }
             }
@@ -104,7 +91,10 @@ fun MainScreen() {
                 .fillMaxSize()
         ) {
             when (currentScreen) {
-                Screen.Home -> HomeScreen()
+                Screen.Home -> HomeScreen(
+                    onProfileClick = { currentScreen = Screen.Profile },
+                    onSettingsClick = { currentScreen = Screen.Settings }
+                )
                 Screen.Profile -> ProfileScreen()
                 Screen.Settings -> SettingsScreen()
                 Screen.FoodList -> FoodListScreen()
