@@ -21,12 +21,11 @@ import com.primecut.theprimecut.ui.screen.HomeScreen
 import com.primecut.theprimecut.ui.screen.ProfileScreen
 import com.primecut.theprimecut.ui.screen.SettingsScreen
 import com.primecut.theprimecut.ui.theme.ThePrimeCutTheme
-import dagger.hilt.android.AndroidEntryPoint
 import com.primecut.theprimecut.ui.screen.FoodListScreen
-import dagger.hilt.android.HiltAndroidApp
 import android.app.Application
 import androidx.compose.material.icons.filled.Add
 import com.primecut.theprimecut.ui.screen.MealEntryScreen
+import com.primecut.theprimecut.di.AppContainer
 
 sealed class Screen(val title: String, val icon: ImageVector) {
     object Home : Screen("Home", Icons.Default.Home)
@@ -36,10 +35,15 @@ sealed class Screen(val title: String, val icon: ImageVector) {
     object MealEntry : Screen("Meal Entry", Icons.Default.Add)
 }
 
-@HiltAndroidApp
-class PrimeCutApplication : Application()
+class PrimeCutApplication : Application() {
+    lateinit var container: AppContainer
 
-@AndroidEntryPoint
+    override fun onCreate() {
+        super.onCreate()
+        container = AppContainer(this)
+    }
+}
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -2,9 +2,8 @@ package com.primecut.theprimecut.data.repository
 
 import com.primecut.theprimecut.data.dao.FoodItemDao
 import com.primecut.theprimecut.data.model.FoodItem
-import javax.inject.Inject
 
-class FoodItemRepository @Inject constructor(
+class FoodItemRepository(
     private val dao: FoodItemDao
 ) {
     suspend fun getAll(): List<FoodItem> = dao.getAll()

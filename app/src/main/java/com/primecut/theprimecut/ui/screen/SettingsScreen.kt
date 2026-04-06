@@ -14,7 +14,9 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.primecut.theprimecut.PrimeCutApplication
+import com.primecut.theprimecut.ui.viewmodels.ViewModelFactory
 import com.primecut.theprimecut.data.model.DietType
 import com.primecut.theprimecut.data.model.Sex
 import com.primecut.theprimecut.data.model.UserProfile
@@ -27,8 +29,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(
-    foodItemViewModel: FoodItemViewModel = hiltViewModel(),
-    userProfileViewModel: UserProfileViewModel = hiltViewModel()
+    foodItemViewModel: FoodItemViewModel = viewModel(
+        factory = ViewModelFactory((LocalContext.current.applicationContext as PrimeCutApplication).container)
+    ),
+    userProfileViewModel: UserProfileViewModel = viewModel(
+        factory = ViewModelFactory((LocalContext.current.applicationContext as PrimeCutApplication).container)
+    )
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current

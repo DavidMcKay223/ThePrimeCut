@@ -4,17 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.primecut.theprimecut.data.model.UserProfile
 import com.primecut.theprimecut.data.repository.UserProfileRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 import com.primecut.theprimecut.util.AppSession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-@HiltViewModel
-class UserProfileViewModel @Inject constructor(
+class UserProfileViewModel(
     private val repository: UserProfileRepository
 ) : ViewModel() {
 

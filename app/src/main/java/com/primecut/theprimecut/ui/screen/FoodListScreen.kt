@@ -12,15 +12,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.primecut.theprimecut.PrimeCutApplication
 import com.primecut.theprimecut.ui.component.FoodItemCard
 import com.primecut.theprimecut.ui.component.ResponsiveInputRow
 import com.primecut.theprimecut.ui.viewmodels.FoodItemViewModel
+import com.primecut.theprimecut.ui.viewmodels.ViewModelFactory
 
 @Composable
 fun FoodListScreen(
-    viewModel: FoodItemViewModel = hiltViewModel()
+    viewModel: FoodItemViewModel = viewModel(
+        factory = ViewModelFactory((LocalContext.current.applicationContext as PrimeCutApplication).container)
+    )
 ) {
     val foodItems by viewModel.foodItems.collectAsState()
     val nameQuery by viewModel.nameQuery.collectAsState()

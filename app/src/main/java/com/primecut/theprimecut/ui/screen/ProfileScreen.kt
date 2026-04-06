@@ -19,7 +19,9 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.primecut.theprimecut.PrimeCutApplication
+import com.primecut.theprimecut.ui.viewmodels.ViewModelFactory
 import com.primecut.theprimecut.ui.component.DateSelector
 import com.primecut.theprimecut.ui.component.ResponsiveInputRow
 import com.primecut.theprimecut.ui.viewmodels.WeightLogViewModel
@@ -30,7 +32,9 @@ import com.primecut.theprimecut.ui.theme.VividBlue
 
 @Composable
 fun ProfileScreen(
-    viewModel: WeightLogViewModel = hiltViewModel()
+    viewModel: WeightLogViewModel = viewModel(
+        factory = ViewModelFactory((LocalContext.current.applicationContext as PrimeCutApplication).container)
+    )
 ) {
     val context = LocalContext.current
     val logs by viewModel.logs.collectAsState()

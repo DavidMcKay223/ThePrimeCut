@@ -17,11 +17,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.primecut.theprimecut.PrimeCutApplication
+import com.primecut.theprimecut.ui.viewmodels.ViewModelFactory
+import androidx.compose.ui.platform.LocalContext
 import com.primecut.theprimecut.ui.component.MacroProgressRow
 import com.primecut.theprimecut.ui.viewmodels.MacroViewModel
 import com.primecut.theprimecut.ui.viewmodels.UserProfileViewModel
@@ -29,8 +33,12 @@ import com.primecut.theprimecut.util.AppSession
 
 @Composable
 fun MacroProgressView(
-    userProfileViewModel: UserProfileViewModel = hiltViewModel(),
-    macroViewModel: MacroViewModel = hiltViewModel()
+    userProfileViewModel: UserProfileViewModel = viewModel(
+        factory = ViewModelFactory((LocalContext.current.applicationContext as PrimeCutApplication).container)
+    ),
+    macroViewModel: MacroViewModel = viewModel(
+        factory = ViewModelFactory((LocalContext.current.applicationContext as PrimeCutApplication).container)
+    )
 ) {
     val profile by userProfileViewModel.userProfile.collectAsState()
     val summary by macroViewModel.summary.collectAsState()

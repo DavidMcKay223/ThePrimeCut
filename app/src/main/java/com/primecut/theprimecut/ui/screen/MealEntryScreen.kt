@@ -14,11 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.primecut.theprimecut.PrimeCutApplication
+import com.primecut.theprimecut.ui.viewmodels.ViewModelFactory
 import com.primecut.theprimecut.data.model.FoodItem
 import com.primecut.theprimecut.data.model.MealEntry
 import com.primecut.theprimecut.ui.viewmodels.MealEntryViewModel
 import com.primecut.theprimecut.ui.viewmodels.FoodItemViewModel
+import java.time.LocalDate
 import java.text.SimpleDateFormat
 import java.util.*
 import com.primecut.theprimecut.ui.component.MealEntryCard
@@ -31,8 +34,12 @@ import com.primecut.theprimecut.ui.theme.VividBlue
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MealEntryScreen(
-    mealEntryViewModel: MealEntryViewModel = hiltViewModel(),
-    foodItemViewModel: FoodItemViewModel = hiltViewModel()
+    mealEntryViewModel: MealEntryViewModel = viewModel(
+        factory = ViewModelFactory((LocalContext.current.applicationContext as PrimeCutApplication).container)
+    ),
+    foodItemViewModel: FoodItemViewModel = viewModel(
+        factory = ViewModelFactory((LocalContext.current.applicationContext as PrimeCutApplication).container)
+    )
 ) {
     val context = LocalContext.current
 
@@ -159,8 +166,7 @@ fun MealEntryScreen(
                                 if (foodItem != null) {
                                     val entry = MealEntry(
                                         date = selectedDate,
-                                        day = SimpleDateFormat("EEEE", Locale.US)
-                                            .format(SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(selectedDate)!!),
+                                        day = LocalDate.parse(selectedDate).dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() },
                                         mealType = mealType,
                                         mealName = foodItem.recipeName,
                                         groupName = foodItem.groupName,
