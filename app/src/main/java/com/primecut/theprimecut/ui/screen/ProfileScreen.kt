@@ -28,9 +28,62 @@ import com.primecut.theprimecut.ui.component.DateSelector
 import com.primecut.theprimecut.ui.component.ResponsiveInputRow
 import com.primecut.theprimecut.ui.viewmodels.WeightLogViewModel
 import com.primecut.theprimecut.util.AppSession
-import com.primecut.theprimecut.ui.theme.OffWhite
-import com.primecut.theprimecut.ui.theme.SlateGray
-import com.primecut.theprimecut.ui.theme.VividBlue
+
+import androidx.compose.foundation.Canvas
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.PathEffect
+import kotlin.math.max
+import kotlin.math.min
+
+@Composable
+fun WeightTrendGraph(
+    logs: List<com.primecut.theprimecut.data.model.WeightLog>,
+    modifier: Modifier = Modifier
+) {
+    val sortedLogs = logs.sortedBy { it.date }
+    val weights = sortedLogs.map { it.weightLbs }
+    val minWeight = weights.minOrNull() ?: 0f
+    val maxWeight = weights.maxOrNull() ?: 100f
+    
+    // Calculate padding for the graph so it doesn't hit the absolute edges
+    val range = maxWeight - minWeight
+    val displayMin = minWeight - (range * 0.1f)
+    val displayMax = maxWeight + (range * 0.1f)
+    val displayRange = (displayMax - displayMin).let { if (it <= 0f) 1f else it }
+
+    Canvas(modifier = modifier) {
+        val width = size.width
+        val height = size.height
+        val spacing = width / (weights.size - 1).coerceAtLeast(1)
+
+        val points = weights.mapIndexed { index, weight ->
+            val x = index * spacing
+            val normalizedWeight = (weight - displayMin) / displayRange
+            // Inverse Y since 0 is top
+            val y = height - (normalizedWeight * height)
+            androidx.compose.ui.geometry.Offset(x, y)
+        }
+
+        val path = Path().apply {
+            if (points.isNotEmpty()) {
+                moveTo(points[0].x, points[0].y)
+                for (i in 1 until points.size) {
+                    lineTo(points[i].x, points[i].y)
+                }
+            }
+        }
+
+        drawPath(
+            path = path,
+            color = Color(0xFF2E7D32),
+            style = Stroke(
+                width = 3.dp.toPx(),
+                pathEffect = PathEffect.cornerPathEffect(20f)
+            )
+        )
+    }
+}
 
 @Composable
 fun ProfileScreen(
@@ -56,7 +109,7 @@ fun ProfileScreen(
                 .padding(horizontal = 16.dp, vertical = 20.dp)
         ) {
             Text(
-                text = "My Profile",
+                text = "The Prime Identity",
                 style = MaterialTheme.typography.headlineMedium.copy(
                     fontWeight = FontWeight.ExtraBold,
                     letterSpacing = (-0.5).sp
@@ -64,7 +117,7 @@ fun ProfileScreen(
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = "Manage your journey and logs",
+                text = "Managing the elite engine that is you",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -82,38 +135,51 @@ fun ProfileScreen(
                     shape = RoundedCornerShape(24.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(20.dp)
-                    ) {
-                        Box(
+                    Column {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
                             modifier = Modifier
-                                .size(64.dp)
-                                .clip(CircleShape)
-                                .background(VividBlue),
-                            contentAlignment = Alignment.Center
+                                .fillMaxWidth()
+                                .padding(20.dp)
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.Person,
-                                contentDescription = "Profile Picture",
-                                modifier = Modifier.size(32.dp),
-                                tint = Color.White
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(64.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.primary),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Person,
+                                    contentDescription = "Profile Picture",
+                                    modifier = Modifier.size(32.dp),
+                                    tint = MaterialTheme.colorScheme.onPrimary
+                                )
+                            }
+                            
+                            Column {
+                                Text(
+                                    text = AppSession.userName,
+                                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Text(
+                                    text = "Elite Cut Connoisseur",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.tertiary,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
                         }
-                        
-                        Column {
-                            Text(
-                                text = AppSession.userName,
-                                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            Text(
-                                text = "Premium Food Diary Member",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+
+                        if (logs.size >= 2) {
+                            WeightTrendGraph(
+                                logs = logs,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(100.dp)
+                                    .padding(horizontal = 24.dp, vertical = 8.dp)
                             )
                         }
                     }
@@ -127,7 +193,7 @@ fun ProfileScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        text = "Log New Weight",
+                        text = "Recalibrate the Machine",
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -167,19 +233,19 @@ fun ProfileScreen(
                                 onClick = {
                                     val weight = weightInput.toFloatOrNull()
                                     if (dateInput.isBlank() || weight == null) {
-                                        Toast.makeText(context, "Enter valid date and weight", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, "Precision requires data. Enter date and weight.", Toast.LENGTH_SHORT).show()
                                     } else {
                                         viewModel.addOrUpdateLog(AppSession.userName, dateInput, weight)
                                         dateInput = ""
                                         weightInput = ""
-                                        Toast.makeText(context, "Entry added!", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, "Metrics updated!", Toast.LENGTH_SHORT).show()
                                     }
                                 },
                                 modifier = Modifier.fillMaxWidth().height(48.dp),
                                 shape = RoundedCornerShape(12.dp),
-                                colors = ButtonDefaults.buttonColors(containerColor = VividBlue)
+                                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                             ) {
-                                Text("Add Entry", fontWeight = FontWeight.Bold)
+                                Text("Commit to the Log", fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -189,7 +255,7 @@ fun ProfileScreen(
             // History Header
             item {
                 Text(
-                    text = "History",
+                    text = "Historical Performance",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(horizontal = 16.dp)
@@ -205,9 +271,10 @@ fun ProfileScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "No logs yet.",
+                            text = "The annals are empty. Start recording your legend.",
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
                         )
                     }
                 }
@@ -235,7 +302,7 @@ fun ProfileScreen(
                                 Icon(
                                     imageVector = Icons.Default.DateRange,
                                     contentDescription = null,
-                                    tint = VividBlue,
+                                    tint = MaterialTheme.colorScheme.tertiary,
                                     modifier = Modifier.size(20.dp)
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
@@ -248,7 +315,7 @@ fun ProfileScreen(
                             Text(
                                 text = "${log.weightLbs} lbs",
                                 style = MaterialTheme.typography.titleMedium,
-                                color = VividBlue,
+                                color = MaterialTheme.colorScheme.tertiary,
                                 fontWeight = FontWeight.Bold
                             )
                         }

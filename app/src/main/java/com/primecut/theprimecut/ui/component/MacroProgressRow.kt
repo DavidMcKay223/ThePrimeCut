@@ -18,7 +18,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.primecut.theprimecut.ui.theme.VividBlue
 import kotlin.math.abs
 
 @Composable
@@ -40,11 +39,7 @@ fun MacroProgressRow(
     )
 
     // Determine colors
-    val progressColor = when {
-        isOverLimit -> MaterialTheme.colorScheme.error
-        progressValue >= 0.9f -> Color(0xFFFFA726) // Warning/Close color
-        else -> VividBlue
-    }
+    val progressColor = getMacroColor(name, current / safeGoal)
 
     Column(
         modifier = Modifier
@@ -99,7 +94,7 @@ fun MacroProgressRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            val status = getStatusText(current, goal, format)
+            val status = getStatusText(name, current, goal, format)
             Text(
                 text = status,
                 style = MaterialTheme.typography.labelSmall,
@@ -117,11 +112,25 @@ fun MacroProgressRow(
     }
 }
 
-private fun getStatusText(current: Float, goal: Float, format: String): String {
+private fun getMacroColor(name: String, ratio: Float): Color {
+    return when {
+        ratio > 1.0f -> Color(0xFFD32F2F) // Over target (Red)
+        ratio >= 0.9f -> Color(0xFFFFA726) // Near target (Orange)
+        else -> {
+            if (name.equals("Protein", ignoreCase = true) || name.equals("Fiber", ignoreCase = true)) {
+                Color(0xFF2E7D32) // Standard Success Green
+            } else {
+                Color(0xFF0066EE) // Standard Blue
+            }
+        }
+    }
+}
+
+private fun getStatusText(name: String, current: Float, goal: Float, format: String): String {
     val remaining = goal - current
     return when {
-        remaining < 0 -> "Over by %.1f%s".format(abs(remaining), format)
-        current / (if (goal > 0) goal else 1f) >= 0.9f -> "Almost there!"
-        else -> "${String.format("%.1f", remaining)}$format left"
+        remaining < 0 -> "Threshold exceeded by %.1f%s".format(abs(remaining), format)
+        current / (if (goal > 0) goal else 1f) >= 0.9f -> "Peak performance imminent"
+        else -> "Tactical reserve: ${String.format("%.1f", remaining)}$format"
     }
 }

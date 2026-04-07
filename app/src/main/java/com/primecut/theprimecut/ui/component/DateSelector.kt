@@ -3,12 +3,14 @@ package com.primecut.theprimecut.ui.component
 import android.app.DatePickerDialog
 import android.content.Context
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,7 +20,11 @@ fun DateSelector(
     selectedDate: String,
     modifier: Modifier = Modifier,
     label: String = "Date",
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
+    shape: androidx.compose.ui.graphics.Shape = RoundedCornerShape(12.dp),
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
+        focusedContainerColor = MaterialTheme.colorScheme.surface,
+        unfocusedContainerColor = MaterialTheme.colorScheme.surface
+    ),
     onDateSelected: (String) -> Unit
 ) {
     val context: Context = LocalContext.current
@@ -29,6 +35,7 @@ fun DateSelector(
         onValueChange = {},
         readOnly = true,
         label = { Text(label) },
+        shape = shape,
         trailingIcon = {
             IconButton(onClick = {
                 val datePicker = DatePickerDialog(
@@ -47,7 +54,11 @@ fun DateSelector(
                 )
                 datePicker.show()
             }) {
-                Icon(Icons.Default.DateRange, contentDescription = "Pick date")
+                Icon(
+                    imageVector = Icons.Default.DateRange,
+                    contentDescription = "Pick date",
+                    tint = MaterialTheme.colorScheme.primary
+                )
             }
         },
         modifier = modifier.fillMaxWidth(),

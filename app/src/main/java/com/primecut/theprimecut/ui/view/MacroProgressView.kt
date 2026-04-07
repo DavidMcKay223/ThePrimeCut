@@ -30,7 +30,7 @@ import com.primecut.theprimecut.ui.viewmodels.MacroViewModel
 import com.primecut.theprimecut.ui.viewmodels.UserProfileViewModel
 import com.primecut.theprimecut.ui.viewmodels.ViewModelFactory
 import com.primecut.theprimecut.util.AppSession
-import com.primecut.theprimecut.ui.theme.VividBlue
+import java.util.Calendar
 
 @Composable
 fun MacroProgressView(
@@ -66,14 +66,14 @@ fun MacroProgressView(
         ) {
             Column {
                 Text(
-                    text = "My Dashboard",
+                    text = getWittyGreeting(),
                     style = MaterialTheme.typography.headlineMedium.copy(
                         fontWeight = FontWeight.ExtraBold,
                         letterSpacing = (-0.5).sp
                     )
                 )
                 Text(
-                    text = "Fueling for greatness",
+                    text = getDailyMotivation(summary.calories, profile?.calorieGoal ?: 2000f),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -154,9 +154,15 @@ fun MacroProgressView(
                             
                             Spacer(modifier = Modifier.height(24.dp))
 
+                            val hasMacroOverflow = (summary.protein > userProfile.proteinGoal) ||
+                                    (summary.carbs > userProfile.carbsGoal) ||
+                                    (summary.fats > userProfile.fatGoal) ||
+                                    (summary.fiber > userProfile.fiberGoal)
+
                             CalorieProgressCircle(
                                 current = summary.calories,
                                 goal = userProfile.calorieGoal,
+                                hasMacroOverflow = hasMacroOverflow,
                                 size = 220.dp,
                                 strokeWidth = 20.dp
                             )
@@ -168,18 +174,31 @@ fun MacroProgressView(
 
                 // Nutrient Details Section
                 item {
-                    Text(
-                        text = "Nutrient Breakdown",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "The Prime Breakdown",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "Precision Fueling",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.tertiary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                     
+                    Spacer(modifier = Modifier.height(12.dp))
+
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(24.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                         border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
                     ) {
                         Column(
@@ -199,9 +218,30 @@ fun MacroProgressView(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(strokeWidth = 3.dp)
+                CircularProgressIndicator(strokeWidth = 3.dp, color = MaterialTheme.colorScheme.primary)
             }
         }
+    }
+}
+
+private fun getWittyGreeting(): String {
+    val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+    return when (hour) {
+        in 0..11 -> "Morning, Operator"
+        in 12..16 -> "Mid-Day Calibration"
+        in 17..20 -> "Evening Refuel"
+        else -> "Late-Night Optimization"
+    }
+}
+
+private fun getDailyMotivation(current: Float, goal: Float): String {
+    val ratio = current / goal
+    return when {
+        ratio == 0f -> "System Idle: Awaiting Initial Fuel Injection."
+        ratio < 0.3f -> "Initializing: Deploy Primary Macronutrients."
+        ratio < 0.7f -> "Status Nominal: Maintain Current Trajectory."
+        ratio < 1.0f -> "Final Phase: Precision Intake Required."
+        else -> "Capacity Reached: Cease Further Intake."
     }
 }
 

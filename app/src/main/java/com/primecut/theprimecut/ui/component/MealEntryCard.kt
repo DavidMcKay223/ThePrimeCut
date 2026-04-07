@@ -18,8 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.primecut.theprimecut.data.model.MealEntry
-import com.primecut.theprimecut.ui.theme.OffWhite
-import com.primecut.theprimecut.ui.theme.VividBlue
+import java.util.*
 
 @Composable
 fun MealEntryCard(
@@ -47,13 +46,13 @@ fun MealEntryCard(
                 modifier = Modifier
                     .size(48.dp)
                     .clip(CircleShape)
-                    .background(VividBlue.copy(alpha = 0.1f)),
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Default.Restaurant,
                     contentDescription = null,
-                    tint = VividBlue,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -76,14 +75,32 @@ fun MealEntryCard(
                     Text(
                         text = "${mealEntryItem.calories.toInt()} kcal",
                         style = MaterialTheme.typography.labelMedium,
-                        color = VividBlue,
+                        color = MaterialTheme.colorScheme.tertiary,
                         fontWeight = FontWeight.Bold
                     )
+                    val portionDesc = if (mealEntryItem.measurementServings != null && mealEntryItem.measurementType != null) {
+                        " • ${mealEntryItem.portionEaten} x ${mealEntryItem.measurementServings} ${mealEntryItem.measurementType}"
+                    } else {
+                        " • ${mealEntryItem.portionEaten} portions"
+                    }
                     Text(
-                        text = " • ${mealEntryItem.portionEaten} portions",
+                        text = portionDesc,
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Full Macros Row
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    CompactMacro("Prot", "${mealEntryItem.protein.toInt()}g", MaterialTheme.colorScheme.tertiary)
+                    CompactMacro("Carb", "${mealEntryItem.carbs.toInt()}g", MaterialTheme.colorScheme.primary)
+                    CompactMacro("Fat", "${mealEntryItem.fats.toInt()}g", MaterialTheme.colorScheme.secondary)
+                    CompactMacro("Fiber", "${mealEntryItem.fiber.toInt()}g", MaterialTheme.colorScheme.tertiaryContainer)
                 }
             }
 
@@ -106,17 +123,36 @@ fun MealEntryCard(
 
 
 @Composable
+private fun CompactMacro(label: String, value: String, color: Color) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box(
+            modifier = Modifier
+                .size(8.dp)
+                .clip(CircleShape)
+                .background(color)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = "$label: $value",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
 private fun MacroItem(label: String, value: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = value,
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-            color = OffWhite
+            color = MaterialTheme.colorScheme.onPrimary
         )
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = OffWhite.copy(alpha = 0.7f)
+            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
         )
     }
 }

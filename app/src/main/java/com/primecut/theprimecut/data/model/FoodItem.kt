@@ -55,6 +55,9 @@ data class FoodItem(
     val isBalancedMeal: Boolean
         get() = protein >= 15f && carbs <= 60f && fats <= 20f
 
+    val isHighFiber: Boolean
+        get() = fiber >= 5f
+
     val isLowProtein: Boolean
         get() = protein < 5f
 }

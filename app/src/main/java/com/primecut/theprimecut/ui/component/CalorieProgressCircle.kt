@@ -17,13 +17,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.primecut.theprimecut.ui.theme.VividBlue
 import kotlin.math.abs
 
 @Composable
 fun CalorieProgressCircle(
     current: Float,
     goal: Float,
+    hasMacroOverflow: Boolean = false,
     modifier: Modifier = Modifier,
     size: Dp = 200.dp,
     strokeWidth: Dp = 16.dp
@@ -39,7 +39,11 @@ fun CalorieProgressCircle(
         label = "CalorieProgressAnimation"
     )
 
-    val progressColor = if (isOverLimit) MaterialTheme.colorScheme.error else VividBlue
+    val progressColor = when {
+        isOverLimit -> MaterialTheme.colorScheme.error
+        hasMacroOverflow -> Color(0xFFFFA726) // Warning Orange
+        else -> MaterialTheme.colorScheme.tertiary
+    }
     val trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
 
     Box(
@@ -77,10 +81,10 @@ fun CalorieProgressCircle(
                     fontWeight = FontWeight.Bold,
                     fontSize = 42.sp
                 ),
-                color = if (isOverLimit) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+                color = if (isOverLimit) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.tertiary
             )
             Text(
-                text = if (isOverLimit) "Over Limit" else "Remaining",
+                text = if (isOverLimit) "Prime Overflow" else "Remaining Fuel",
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

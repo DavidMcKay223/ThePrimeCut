@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.primecut.theprimecut.data.model.FoodItem
+import com.primecut.theprimecut.ui.theme.PrimeGreen
 import com.primecut.theprimecut.ui.theme.VividBlue
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -165,17 +166,23 @@ fun FoodItemCard(
                         // Slider
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
                                 text = "Adjust Portion",
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold
                             )
+                            val portionText = if (foodItem.measurementServings != 0f) {
+                                String.format(Locale.US, "%.2f x %.0f %s", servingMultiplier, foodItem.measurementServings, foodItem.measurementType)
+                            } else {
+                                String.format(Locale.US, "%.2f portions", servingMultiplier)
+                            }
                             Text(
-                                text = String.format(Locale.US, "%.2f servings", servingMultiplier),
+                                text = portionText,
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.primary,
+                                color = VividBlue,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -200,14 +207,36 @@ fun FoodItemCard(
                             ) {
                                 Text(
                                     text = if (newRemaining >= 0) 
-                                        "Fits! ${newRemaining.roundToInt()} kcal remaining" 
-                                        else "Caution: Over by ${kotlin.math.abs(newRemaining).roundToInt()} kcal",
+                                        "Fits the cut! ${newRemaining.roundToInt()} kcal remaining" 
+                                        else "Caution: This exceeds the prime limit by ${kotlin.math.abs(newRemaining).roundToInt()} kcal",
                                     style = MaterialTheme.typography.labelLarge,
                                     color = if (newRemaining >= 0) Color(0xFF2E7D32) else MaterialTheme.colorScheme.error,
                                     modifier = Modifier.padding(12.dp),
                                     fontWeight = FontWeight.SemiBold
                                 )
                             }
+                        }
+                        
+                        // Detailed Breakdown Section
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp)
+                                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
+                                .padding(12.dp)
+                        ) {
+                            Text(
+                                text = "Nutritional Logic",
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = VividBlue
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = getFoodLogic(foodItem),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         }
 
                         Button(
@@ -218,7 +247,7 @@ fun FoodItemCard(
                         ) {
                             Icon(Icons.Default.Add, contentDescription = null)
                             Spacer(Modifier.width(8.dp))
-                            Text("Add to Diary", fontWeight = FontWeight.Bold)
+                            Text("Initialize Logging", fontWeight = FontWeight.Bold)
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                     }
@@ -231,10 +260,10 @@ fun FoodItemCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    MacroIndicator("Prot", "${protein.roundToInt()}g", Color(0xFF42A5F5))
-                    MacroIndicator("Carb", "${carbs.roundToInt()}g", Color(0xFFFFA726))
-                    MacroIndicator("Fat", "${fats.roundToInt()}g", Color(0xFFEF5350))
-                    MacroIndicator("Fiber", "${(foodItem.fiber * servingMultiplier).roundToInt()}g", Color(0xFF66BB6A))
+                    MacroIndicator("Prot", "${protein.roundToInt()}g", PrimeGreen)
+                    MacroIndicator("Carb", "${carbs.roundToInt()}g", VividBlue)
+                    MacroIndicator("Fat", "${fats.roundToInt()}g", VividBlue)
+                    MacroIndicator("Fiber", "${(foodItem.fiber * servingMultiplier).roundToInt()}g", PrimeGreen)
                 }
             }
         }
@@ -270,6 +299,21 @@ private fun MacroIndicator(label: String, value: String, color: Color) {
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+    }
+}
+
+private fun getFoodLogic(item: FoodItem): String {
+    val reasons = mutableListOf<String>()
+    if (item.isHighProtein) reasons.add("High protein to fortify the frame.")
+    if (item.isLowCarb) reasons.add("Low carb to maintain steady-state focus.")
+    if (item.isKeto) reasons.add("Keto-optimized for lipid-driven performance.")
+    if (item.isBalancedMeal) reasons.add("Strategically balanced for all-day endurance.")
+    if (item.isHighFiber) reasons.add("High fiber to optimize internal logistics.")
+    
+    return if (reasons.isEmpty()) {
+        "A standard addition to the operational day."
+    } else {
+        reasons.joinToString(" ")
     }
 }
 

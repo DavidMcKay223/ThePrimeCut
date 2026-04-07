@@ -40,6 +40,9 @@ import com.primecut.theprimecut.util.AppSession
 import java.time.LocalDate
 import java.util.Calendar
 
+import com.primecut.theprimecut.ui.theme.PrimeGreen
+import com.primecut.theprimecut.ui.theme.VividBlue
+
 @Composable
 fun FoodListScreen(
     viewModel: FoodItemViewModel = viewModel(
@@ -89,7 +92,7 @@ fun FoodListScreen(
             ) {
                 Column {
                     Text(
-                        text = "Food Library",
+                        text = "The Prime Selection",
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.ExtraBold,
                             letterSpacing = (-0.5).sp
@@ -97,7 +100,7 @@ fun FoodListScreen(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "${foodItems.size} items available",
+                        text = "Curating ${foodItems.size} elite fuel sources",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -252,7 +255,7 @@ fun FoodListScreen(
                             mealName = food.recipeName,
                             groupName = food.groupName,
                             portionEaten = multiplier,
-                            measurementServings = food.measurementServings * multiplier,
+                            measurementServings = food.measurementServings,
                             measurementType = food.measurementType,
                             calories = food.caloriesPerServing * multiplier,
                             protein = food.protein * multiplier,
@@ -289,17 +292,17 @@ private fun EmptySearchState() {
             imageVector = Icons.Default.Search,
             contentDescription = null,
             modifier = Modifier.size(80.dp),
-            tint = MaterialTheme.colorScheme.outlineVariant
+            tint = PrimeGreen.copy(alpha = 0.3f)
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "No culinary matches found",
+            text = "No 'Prime' matches found",
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface
         )
         Text(
-            text = "Try adjusting your filters or search terms.",
+            text = "Even our elite scanners couldn't find that. Try widening your search for the perfect cut.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = androidx.compose.ui.text.style.TextAlign.Center
