@@ -7,31 +7,23 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import androidx.compose.ui.unit.sp
 import com.primecut.theprimecut.data.model.FoodItem
-import com.primecut.theprimecut.ui.theme.PrimeGreen
-import com.primecut.theprimecut.ui.theme.VividBlue
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -49,107 +41,101 @@ fun FoodItemCard(
     val carbs = foodItem.carbs * servingMultiplier
     val fats = foodItem.fats * servingMultiplier
 
-    val isImpactPositive = remainingCalories == null || calories <= remainingCalories
-
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 10.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
         onClick = { expanded = !expanded }
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            // Top Image Section
+            // Visual Header Section (Styled Box with Icon and Color)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(180.dp)
-                    .background(VividBlue.copy(alpha = 0.1f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Restaurant,
-                    contentDescription = null,
-                    modifier = Modifier.size(64.dp),
-                    tint = VividBlue.copy(alpha = 0.3f)
-                )
-                
-                // Gradient overlay
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.7f)),
-                                startY = 300f
+                    .height(100.dp)
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f),
+                                MaterialTheme.colorScheme.primaryContainer
                             )
                         )
+                    )
+            ) {
+                // Large Background Icon for "Picture Book" feel without internet
+                Icon(
+                    imageVector = getIconForGroup(foodItem.groupName),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(120.dp)
+                        .align(Alignment.CenterEnd)
+                        .offset(x = 20.dp, y = 10.dp),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.1f)
                 )
 
                 // Calorie Badge
                 Surface(
-                    color = if (isImpactPositive) VividBlue else MaterialTheme.colorScheme.error,
-                    shape = RoundedCornerShape(12.dp),
+                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+                    shape = RoundedCornerShape(8.dp),
                     modifier = Modifier
                         .padding(12.dp)
                         .align(Alignment.TopEnd)
                 ) {
                     Text(
                         text = "${calories.roundToInt()} kcal",
-                        style = MaterialTheme.typography.labelLarge.copy(
+                        style = MaterialTheme.typography.labelMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.primary
                         ),
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
 
-                // Name
-                Text(
-                    text = foodItem.recipeName,
-                    style = MaterialTheme.typography.headlineSmall.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    ),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
+                // Food Name on Header
+                Column(
                     modifier = Modifier
                         .align(Alignment.BottomStart)
-                        .padding(16.dp)
-                )
+                        .padding(12.dp)
+                ) {
+                    Text(
+                        text = foodItem.recipeName,
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
 
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(12.dp)
             ) {
-                // Info Row
+                // Info & Small Macros Row
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val subtitle = listOfNotNull(
-                        foodItem.brandType.takeIf { it.isNotEmpty() },
-                        foodItem.groupName?.takeIf { it.isNotEmpty() }
-                    ).joinToString(" • ")
-
                     Text(
-                        text = subtitle,
-                        style = MaterialTheme.typography.bodyMedium,
+                        text = "${foodItem.brandType} • ${foodItem.measurementServings.roundToInt()} ${foodItem.measurementType}",
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     
-                    Icon(
-                        imageVector = if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                         MacroSmallLabel("P", "${protein.roundToInt()}g")
+                         MacroSmallLabel("C", "${carbs.roundToInt()}g")
+                         MacroSmallLabel("F", "${fats.roundToInt()}g")
+                    }
                 }
 
                 AnimatedVisibility(
@@ -157,32 +143,26 @@ fun FoodItemCard(
                     enter = fadeIn() + expandVertically(),
                     exit = fadeOut() + shrinkVertically()
                 ) {
-                    Column(modifier = Modifier.padding(top = 16.dp)) {
+                    Column(modifier = Modifier.padding(top = 12.dp)) {
                         HorizontalDivider(
-                            modifier = Modifier.padding(bottom = 16.dp),
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+                            modifier = Modifier.padding(bottom = 12.dp),
+                            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
                         )
                         
-                        // Slider
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Adjust Portion",
-                                style = MaterialTheme.typography.titleSmall,
+                                text = "Adjust Serving",
+                                style = MaterialTheme.typography.labelLarge,
                                 fontWeight = FontWeight.Bold
                             )
-                            val portionText = if (foodItem.measurementServings != 0f) {
-                                String.format(Locale.US, "%.2f x %.0f %s", servingMultiplier, foodItem.measurementServings, foodItem.measurementType)
-                            } else {
-                                String.format(Locale.US, "%.2f portions", servingMultiplier)
-                            }
                             Text(
-                                text = portionText,
+                                text = String.format(Locale.US, "%.2f x", servingMultiplier),
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = VividBlue,
+                                color = MaterialTheme.colorScheme.primary,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -193,77 +173,24 @@ fun FoodItemCard(
                             valueRange = 0.25f..4f,
                             steps = 14,
                             colors = SliderDefaults.colors(
-                                thumbColor = VividBlue,
-                                activeTrackColor = VividBlue
+                                thumbColor = MaterialTheme.colorScheme.primary,
+                                activeTrackColor = MaterialTheme.colorScheme.primary
                             )
                         )
 
-                        if (remainingCalories != null) {
-                            val newRemaining = remainingCalories - calories
-                            Surface(
-                                color = if (newRemaining >= 0) Color(0xFF4CAF50).copy(alpha = 0.1f) else MaterialTheme.colorScheme.error.copy(alpha = 0.1f),
-                                shape = RoundedCornerShape(12.dp),
-                                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
-                            ) {
-                                Text(
-                                    text = if (newRemaining >= 0) 
-                                        "Fits the cut! ${newRemaining.roundToInt()} kcal remaining" 
-                                        else "Caution: This exceeds the prime limit by ${kotlin.math.abs(newRemaining).roundToInt()} kcal",
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = if (newRemaining >= 0) Color(0xFF2E7D32) else MaterialTheme.colorScheme.error,
-                                    modifier = Modifier.padding(12.dp),
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                            }
-                        }
-                        
-                        // Detailed Breakdown Section
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp)
-                                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
-                                .padding(12.dp)
-                        ) {
-                            Text(
-                                text = "Nutritional Logic",
-                                style = MaterialTheme.typography.labelLarge,
-                                fontWeight = FontWeight.Bold,
-                                color = VividBlue
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = getFoodLogic(foodItem),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-
                         Button(
-                            onClick = { onLogClick(foodItem, servingMultiplier) },
-                            modifier = Modifier.fillMaxWidth().height(48.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = VividBlue),
-                            shape = RoundedCornerShape(12.dp)
+                            onClick = { 
+                                onLogClick(foodItem, servingMultiplier) 
+                                expanded = false
+                            },
+                            modifier = Modifier.fillMaxWidth().height(40.dp),
+                            shape = RoundedCornerShape(8.dp)
                         ) {
-                            Icon(Icons.Default.Add, contentDescription = null)
+                            Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(Modifier.width(8.dp))
-                            Text("Initialize Logging", fontWeight = FontWeight.Bold)
+                            Text("Add to Diary", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
                     }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Macros Row
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    MacroIndicator("Prot", "${protein.roundToInt()}g", PrimeGreen)
-                    MacroIndicator("Carb", "${carbs.roundToInt()}g", VividBlue)
-                    MacroIndicator("Fat", "${fats.roundToInt()}g", VividBlue)
-                    MacroIndicator("Fiber", "${(foodItem.fiber * servingMultiplier).roundToInt()}g", PrimeGreen)
                 }
             }
         }
@@ -271,63 +198,28 @@ fun FoodItemCard(
 }
 
 @Composable
-private fun MacroIndicator(label: String, value: String, color: Color) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(
-            modifier = Modifier
-                .width(50.dp)
-                .height(4.dp)
-                .clip(CircleShape)
-                .background(color.copy(alpha = 0.2f))
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(0.7f)
-                    .clip(CircleShape)
-                    .background(color)
-            )
-        }
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-            color = MaterialTheme.colorScheme.onSurface
-        )
+private fun MacroSmallLabel(label: String, value: String) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(Modifier.width(2.dp))
+        Text(
+            text = value,
+            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
 
-private fun getFoodLogic(item: FoodItem): String {
-    val reasons = mutableListOf<String>()
-    if (item.isHighProtein) reasons.add("High protein to fortify the frame.")
-    if (item.isLowCarb) reasons.add("Low carb to maintain steady-state focus.")
-    if (item.isKeto) reasons.add("Keto-optimized for lipid-driven performance.")
-    if (item.isBalancedMeal) reasons.add("Strategically balanced for all-day endurance.")
-    if (item.isHighFiber) reasons.add("High fiber to optimize internal logistics.")
-    
-    return if (reasons.isEmpty()) {
-        "A standard addition to the operational day."
-    } else {
-        reasons.joinToString(" ")
-    }
-}
-
-private fun getPlaceholderForGroup(group: String?): String {
+private fun getIconForGroup(group: String?): ImageVector {
     return when (group?.lowercase()) {
-        "chicken", "poultry", "meat" -> "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=800&q=80"
-        "beef", "steak" -> "https://images.unsplash.com/photo-1546241072-48010ad28c2c?auto=format&fit=crop&w=800&q=80"
-        "fish", "seafood" -> "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80"
-        "vegetable", "salad" -> "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80"
-        "fruit" -> "https://images.unsplash.com/photo-1519996529931-28324d5a630e?auto=format&fit=crop&w=800&q=80"
-        "breakfast", "egg" -> "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80"
-        "dessert", "sweet" -> "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=80"
-        "pasta", "grain" -> "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80"
-        "burger", "fast food" -> "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80"
-        else -> "https://images.unsplash.com/photo-1490818387583-1baba5e6382b?auto=format&fit=crop&w=800&q=80"
+        "fruits & vegetables" -> Icons.Default.Restaurant
+        "meat", "poultry", "beef" -> Icons.Default.Restaurant
+        "bakery", "sweets" -> Icons.Default.Fastfood
+        "nutrition", "beverages" -> Icons.Default.Fastfood
+        else -> Icons.Default.Restaurant
     }
 }

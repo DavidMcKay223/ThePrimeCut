@@ -189,6 +189,7 @@ fun MealEntryScreen(
                 showFoodSearchSheet = false
                 if (foodName.isEmpty()) activeMealType = null
             },
+            containerColor = MaterialTheme.colorScheme.surface,
             dragHandle = { BottomSheetDefaults.DragHandle() }
         ) {
             FoodSearchSheetContent(
@@ -208,6 +209,7 @@ fun MealEntryScreen(
                 foodName = ""
                 activeMealType = null
             },
+            containerColor = MaterialTheme.colorScheme.surface,
             dragHandle = { BottomSheetDefaults.DragHandle() }
         ) {
             Column(modifier = Modifier.padding(16.dp).padding(bottom = 32.dp)) {
@@ -220,7 +222,8 @@ fun MealEntryScreen(
                 Text(
                     text = foodName,
                     style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 
                 Spacer(Modifier.height(16.dp))
@@ -421,7 +424,7 @@ fun MealEntryRow(entry: MealEntry, onDelete: (MealEntry) -> Unit) {
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "${entry.portionEaten.toOneDecimal()} x ${entry.measurementServings}${entry.measurementType}",
+                text = "${entry.portionEaten.toOneDecimal()} x ${entry.measurementServings} ${entry.measurementType}",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -547,9 +550,15 @@ fun NutritionPortionSlider(
 
             Slider(
                 value = portion,
-                onValueChange = onPortionChange,
+                onValueChange = { onPortionChange(it) },
                 valueRange = 0.25f..10f,
-                modifier = Modifier.padding(vertical = 8.dp)
+                steps = 38,
+                modifier = Modifier.padding(vertical = 8.dp),
+                colors = SliderDefaults.colors(
+                    thumbColor = MaterialTheme.colorScheme.primary,
+                    activeTrackColor = MaterialTheme.colorScheme.primary,
+                    inactiveTrackColor = MaterialTheme.colorScheme.outlineVariant
+                )
             )
 
             // Live macro preview
@@ -572,7 +581,8 @@ private fun NutritionPreviewItem(label: String, value: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = value,
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+            color = MaterialTheme.colorScheme.onSurface
         )
         Text(
             text = label,

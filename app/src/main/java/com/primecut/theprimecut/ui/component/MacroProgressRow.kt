@@ -38,8 +38,12 @@ fun MacroProgressRow(
         label = "ProgressAnimation"
     )
 
-    // Determine colors
-    val progressColor = getMacroColor(name, current / safeGoal)
+    // Determine colors: All match Green (Tertiary) unless over limit
+    val progressColor = if (isOverLimit) {
+        MaterialTheme.colorScheme.error
+    } else {
+        MaterialTheme.colorScheme.tertiary
+    }
 
     Column(
         modifier = Modifier
@@ -85,6 +89,8 @@ fun MacroProgressRow(
                 .clip(RoundedCornerShape(50)), // Fully rounded
             color = progressColor,
             trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+            gapSize = 0.dp,
+            drawStopIndicator = {} // This effectively hides it
         )
 
         Spacer(modifier = Modifier.height(4.dp))
@@ -94,9 +100,15 @@ fun MacroProgressRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            val status = getStatusText(name, current, goal, format)
+            val remaining = goal - current
+            val statusText = if (remaining < 0) {
+                "Over by ${String.format("%.1f", abs(remaining))}$format"
+            } else {
+                "${String.format("%.1f", remaining)}$format remaining"
+            }
+
             Text(
-                text = status,
+                text = statusText,
                 style = MaterialTheme.typography.labelSmall,
                 color = if (isOverLimit) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
             )
