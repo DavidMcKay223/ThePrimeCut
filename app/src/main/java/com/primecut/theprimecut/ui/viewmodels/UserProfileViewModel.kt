@@ -18,20 +18,44 @@ class UserProfileViewModel(
     private val _userProfile = MutableStateFlow<UserProfile?>(null)
     val userProfile: StateFlow<UserProfile?> get() = _userProfile
 
+    private val _allUserNames = MutableStateFlow<List<String>>(emptyList())
+    val allUserNames: StateFlow<List<String>> get() = _allUserNames
+
+    private val _allProfiles = MutableStateFlow<List<UserProfile>>(emptyList())
+    val allProfiles: StateFlow<List<UserProfile>> get() = _allProfiles
+
+    var onUserSwitched: (() -> Unit)? = null
+
     init {
         loadProfile(AppSession.userName)
+        loadAllUserNames()
+    }
+
+    fun loadAllUserNames() {
+        viewModelScope.launch {
+            val names = withContext(Dispatchers.IO) { repository.getAllUserNames() }
+            _allUserNames.value = names
+            val profiles = withContext(Dispatchers.IO) { repository.getAllProfiles() }
+            _allProfiles.value = profiles
+        }
     }
 
     fun loadProfile(userName: String) {
         viewModelScope.launch {
             val profile = withContext(Dispatchers.IO) { repository.getUserProfile(userName) }
             _userProfile.value = profile
+            AppSession.userName = userName // Update session
+            
+            withContext(Dispatchers.Main) {
+                onUserSwitched?.invoke()
+            }
         }
     }
 
     fun saveProfile(profile: UserProfile, onComplete: (() -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.saveUserProfile(profile)
+            loadAllUserNames() // Refresh list
             onComplete?.let { callback ->
                 launch(Dispatchers.Main) { callback() }
             }

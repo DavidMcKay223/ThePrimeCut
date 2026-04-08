@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -33,20 +32,18 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.PathEffect
-import kotlin.math.max
-import kotlin.math.min
 
 @Composable
 fun WeightTrendGraph(
     logs: List<com.primecut.theprimecut.data.model.WeightLog>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.primary
 ) {
     val sortedLogs = logs.sortedBy { it.date }
     val weights = sortedLogs.map { it.weightLbs }
     val minWeight = weights.minOrNull() ?: 0f
     val maxWeight = weights.maxOrNull() ?: 100f
-    
-    // Calculate padding for the graph so it doesn't hit the absolute edges
+
     val range = maxWeight - minWeight
     val displayMin = minWeight - (range * 0.1f)
     val displayMax = maxWeight + (range * 0.1f)
@@ -76,7 +73,7 @@ fun WeightTrendGraph(
 
         drawPath(
             path = path,
-            color = Color(0xFF2E7D32),
+            color = color,
             style = Stroke(
                 width = 3.dp.toPx(),
                 pathEffect = PathEffect.cornerPathEffect(20f)
@@ -94,6 +91,10 @@ fun ProfileScreen(
     val context = LocalContext.current
     val logs by viewModel.logs.collectAsState()
 
+    LaunchedEffect(AppSession.userName) {
+        viewModel.refresh()
+    }
+
     var dateInput by remember { mutableStateOf("") }
     var weightInput by remember { mutableStateOf("") }
 
@@ -109,15 +110,14 @@ fun ProfileScreen(
                 .padding(horizontal = 16.dp, vertical = 20.dp)
         ) {
             Text(
-                text = "The Prime Identity",
-                style = MaterialTheme.typography.headlineMedium.copy(
-                    fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = (-0.5).sp
-                ),
-                color = MaterialTheme.colorScheme.onSurface
+                text = "My Profile",
+                style = MaterialTheme.typography.headlineSmall.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
             )
             Text(
-                text = "Managing the elite engine that is you",
+                text = "Track your progress and updates",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -132,8 +132,9 @@ fun ProfileScreen(
             item {
                 Card(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    shape = RoundedCornerShape(24.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                 ) {
                     Column {
                         Row(
@@ -141,20 +142,20 @@ fun ProfileScreen(
                             horizontalArrangement = Arrangement.spacedBy(16.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(20.dp)
+                                .padding(16.dp)
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(64.dp)
+                                    .size(60.dp)
                                     .clip(CircleShape)
-                                    .background(MaterialTheme.colorScheme.primary),
+                                    .background(MaterialTheme.colorScheme.primaryContainer),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Person,
                                     contentDescription = "Profile Picture",
-                                    modifier = Modifier.size(32.dp),
-                                    tint = MaterialTheme.colorScheme.onPrimary
+                                    modifier = Modifier.size(30.dp),
+                                    tint = MaterialTheme.colorScheme.onPrimaryContainer
                                 )
                             }
                             
@@ -165,21 +166,27 @@ fun ProfileScreen(
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Text(
-                                    text = "Elite Cut Connoisseur",
+                                    text = "Active Member",
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.tertiary,
-                                    fontWeight = FontWeight.Bold
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                         }
 
                         if (logs.size >= 2) {
+                            Text(
+                                text = "Weight Trend",
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                             WeightTrendGraph(
                                 logs = logs,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(100.dp)
-                                    .padding(horizontal = 24.dp, vertical = 8.dp)
+                                    .height(120.dp)
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
                             )
                         }
                     }
@@ -190,10 +197,10 @@ fun ProfileScreen(
             item {
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "Recalibrate the Machine",
+                        text = "Log Weight",
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -201,7 +208,7 @@ fun ProfileScreen(
                     Card(
                         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                        shape = RoundedCornerShape(20.dp)
+                        shape = RoundedCornerShape(16.dp)
                     ) {
                         Column(
                             modifier = Modifier
@@ -233,19 +240,19 @@ fun ProfileScreen(
                                 onClick = {
                                     val weight = weightInput.toFloatOrNull()
                                     if (dateInput.isBlank() || weight == null) {
-                                        Toast.makeText(context, "Precision requires data. Enter date and weight.", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, "Please enter both date and weight.", Toast.LENGTH_SHORT).show()
                                     } else {
                                         viewModel.addOrUpdateLog(AppSession.userName, dateInput, weight)
                                         dateInput = ""
                                         weightInput = ""
-                                        Toast.makeText(context, "Metrics updated!", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context, "Weight logged!", Toast.LENGTH_SHORT).show()
                                     }
                                 },
                                 modifier = Modifier.fillMaxWidth().height(48.dp),
                                 shape = RoundedCornerShape(12.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                             ) {
-                                Text("Commit to the Log", fontWeight = FontWeight.Bold)
+                                Text("Log Weight", fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -255,7 +262,7 @@ fun ProfileScreen(
             // History Header
             item {
                 Text(
-                    text = "Historical Performance",
+                    text = "Weight History",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(horizontal = 16.dp)

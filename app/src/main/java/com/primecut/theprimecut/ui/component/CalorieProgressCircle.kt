@@ -39,12 +39,8 @@ fun CalorieProgressCircle(
         label = "CalorieProgressAnimation"
     )
 
-    val progressColor = when {
-        isOverLimit -> MaterialTheme.colorScheme.error
-        hasMacroOverflow -> Color(0xFFFFA726) // Warning Orange
-        else -> MaterialTheme.colorScheme.tertiary
-    }
-    val trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+    val progressColor = if (isOverLimit) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.tertiary
+    val trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
 
     Box(
         modifier = modifier.size(size),
@@ -79,12 +75,12 @@ fun CalorieProgressCircle(
                 text = if (remaining >= 0) remaining.toInt().toString() else abs(remaining).toInt().toString(),
                 style = MaterialTheme.typography.displayMedium.copy(
                     fontWeight = FontWeight.Bold,
-                    fontSize = 42.sp
+                    fontSize = 48.sp
                 ),
-                color = if (isOverLimit) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.tertiary
+                color = if (isOverLimit) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = if (isOverLimit) "Prime Overflow" else "Remaining Fuel",
+                text = if (isOverLimit) "Calories Over" else "Remaining",
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

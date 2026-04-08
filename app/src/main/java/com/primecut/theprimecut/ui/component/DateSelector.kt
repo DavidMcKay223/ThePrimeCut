@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import java.text.SimpleDateFormat
@@ -21,10 +22,6 @@ fun DateSelector(
     modifier: Modifier = Modifier,
     label: String = "Date",
     shape: androidx.compose.ui.graphics.Shape = RoundedCornerShape(12.dp),
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
-        focusedContainerColor = MaterialTheme.colorScheme.surface,
-        unfocusedContainerColor = MaterialTheme.colorScheme.surface
-    ),
     onDateSelected: (String) -> Unit
 ) {
     val context: Context = LocalContext.current
@@ -61,7 +58,6 @@ fun DateSelector(
                 )
             }
         },
-        modifier = modifier.fillMaxWidth(),
-        colors = colors
+        modifier = modifier.fillMaxWidth()
     )
 }

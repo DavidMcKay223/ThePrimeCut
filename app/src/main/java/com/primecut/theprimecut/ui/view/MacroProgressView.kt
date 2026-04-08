@@ -1,6 +1,13 @@
 package com.primecut.theprimecut.ui.view
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -10,10 +17,9 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.primecut.theprimecut.PrimeCutApplication
+import com.primecut.theprimecut.data.model.MacroSummary
+import com.primecut.theprimecut.data.model.UserProfile
 import com.primecut.theprimecut.ui.component.CalorieProgressCircle
 import com.primecut.theprimecut.ui.component.MacroProgressRow
 import com.primecut.theprimecut.ui.viewmodels.MacroViewModel
@@ -44,9 +52,24 @@ fun MacroProgressView(
     )
 ) {
     val profile by userProfileViewModel.userProfile.collectAsState()
+    val allUserNames by userProfileViewModel.allUserNames.collectAsState()
+    val allProfiles by userProfileViewModel.allProfiles.collectAsState()
     val summary by macroViewModel.summary.collectAsState()
+    val allUsersSummaries by macroViewModel.allUsersSummaries.collectAsState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(allUserNames) {
+        if (allUserNames.isNotEmpty()) {
+            macroViewModel.loadAllUsersSummaries(allUserNames)
+        }
+    }
+
+    LaunchedEffect(userProfileViewModel) {
+        userProfileViewModel.onUserSwitched = {
+            macroViewModel.refresh()
+        }
+    }
+
+    LaunchedEffect(AppSession.userName, profile?.calorieGoal) {
         userProfileViewModel.loadProfile(AppSession.userName)
         macroViewModel.loadSummary()
     }
@@ -57,55 +80,59 @@ fun MacroProgressView(
             .background(MaterialTheme.colorScheme.background)
     ) {
         // Dashboard Header
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 24.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .padding(horizontal = 20.dp, vertical = 24.dp)
         ) {
-            Column {
-                Text(
-                    text = getWittyGreeting(),
-                    style = MaterialTheme.typography.headlineMedium.copy(
-                        fontWeight = FontWeight.ExtraBold,
-                        letterSpacing = (-0.5).sp
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        text = "${getFriendlyGreeting()}, ${profile?.userName ?: ""}",
+                        style = MaterialTheme.typography.headlineSmall.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
                     )
-                )
-                Text(
-                    text = getDailyMotivation(summary.calories, profile?.calorieGoal ?: 2000f),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                IconButton(
-                    onClick = onSettingsClick,
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "Settings",
-                        tint = MaterialTheme.colorScheme.onSurface
+                    Text(
+                        text = "Here's your daily summary",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
-                Surface(
-                    modifier = Modifier.size(48.dp),
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    onClick = onProfileClick
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    IconButton(
+                        onClick = onSettingsClick,
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                    ) {
                         Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = "Profile",
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Settings",
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
+                    }
+
+                    Surface(
+                        modifier = Modifier.size(48.dp),
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        onClick = onProfileClick
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                imageVector = Icons.Default.Person,
+                                contentDescription = "Profile",
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                        }
                     }
                 }
             }
@@ -119,14 +146,55 @@ fun MacroProgressView(
                 contentPadding = PaddingValues(start = 20.dp, end = 20.dp, bottom = 32.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
+                // Competition Leaderboard Section
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Competition Leaderboard",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 4.dp)
+                        )
+                        Icon(
+                            imageVector = Icons.Default.LocalFireDepartment,
+                            contentDescription = null,
+                            tint = Color(0xFFFF4500)
+                        )
+                    }
+                    
+                    Spacer(modifier = Modifier.height(12.dp))
+                    
+                    val leaderboardData = allProfiles.map { userProfile ->
+                        val userSummary = allUsersSummaries[userProfile.userName] ?: MacroSummary()
+                        val percent = if (userProfile.calorieGoal > 0) (userSummary.calories / userProfile.calorieGoal) else 0f
+                        // Consistency Score: 100 - absolute deviation from goal percentage
+                        val score = (100f - kotlin.math.abs(100f - (percent * 100f))).coerceAtLeast(0f)
+                        Triple(userProfile, userSummary, score)
+                    }.sortedByDescending { it.third }
+
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        leaderboardData.forEachIndexed { index, (user, userSummary, score) ->
+                            LeaderboardCard(
+                                rank = index + 1,
+                                profile = user,
+                                summary = userSummary,
+                                score = score
+                            )
+                        }
+                    }
+                }
+
                 // Main Calorie Card
                 item {
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(32.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                     ) {
                         Column(
                             modifier = Modifier
@@ -134,81 +202,53 @@ fun MacroProgressView(
                                 .padding(24.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    Icons.Default.LocalFireDepartment,
-                                    contentDescription = null,
-                                    tint = Color(0xFFFF7043),
-                                    modifier = Modifier.size(24.dp)
-                                )
-                                Spacer(Modifier.width(8.dp))
-                                Text(
-                                    text = "Daily Calories",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
+                            Text(
+                                text = "Calories",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                             
                             Spacer(modifier = Modifier.height(24.dp))
-
-                            val hasMacroOverflow = (summary.protein > userProfile.proteinGoal) ||
-                                    (summary.carbs > userProfile.carbsGoal) ||
-                                    (summary.fats > userProfile.fatGoal) ||
-                                    (summary.fiber > userProfile.fiberGoal)
 
                             CalorieProgressCircle(
                                 current = summary.calories,
                                 goal = userProfile.calorieGoal,
-                                hasMacroOverflow = hasMacroOverflow,
-                                size = 220.dp,
-                                strokeWidth = 20.dp
+                                size = 200.dp,
+                                strokeWidth = 12.dp
                             )
-                            
-                            Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
                 }
 
                 // Nutrient Details Section
                 item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "The Prime Breakdown",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "Precision Fueling",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.tertiary,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+                    Text(
+                        text = "Nutrients",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 4.dp)
+                    )
                     
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(24.dp),
+                        shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                     ) {
                         Column(
-                            modifier = Modifier.padding(20.dp),
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(0.dp)
                         ) {
-                            MacroProgressRow("Protein", summary.protein, userProfile.proteinGoal, " g")
-                            MacroProgressRow("Carbs", summary.carbs, userProfile.carbsGoal, " g")
-                            MacroProgressRow("Fat", summary.fats, userProfile.fatGoal, " g")
-                            MacroProgressRow("Fiber", summary.fiber, userProfile.fiberGoal, " g")
+                            MacroProgressRow("Protein", summary.protein, userProfile.proteinGoal, "g")
+                            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                            MacroProgressRow("Carbohydrates", summary.carbs, userProfile.carbsGoal, "g")
+                            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                            MacroProgressRow("Fat", summary.fats, userProfile.fatGoal, "g")
+                            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                            MacroProgressRow("Fiber", summary.fiber, userProfile.fiberGoal, "g")
                         }
                     }
                 }
@@ -224,24 +264,147 @@ fun MacroProgressView(
     }
 }
 
-private fun getWittyGreeting(): String {
-    val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-    return when (hour) {
-        in 0..11 -> "Morning, Operator"
-        in 12..16 -> "Mid-Day Calibration"
-        in 17..20 -> "Evening Refuel"
-        else -> "Late-Night Optimization"
+@Composable
+fun LeaderboardCard(
+    rank: Int,
+    profile: UserProfile,
+    summary: MacroSummary,
+    score: Float
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val rotation by animateFloatAsState(if (expanded) 180f else 0f)
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { expanded = !expanded },
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (profile.userName == AppSession.userName)
+                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+            else MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column {
+            Row(
+                modifier = Modifier.padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Rank Circle
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(
+                            when (rank) {
+                                1 -> Color(0xFFFFD700) // Gold
+                                2 -> Color(0xFFC0C0C0) // Silver
+                                3 -> Color(0xFFCD7F32) // Bronze
+                                else -> MaterialTheme.colorScheme.surfaceVariant
+                            }
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "#$rank",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = if (rank <= 3) Color.Black else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Column(modifier = Modifier.weight(1.0f)) {
+                    Text(
+                        text = profile.userName,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "${summary.calories.toInt()} / ${profile.calorieGoal.toInt()} kcal",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(
+                        text = "${score.toInt()}%",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowDown,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .graphicsLayer(rotationZ = rotation),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            AnimatedVisibility(
+                visible = expanded,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                    
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        MacroMiniStat("Protein", summary.protein, profile.proteinGoal)
+                        MacroMiniStat("Carbs", summary.carbs, profile.carbsGoal)
+                        MacroMiniStat("Fat", summary.fats, profile.fatGoal)
+                        MacroMiniStat("Fiber", summary.fiber, profile.fiberGoal)
+                    }
+                }
+            }
+        }
     }
 }
 
-private fun getDailyMotivation(current: Float, goal: Float): String {
-    val ratio = current / goal
-    return when {
-        ratio == 0f -> "System Idle: Awaiting Initial Fuel Injection."
-        ratio < 0.3f -> "Initializing: Deploy Primary Macronutrients."
-        ratio < 0.7f -> "Status Nominal: Maintain Current Trajectory."
-        ratio < 1.0f -> "Final Phase: Precision Intake Required."
-        else -> "Capacity Reached: Cease Further Intake."
+@Composable
+fun MacroMiniStat(label: String, current: Float, goal: Float) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(text = label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(
+            text = "${current.toInt()}g",
+            style = MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.Bold,
+            color = if (current > goal && goal > 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+        )
+        val progress = if (goal > 0) (current / goal).coerceIn(0f, 1f) else 0f
+        Spacer(modifier = Modifier.height(4.dp))
+        LinearProgressIndicator(
+            progress = { progress },
+            modifier = Modifier
+                .width(40.dp)
+                .height(4.dp)
+                .clip(CircleShape),
+            color = if (current > goal && goal > 0) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.surfaceVariant
+        )
+    }
+}
+
+private fun getFriendlyGreeting(): String {
+    val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+    return when (hour) {
+        in 0..11 -> "Good Morning"
+        in 12..16 -> "Good Afternoon"
+        else -> "Good Evening"
     }
 }
 

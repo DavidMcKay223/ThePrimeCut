@@ -9,6 +9,14 @@ class UserProfileRepository(private val dao: UserProfileDao) {
         return dao.getUserProfile(userName) ?: UserProfile(userName = userName)
     }
 
+    suspend fun getAllUserNames(): List<String> {
+        return dao.getAllUserNames()
+    }
+
+    suspend fun getAllProfiles(): List<UserProfile> {
+        return dao.getAllProfiles()
+    }
+
     suspend fun saveUserProfile(profile: UserProfile) {
         val existing = dao.getUserProfile(profile.userName)
         if (existing == null) {

@@ -13,7 +13,7 @@ import com.primecut.theprimecut.data.model.WeightLog
 
 @Database(
     entities = [FoodItem::class, MealEntry::class, UserProfile::class, WeightLog::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

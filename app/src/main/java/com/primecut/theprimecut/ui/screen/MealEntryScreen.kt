@@ -63,8 +63,15 @@ fun MealEntryScreen(
     val foodItems by foodItemViewModel.foodItems.collectAsState()
     val profile by userProfileViewModel.userProfile.collectAsState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(userProfileViewModel) {
+        userProfileViewModel.onUserSwitched = {
+            mealEntryViewModel.refreshMealEntries()
+        }
+    }
+
+    LaunchedEffect(com.primecut.theprimecut.util.AppSession.userName) {
         userProfileViewModel.loadProfile(com.primecut.theprimecut.util.AppSession.userName)
+        mealEntryViewModel.refreshMealEntries()
     }
 
     var selectedDate by remember {
@@ -242,6 +249,7 @@ fun MealEntryScreen(
                         val foodItem = currentFoodItem
                         if (foodItem != null) {
                             val entry = MealEntry(
+                                userName = com.primecut.theprimecut.util.AppSession.userName,
                                 date = selectedDate,
                                 day = LocalDate.parse(selectedDate).dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() },
                                 mealType = activeMealType!!,

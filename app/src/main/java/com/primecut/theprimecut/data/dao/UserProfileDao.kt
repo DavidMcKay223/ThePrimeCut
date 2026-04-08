@@ -9,6 +9,12 @@ interface UserProfileDao {
     @Query("SELECT * FROM user_profiles WHERE userName = :userName LIMIT 1")
     suspend fun getUserProfile(userName: String): UserProfile?
 
+    @Query("SELECT userName FROM user_profiles")
+    suspend fun getAllUserNames(): List<String>
+
+    @Query("SELECT * FROM user_profiles")
+    suspend fun getAllProfiles(): List<UserProfile>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProfile(profile: UserProfile)
 

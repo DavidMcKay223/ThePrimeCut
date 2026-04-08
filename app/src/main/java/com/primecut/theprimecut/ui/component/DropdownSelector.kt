@@ -14,7 +14,8 @@ fun DropdownSelector(
     onSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
     shape: androidx.compose.ui.graphics.Shape = OutlinedTextFieldDefaults.shape,
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
+    leadingIcon: @Composable (() -> Unit)? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -28,6 +29,7 @@ fun DropdownSelector(
             onValueChange = {},
             label = { Text(label) },
             readOnly = true,
+            leadingIcon = leadingIcon,
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },

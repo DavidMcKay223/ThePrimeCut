@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.primecut.theprimecut.data.model.MealEntry
 import com.primecut.theprimecut.data.repository.MealEntryRepository
+import com.primecut.theprimecut.util.AppSession
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +25,7 @@ class MealEntryViewModel(
     fun refreshMealEntries(date: String? = null) {
         viewModelScope.launch {
             val items = withContext(Dispatchers.IO) {
-                date?.let { repository.getByDate(it) } ?: repository.getAll()
+                date?.let { repository.getByDate(it, AppSession.userName) } ?: repository.getAll(AppSession.userName)
             }
             _mealEntries.value = items
         }
@@ -32,8 +33,9 @@ class MealEntryViewModel(
 
     fun addMealEntry(entry: MealEntry, onComplete: (() -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.add(entry)
-            refreshMealEntries(entry.date)
+            val entryWithUser = entry.copy(userName = AppSession.userName)
+            repository.add(entryWithUser)
+            refreshMealEntries(entryWithUser.date)
             onComplete?.let { withContext(Dispatchers.Main) { it() } }
         }
     }

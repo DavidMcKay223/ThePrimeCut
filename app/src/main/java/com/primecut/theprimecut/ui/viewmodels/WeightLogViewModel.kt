@@ -19,6 +19,10 @@ class WeightLogViewModel(
     val logs: StateFlow<List<WeightLog>> = _logs
 
     init {
+        refresh()
+    }
+
+    fun refresh() {
         loadUserLogs(AppSession.userName)
     }
 
@@ -34,8 +38,7 @@ class WeightLogViewModel(
     fun addOrUpdateLog(userId: String, date: String, weightLbs: Float) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addOrUpdateLog(userId, date, weightLbs)
-            val updatedLogs = repository.getUserLogs(userId)
-            _logs.value = updatedLogs
+            refresh()
         }
     }
 }

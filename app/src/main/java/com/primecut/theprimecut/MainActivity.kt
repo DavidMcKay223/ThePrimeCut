@@ -66,7 +66,6 @@ fun MainScreen() {
     Scaffold(
         bottomBar = {
             NavigationBar(
-                containerColor = MaterialTheme.colorScheme.surface,
                 tonalElevation = 8.dp
             ) {
                 tabs.forEach { screen ->
@@ -74,12 +73,7 @@ fun MainScreen() {
                         selected = currentScreen == screen,
                         onClick = { currentScreen = screen },
                         icon = { Icon(imageVector = screen.icon, contentDescription = screen.title) },
-                        label = { Text(screen.title) },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.primary,
-                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            indicatorColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-                        )
+                        label = { Text(screen.title) }
                     )
                 }
             }

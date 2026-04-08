@@ -1,9 +1,7 @@
 package com.primecut.theprimecut.ui.screen
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -12,7 +10,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.*
@@ -20,7 +17,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -36,12 +32,8 @@ import com.primecut.theprimecut.ui.viewmodels.MacroViewModel
 import com.primecut.theprimecut.ui.viewmodels.MealEntryViewModel
 import com.primecut.theprimecut.ui.viewmodels.UserProfileViewModel
 import com.primecut.theprimecut.ui.viewmodels.ViewModelFactory
-import com.primecut.theprimecut.util.AppSession
 import java.time.LocalDate
 import java.util.Calendar
-
-import com.primecut.theprimecut.ui.theme.PrimeGreen
-import com.primecut.theprimecut.ui.theme.VividBlue
 
 @Composable
 fun FoodListScreen(
@@ -92,11 +84,10 @@ fun FoodListScreen(
             ) {
                 Text(
                     text = "Food List",
-                    style = MaterialTheme.typography.headlineMedium.copy(
-                        fontWeight = FontWeight.ExtraBold,
-                        letterSpacing = (-0.5).sp
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface
+                    style = MaterialTheme.typography.headlineSmall.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 )
 
                 IconButton(
@@ -240,6 +231,7 @@ fun FoodListScreen(
                         val today = LocalDate.now().toString()
                         val suggestedMealType = suggestDefaultMealType()
                         val entry = MealEntry(
+                            userName = com.primecut.theprimecut.util.AppSession.userName,
                             date = today,
                             day = LocalDate.now().dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() },
                             mealType = suggestedMealType,

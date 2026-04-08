@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,6 +27,7 @@ import com.primecut.theprimecut.ui.component.DropdownSelector
 import com.primecut.theprimecut.ui.component.ResponsiveInputRow
 import com.primecut.theprimecut.ui.viewmodels.FoodItemViewModel
 import com.primecut.theprimecut.ui.viewmodels.UserProfileViewModel
+import com.primecut.theprimecut.util.AppSession
 import com.primecut.theprimecut.util.loadFoodItemsFromAssets
 import kotlinx.coroutines.launch
 
@@ -34,6 +38,12 @@ fun SettingsScreen(
     ),
     userProfileViewModel: UserProfileViewModel = viewModel(
         factory = ViewModelFactory((LocalContext.current.applicationContext as PrimeCutApplication).container)
+    ),
+    macroViewModel: com.primecut.theprimecut.ui.viewmodels.MacroViewModel = viewModel(
+        factory = ViewModelFactory((LocalContext.current.applicationContext as PrimeCutApplication).container)
+    ),
+    mealEntryViewModel: com.primecut.theprimecut.ui.viewmodels.MealEntryViewModel = viewModel(
+        factory = ViewModelFactory((LocalContext.current.applicationContext as PrimeCutApplication).container)
     )
 ) {
     val context = LocalContext.current
@@ -41,9 +51,16 @@ fun SettingsScreen(
     val scope = rememberCoroutineScope()
 
     val profile by userProfileViewModel.userProfile.collectAsState()
+    val allUsers by userProfileViewModel.allUserNames.collectAsState()
 
-    // Breakpoint for responsive layout
-    val isCompact = configuration.screenWidthDp < 480
+    // Sync all viewmodels when user switches
+    LaunchedEffect(userProfileViewModel) {
+        userProfileViewModel.onUserSwitched = {
+            macroViewModel.refresh()
+            mealEntryViewModel.refreshMealEntries()
+            // weightLogViewModel.refresh() // if we had it here
+        }
+    }
 
     val sexes = listOf("Male", "Female")
     val activityLevels = listOf("Sedentary", "Lightly Active", "Moderately Active", "Very Active", "Super Active")
@@ -59,6 +76,18 @@ fun SettingsScreen(
     var activity by remember { mutableStateOf("") }
     var goal by remember { mutableStateOf("") }
     var diet by remember { mutableStateOf("") }
+
+    // Helper to clear form
+    fun clearForm() {
+        userName = ""
+        age = ""
+        height = ""
+        weight = ""
+        sex = ""
+        activity = ""
+        goal = ""
+        diet = ""
+    }
 
     // Populate fields when profile loads
     LaunchedEffect(profile) {
@@ -81,18 +110,54 @@ fun SettingsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        Text(
-            text = "Settings",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Settings",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+            
+            Button(
+                onClick = { clearForm() },
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(4.dp))
+                Text("Add User", style = MaterialTheme.typography.labelLarge)
+            }
+        }
+
+        // --- User Selector ---
+        if (allUsers.isNotEmpty()) {
+            Card(
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                DropdownSelector(
+                    label = "Switch User",
+                    selected = AppSession.userName,
+                    options = allUsers,
+                    onSelected = { 
+                        userProfileViewModel.loadProfile(it)
+                    },
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) }
+                )
+            }
+        }
 
         // --- Personal Information Section ---
         Card(
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            shape = MaterialTheme.shapes.medium,
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+            shape = RoundedCornerShape(16.dp)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
@@ -101,20 +166,16 @@ fun SettingsScreen(
                 Text(
                     text = "Personal Information",
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary
+                    fontWeight = FontWeight.Bold
                 )
 
                 OutlinedTextField(
                     value = userName,
                     onValueChange = { userName = it },
-                    label = { Text("Username") },
+                    label = { Text("Name") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surface
-                    )
+                    shape = RoundedCornerShape(12.dp)
                 )
 
                 ResponsiveInputRow(
@@ -125,10 +186,7 @@ fun SettingsScreen(
                             label = { Text("Age") },
                             modifier = modifier,
                             singleLine = true,
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
-                            )
+                            shape = RoundedCornerShape(12.dp)
                         )
                     },
                     content2 = { modifier ->
@@ -138,10 +196,7 @@ fun SettingsScreen(
                             options = sexes,
                             onSelected = { sex = it },
                             modifier = modifier,
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
-                            )
+                            shape = RoundedCornerShape(12.dp)
                         )
                     }
                 )
@@ -154,10 +209,7 @@ fun SettingsScreen(
                             label = { Text("Height (in)") },
                             modifier = modifier,
                             singleLine = true,
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
-                            )
+                            shape = RoundedCornerShape(12.dp)
                         )
                     },
                     content2 = { modifier ->
@@ -167,10 +219,7 @@ fun SettingsScreen(
                             label = { Text("Weight (lbs)") },
                             modifier = modifier,
                             singleLine = true,
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
-                            )
+                            shape = RoundedCornerShape(12.dp)
                         )
                     }
                 )
@@ -181,18 +230,16 @@ fun SettingsScreen(
         Card(
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            shape = MaterialTheme.shapes.medium,
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+            shape = RoundedCornerShape(16.dp)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = "Goals & Preferences",
+                    text = "Goals & Activity",
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary
+                    fontWeight = FontWeight.Bold
                 )
 
                 DropdownSelector(
@@ -201,10 +248,7 @@ fun SettingsScreen(
                     options = activityLevels,
                     onSelected = { activity = it },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surface
-                    )
+                    shape = RoundedCornerShape(12.dp)
                 )
 
                 ResponsiveInputRow(
@@ -215,23 +259,17 @@ fun SettingsScreen(
                             options = goals,
                             onSelected = { goal = it },
                             modifier = modifier,
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
-                            )
+                            shape = RoundedCornerShape(12.dp)
                         )
                     },
                     content2 = { modifier ->
                         DropdownSelector(
-                            label = "Diet",
+                            label = "Diet Style",
                             selected = diet,
                             options = diets,
                             onSelected = { diet = it },
                             modifier = modifier,
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
-                            )
+                            shape = RoundedCornerShape(12.dp)
                         )
                     }
                 )
@@ -250,99 +288,66 @@ fun SettingsScreen(
                     age = age.toFloatOrNull() ?: 25f,
                     heightInches = height.toFloatOrNull() ?: 70f,
                     weightPounds = weight.toFloatOrNull() ?: 180f,
-                    sex = Sex.valueOf(sex),
+                    sex = if (sex == "Male") Sex.Male else Sex.Female,
                     activityLevel = activity,
                     goalType = goal,
                     dietType = DietType.valueOf(diet)
                 )
                 userProfileViewModel.saveProfile(newProfile) {
-                    Toast.makeText(context, "Profile saved!", Toast.LENGTH_SHORT).show()
+                    userProfileViewModel.recalcGoals(userName) {
+                        Toast.makeText(context, "Profile and Goals updated!", Toast.LENGTH_SHORT).show()
+                    }
                 }
             },
-            modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.medium
+            modifier = Modifier.fillMaxWidth().height(56.dp),
+            shape = RoundedCornerShape(12.dp)
         ) {
-            Text("Save Profile")
+            Text("Save Profile", fontWeight = FontWeight.Bold)
         }
 
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-             OutlinedButton(
-                onClick = {
-                    userProfileViewModel.recalcGoals(userName) {
-                        Toast.makeText(context, "Goals recalculated!", Toast.LENGTH_SHORT).show()
+        OutlinedButton(
+            onClick = {
+                scope.launch {
+                    val items = loadFoodItemsFromAssets(context)
+                    foodItemViewModel.syncFoodItemsFromAssets(items) {
+                        Toast.makeText(context, "Database Synced!", Toast.LENGTH_SHORT).show()
                     }
-                },
-                modifier = Modifier.weight(1f),
-                shape = MaterialTheme.shapes.medium
-            ) {
-                Text("Recalc Goals")
-            }
-
-            OutlinedButton(
-                onClick = {
-                    scope.launch {
-                        val items = loadFoodItemsFromAssets(context)
-                        foodItemViewModel.syncFoodItemsFromAssets(items) {
-                            Toast.makeText(context, "Sync DB", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                },
-                modifier = Modifier.weight(1f),
-                shape = MaterialTheme.shapes.medium
-            ) {
-                Text("Sync DB")
-            }
+                }
+            },
+            modifier = Modifier.fillMaxWidth().height(48.dp),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Text("Sync Food Database")
         }
 
         // --- Current Targets Display ---
         profile?.let {
             Card(
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)),
                 shape = RoundedCornerShape(16.dp),
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Daily Targets",
+                        text = "Your Daily Targets",
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
 
-                    if (isCompact) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(16.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceEvenly
-                            ) {
-                                TargetItem("Calories", "${it.calorieGoal.toInt()}")
-                                TargetItem("Protein", "${it.proteinGoal.toInt()}g")
-                            }
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceEvenly
-                            ) {
-                                TargetItem("Carbs", "${it.carbsGoal.toInt()}g")
-                                TargetItem("Fat", "${it.fatGoal.toInt()}g")
-                            }
-                        }
-                    } else {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            TargetItem("Calories", "${it.calorieGoal.toInt()}")
-                            TargetItem("Protein", "${it.proteinGoal.toInt()}g")
-                            TargetItem("Carbs", "${it.carbsGoal.toInt()}g")
-                            TargetItem("Fat", "${it.fatGoal.toInt()}g")
-                        }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        TargetItem("Calories", "${it.calorieGoal.toInt()}", MaterialTheme.colorScheme.onPrimaryContainer)
+                        TargetItem("Protein", "${it.proteinGoal.toInt()}g", MaterialTheme.colorScheme.onPrimaryContainer)
+                        TargetItem("Carbs", "${it.carbsGoal.toInt()}g", MaterialTheme.colorScheme.onPrimaryContainer)
+                        TargetItem("Fat", "${it.fatGoal.toInt()}g", MaterialTheme.colorScheme.onPrimaryContainer)
                     }
                 }
             }
@@ -353,18 +358,18 @@ fun SettingsScreen(
 }
 
 @Composable
-fun TargetItem(label: String, value: String) {
+fun TargetItem(label: String, value: String, color: androidx.compose.ui.graphics.Color) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = value,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSecondaryContainer
+            color = color
         )
         Text(
             text = label,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
+            style = MaterialTheme.typography.labelSmall,
+            color = color.copy(alpha = 0.7f)
         )
     }
 }

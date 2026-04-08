@@ -10,16 +10,16 @@ class MealEntryRepository(private val dao: MealEntryDao) {
     private val mealTypeOrder = listOf("Breakfast", "Lunch", "Dinner", "Snack")
     private val orderMap = mealTypeOrder.withIndex().associate { it.value to it.index }
 
-    suspend fun getAll(): List<MealEntry> {
-        return dao.getAll()
+    suspend fun getAll(userName: String): List<MealEntry> {
+        return dao.getAll(userName)
             .sortedWith(
                 compareByDescending<MealEntry> { it.date }
                     .thenBy { orderMap[it.mealType] ?: 4 }
             )
     }
 
-    suspend fun getByDate(date: String): List<MealEntry> {
-        return dao.getByDate(date)
+    suspend fun getByDate(date: String, userName: String): List<MealEntry> {
+        return dao.getByDate(date, userName)
             .sortedWith(
                 compareByDescending<MealEntry> { it.date }
                     .thenBy { orderMap[it.mealType] ?: 4 }
@@ -32,15 +32,15 @@ class MealEntryRepository(private val dao: MealEntryDao) {
 
     suspend fun delete(id: Int) = dao.delete(id)
 
-    suspend fun getCaloriesByDay(daysBack: Int = 6): Map<String, Float> {
+    suspend fun getCaloriesByDay(userName: String, daysBack: Int = 6): Map<String, Float> {
         val since = LocalDate.now().minusDays(daysBack.toLong()).toString()
-        return dao.getSince(since)
+        return dao.getSince(since, userName)
             .groupBy { it.day }
             .mapValues { (_, meals) -> meals.sumOf { it.calories.toDouble() }.toFloat() }
     }
 
-    suspend fun getMacroSummary(date: String): MacroSummary {
-        val entries = dao.getByDate(date)
+    suspend fun getMacroSummary(date: String, userName: String): MacroSummary {
+        val entries = dao.getByDate(date, userName)
         return MacroSummary(
             calories = entries.sumOf { it.calories.toDouble() }.toFloat(),
             protein = entries.sumOf { it.protein.toDouble() }.toFloat(),
@@ -50,8 +50,8 @@ class MealEntryRepository(private val dao: MealEntryDao) {
         )
     }
 
-    suspend fun getMacroSummariesByDateRange(start: String, end: String): Map<String, MacroSummary> {
-        val entries = dao.getByDateRange(start, end)
+    suspend fun getMacroSummariesByDateRange(start: String, end: String, userName: String): Map<String, MacroSummary> {
+        val entries = dao.getByDateRange(start, end, userName)
 
         val grouped = entries.groupBy { it.day }.mapValues { (_, meals) ->
             MacroSummary(
