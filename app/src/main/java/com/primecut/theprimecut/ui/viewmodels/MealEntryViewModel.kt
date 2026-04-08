@@ -92,6 +92,17 @@ class MealEntryViewModel(
         }
     }
 
+    fun copyEntries(fromUser: String, fromDate: String, toDate: String, onComplete: (() -> Unit)? = null) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val entries = repository.getByDate(fromDate, fromUser)
+            entries.forEach { entry ->
+                repository.add(entry.copy(id = 0, userName = AppSession.userName, date = toDate))
+            }
+            refreshMealEntries(toDate)
+            onComplete?.let { withContext(Dispatchers.Main) { it() } }
+        }
+    }
+
     fun updateMealEntry(entry: MealEntry, onComplete: (() -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.update(entry)

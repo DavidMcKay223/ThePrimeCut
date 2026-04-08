@@ -35,7 +35,10 @@ import com.primecut.theprimecut.ui.viewmodels.FoodItemViewModel
 import com.primecut.theprimecut.ui.viewmodels.MealEntryViewModel
 import com.primecut.theprimecut.ui.viewmodels.UserProfileViewModel
 import com.primecut.theprimecut.ui.viewmodels.ViewModelFactory
-import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,22 +68,69 @@ fun MealEntryScreen(
     val brands by foodItemViewModel.brands.collectAsState()
     val groups by foodItemViewModel.groups.collectAsState()
 
-    LaunchedEffect(userProfileViewModel) {
-        userProfileViewModel.onUserSwitched = {
-            mealEntryViewModel.refreshMealEntries()
+    var selectedDate by remember {
+        mutableStateOf(LocalDate.now().toString())
+    }
+    
+    var showDatePicker by remember { mutableStateOf(false) }
+    var showCopyDayDialog by remember { mutableStateOf(false) }
+    
+    if (showCopyDayDialog) {
+        CopyDayDialog(
+            allProfiles = allProfiles,
+            onDismiss = { showCopyDayDialog = false },
+            onConfirm = { sourceUser, sourceDate ->
+                mealEntryViewModel.copyEntries(sourceUser, sourceDate, selectedDate) {
+                    Toast.makeText(context, "Entries copied successfully", Toast.LENGTH_SHORT).show()
+                }
+                showCopyDayDialog = false
+            }
+        )
+    }
+    
+    if (showDatePicker) {
+        val datePickerState = rememberDatePickerState(
+            initialSelectedDateMillis = LocalDate.parse(selectedDate).atStartOfDay(ZoneId.of("UTC")).toInstant().toEpochMilli()
+        )
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    datePickerState.selectedDateMillis?.let { millis ->
+                        selectedDate = Instant.ofEpochMilli(millis)
+                            .atZone(ZoneId.of("UTC"))
+                            .toLocalDate()
+                            .toString()
+                    }
+                    showDatePicker = false
+                }) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) {
+                    Text("Cancel")
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
         }
     }
 
-    LaunchedEffect(com.primecut.theprimecut.util.AppSession.userName) {
-        userProfileViewModel.loadProfile(com.primecut.theprimecut.util.AppSession.userName)
-        mealEntryViewModel.refreshMealEntries()
+    LaunchedEffect(userProfileViewModel) {
+        userProfileViewModel.onUserSwitched = {
+            mealEntryViewModel.refreshMealEntries(selectedDate)
+        }
     }
 
-    var selectedDate by remember {
-        mutableStateOf(SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date()))
+    LaunchedEffect(com.primecut.theprimecut.util.AppSession.userName, selectedDate) {
+        userProfileViewModel.loadProfile(com.primecut.theprimecut.util.AppSession.userName)
+        mealEntryViewModel.refreshMealEntries(selectedDate)
     }
-    
+
     var activeMealType by remember { mutableStateOf<String?>(null) }
+
+
     var showFoodSearchSheet by remember { mutableStateOf(false) }
     var editingEntry by remember { mutableStateOf<MealEntry?>(null) }
 
@@ -117,18 +167,35 @@ fun MealEntryScreen(
                 )
             }
             
-            Surface(
-                onClick = { },
-                shape = RoundedCornerShape(12.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-            ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Surface(
+                    onClick = { showDatePicker = true },
+                    shape = RoundedCornerShape(12.dp),
+                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                 ) {
-                    Icon(Icons.Default.DateRange, contentDescription = null, modifier = Modifier.size(16.dp))
-                    Text(selectedDate, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                    Row(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(Icons.Default.DateRange, contentDescription = null, modifier = Modifier.size(16.dp))
+                        Text(selectedDate, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                    }
+                }
+
+                IconButton(
+                    onClick = { showCopyDayDialog = true },
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f))
+                ) {
+                    Icon(
+                        Icons.Default.ContentCopy, 
+                        contentDescription = "Copy from another day",
+                        modifier = Modifier.size(20.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
         }
@@ -236,7 +303,9 @@ fun MealEntryScreen(
 
     LaunchedEffect(showFoodSearchSheet, allProfiles) {
         if (showFoodSearchSheet) {
-            mealEntryViewModel.loadAllUsersEntries(selectedDate, allProfiles.map { it.userName })
+            val end = LocalDate.now().toString()
+            val start = LocalDate.now().minusDays(30).toString()
+            mealEntryViewModel.loadAllUsersEntriesRange(start, end, allProfiles.map { it.userName })
         }
     }
 
@@ -266,9 +335,8 @@ fun MealEntryScreen(
                 onGroupQueryChanged = { foodItemViewModel.onGroupQueryChanged(it) },
                 onToggleFilter = { foodItemViewModel.toggleFilter(it) },
                 onAddEntries = { selectedEntries ->
-                    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-                    val dateObj = sdf.parse(selectedDate)
-                    val dayOfWeek = SimpleDateFormat("EEEE", Locale.US).format(dateObj ?: Date())
+                    val dateObj = LocalDate.parse(selectedDate)
+                    val dayOfWeek = dateObj.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }
 
                     val entriesToLog = selectedEntries.map { 
                         it.copy(
@@ -325,7 +393,10 @@ fun AdvancedFoodSelectionSheet(
                     .toList()
                     .sortedByDescending { it.second.size }
                     .take(5)
-                    .map { it.second.first() }
+                    .map { group ->
+                        // Return the most recent entry of this name to preserve its macros/portion
+                        group.second.first()
+                    }
             }
             .toList()
             .filter { it.second.isNotEmpty() }
@@ -486,7 +557,7 @@ fun AdvancedFoodSelectionSheet(
                 if (topEntriesByCategory.isNotEmpty()) {
                     item {
                         Text(
-                            "Top Items Today",
+                            "Frequently Logged (Last 30 Days)",
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(vertical = 8.dp)
@@ -512,7 +583,7 @@ fun AdvancedFoodSelectionSheet(
                             val isSelected = selectedPreviewIds.contains(entry.id)
                             ListItem(
                                 headlineContent = { Text(entry.mealName) },
-                                supportingContent = { Text("${entry.calories.toInt()} kcal") },
+                                supportingContent = { Text("${entry.portionEaten}x • ${entry.calories.toInt()} kcal") },
                                 leadingContent = {
                                     Icon(
                                         imageVector = if (isSelected) Icons.Default.CheckCircle else Icons.Outlined.Circle,
@@ -783,13 +854,13 @@ fun NutritionPortionSlider(
     Column(modifier = modifier) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text("Portion Size", style = MaterialTheme.typography.labelLarge)
-            Text("${portion.toOneDecimal()}x", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+            Text("${portion.toTwoDecimals()}x", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
         }
         Slider(
             value = portion,
             onValueChange = onPortionChange,
-            valueRange = 0.1f..5f,
-            steps = 49
+            valueRange = 0f..10f,
+            steps = 39
         )
         
         if (foodItem != null) {
@@ -804,6 +875,88 @@ fun NutritionPortionSlider(
 }
 
 @Composable
+fun CopyDayDialog(
+    allProfiles: List<UserProfile>,
+    onDismiss: () -> Unit,
+    onConfirm: (String, String) -> Unit
+) {
+    var sourceUser by remember { mutableStateOf(allProfiles.firstOrNull()?.userName ?: "") }
+    var sourceDate by remember { mutableStateOf(LocalDate.now().toString()) }
+    var showSourceDatePicker by remember { mutableStateOf(false) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Copy Day") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Text("Select source to copy entries from.", style = MaterialTheme.typography.bodyMedium)
+                
+                DropdownSelector(
+                    label = "From User",
+                    options = allProfiles.map { it.userName },
+                    selected = sourceUser,
+                    onSelected = { sourceUser = it }
+                )
+
+                Surface(
+                    onClick = { showSourceDatePicker = true },
+                    shape = RoundedCornerShape(8.dp),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(12.dp).fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(Icons.Default.DateRange, contentDescription = null, modifier = Modifier.size(20.dp))
+                        Text(sourceDate, style = MaterialTheme.typography.bodyLarge)
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            Button(onClick = { onConfirm(sourceUser, sourceDate) }) {
+                Text("Copy Entries")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+
+    if (showSourceDatePicker) {
+        val datePickerState = rememberDatePickerState(
+            initialSelectedDateMillis = LocalDate.parse(sourceDate).atStartOfDay(ZoneId.of("UTC")).toInstant().toEpochMilli()
+        )
+        DatePickerDialog(
+            onDismissRequest = { showSourceDatePicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    datePickerState.selectedDateMillis?.let { millis ->
+                        sourceDate = Instant.ofEpochMilli(millis)
+                            .atZone(ZoneId.of("UTC"))
+                            .toLocalDate()
+                            .toString()
+                    }
+                    showSourceDatePicker = false
+                }) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showSourceDatePicker = false }) {
+                    Text("Cancel")
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+}
+
+@Composable
 fun NutritionPreviewItem(label: String, value: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(label, style = MaterialTheme.typography.labelSmall)
@@ -811,4 +964,4 @@ fun NutritionPreviewItem(label: String, value: String) {
     }
 }
 
-fun Float.toOneDecimal() = "%.1f".format(this)
+fun Float.toTwoDecimals() = "%.2f".format(this)
