@@ -31,6 +31,18 @@ data class FoodItem(
     val totalCalories: Float
         get() = servings * caloriesPerServing
 
+    val totalProtein: Float
+        get() = servings * protein
+
+    val totalCarbs: Float
+        get() = servings * carbs
+
+    val totalFats: Float
+        get() = servings * fats
+
+    val totalFiber: Float
+        get() = servings * fiber
+
     val isHighProtein: Boolean
         get() = protein >= 20f
 

@@ -253,7 +253,8 @@ fun MealEntryScreen(
             ) {
                 val entry = editingEntry!!
                 val foodItem = foodItems.find { it.recipeName == entry.mealName }
-                var currentPortion by remember { mutableFloatStateOf(entry.portionEaten) }
+                val baseServings = foodItem?.servings ?: 1f
+                var currentMultiplier by remember { mutableFloatStateOf(entry.portionEaten / baseServings) }
 
                 Column(modifier = Modifier.padding(16.dp).padding(bottom = 32.dp)) {
                     Text(
@@ -270,10 +271,28 @@ fun MealEntryScreen(
                     
                     Spacer(Modifier.height(16.dp))
 
+                    if (foodItem != null) {
+                        Card(
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(12.dp), 
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                NutritionPreviewItem("Calories", (foodItem.totalCalories * currentMultiplier).toInt().toString())
+                                NutritionPreviewItem("Protein", (foodItem.totalProtein * currentMultiplier).toInt().toString() + "g")
+                                NutritionPreviewItem("Carbs", (foodItem.totalCarbs * currentMultiplier).toInt().toString() + "g")
+                                NutritionPreviewItem("Fat", (foodItem.totalFats * currentMultiplier).toInt().toString() + "g")
+                            }
+                        }
+                    }
+
                     NutritionPortionSlider(
                         foodItem = foodItem,
-                        portion = currentPortion,
-                        onPortionChange = { currentPortion = it },
+                        portion = currentMultiplier,
+                        onPortionChange = { currentMultiplier = it },
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -282,12 +301,12 @@ fun MealEntryScreen(
                     Button(
                         onClick = {
                             val updated = entry.copy(
-                                portionEaten = currentPortion,
-                                calories = (foodItem?.caloriesPerServing ?: (entry.calories / entry.portionEaten)) * currentPortion,
-                                protein = (foodItem?.protein ?: (entry.protein / entry.portionEaten)) * currentPortion,
-                                carbs = (foodItem?.carbs ?: (entry.carbs / entry.portionEaten)) * currentPortion,
-                                fats = (foodItem?.fats ?: (entry.fats / entry.portionEaten)) * currentPortion,
-                                fiber = (foodItem?.fiber ?: (entry.fiber / entry.portionEaten)) * currentPortion
+                                portionEaten = currentMultiplier * baseServings,
+                                calories = (foodItem?.caloriesPerServing ?: (entry.calories / entry.portionEaten)) * (currentMultiplier * baseServings),
+                                protein = (foodItem?.protein ?: (entry.protein / entry.portionEaten)) * (currentMultiplier * baseServings),
+                                carbs = (foodItem?.carbs ?: (entry.carbs / entry.portionEaten)) * (currentMultiplier * baseServings),
+                                fats = (foodItem?.fats ?: (entry.fats / entry.portionEaten)) * (currentMultiplier * baseServings),
+                                fiber = (foodItem?.fiber ?: (entry.fiber / entry.portionEaten)) * (currentMultiplier * baseServings)
                             )
                             mealEntryViewModel.updateMealEntry(updated)
                             editingEntry = null
@@ -612,11 +631,24 @@ fun AdvancedFoodSelectionSheet(
 
             items(foodItems) { food ->
                 val isSelected = selectedPortions.containsKey(food.recipeName)
+                val currentPortion = selectedPortions[food.recipeName] ?: 1.0f
                 ListItem(
                     headlineContent = { Text(food.recipeName, fontWeight = FontWeight.Bold) },
                     supportingContent = { 
-                        val portionText = if (isSelected) "Portion: ${selectedPortions[food.recipeName]}x" else "${food.brandType} • ${food.caloriesPerServing.toInt()} kcal"
-                        Text(portionText) 
+                        if (isSelected) {
+                            Column {
+                                val portion = selectedPortions[food.recipeName] ?: 1.0f
+                                Text("Portion: ${currentPortion.toTwoDecimals()}x (${food.servings.toInt()}x ${food.measurementServings.toInt()} ${food.measurementType})")
+                                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    Text("${(food.totalCalories * portion).toInt()} kcal", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                                    Text("P: ${(food.totalProtein * portion).toInt()}g", style = MaterialTheme.typography.labelSmall)
+                                    Text("C: ${(food.totalCarbs * portion).toInt()}g", style = MaterialTheme.typography.labelSmall)
+                                    Text("F: ${(food.totalFats * portion).toInt()}g", style = MaterialTheme.typography.labelSmall)
+                                }
+                            }
+                        } else {
+                            Text("${food.brandType} • ${food.servings.toInt()}x ${food.measurementServings.toInt()} ${food.measurementType} • ${food.totalCalories.toInt()} kcal")
+                        }
                     },
                     leadingContent = {
                         Icon(
@@ -656,14 +688,14 @@ fun AdvancedFoodSelectionSheet(
                             mealType = "", 
                             mealName = food.recipeName,
                             groupName = food.groupName,
-                            portionEaten = portion,
+                            portionEaten = portion * food.servings,
                             measurementServings = food.measurementServings,
                             measurementType = food.measurementType,
-                            calories = food.caloriesPerServing * portion,
-                            protein = food.protein * portion,
-                            carbs = food.carbs * portion,
-                            fats = food.fats * portion,
-                            fiber = food.fiber * portion
+                            calories = food.totalCalories * portion,
+                            protein = food.totalProtein * portion,
+                            carbs = food.totalCarbs * portion,
+                            fats = food.totalFats * portion,
+                            fiber = food.totalFiber * portion
                         )
                     }
                     val allPreselectedEntries = allUsersEntries.values.flatten()
@@ -839,7 +871,14 @@ fun MealEntryRow(
     ListItem(
         modifier = Modifier.clickable { onClick() },
         headlineContent = { Text(entry.mealName, fontWeight = FontWeight.Medium) },
-        supportingContent = { Text("${entry.portionEaten}x serving • ${entry.calories.toInt()} kcal") },
+        supportingContent = { 
+            val sizeText = if ((entry.measurementServings ?: 0f) > 0f) {
+                " • ${entry.portionEaten.toTwoDecimals()}x ${entry.measurementServings?.toInt()} ${entry.measurementType}"
+            } else {
+                " • ${entry.portionEaten.toTwoDecimals()} servings"
+            }
+            Text("${entry.calories.toInt()} kcal$sizeText") 
+        },
         trailingContent = {
             IconButton(onClick = onDelete) {
                 Icon(Icons.Default.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f), modifier = Modifier.size(20.dp))
@@ -851,28 +890,54 @@ fun MealEntryRow(
 @Composable
 fun NutritionPortionSlider(
     foodItem: FoodItem?,
-    portion: Float,
+    portion: Float, // Multiplier (1.0 = whole item)
     onPortionChange: (Float) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("Portion Size", style = MaterialTheme.typography.labelLarge)
-            Text("${portion.toTwoDecimals()}x", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+    val baseServings = foodItem?.servings ?: 1f
+    val totalServings = portion * baseServings
+    
+    // Determine max range: at least 10 servings or 3x the default item size
+    val maxServings = maxOf(baseServings * 3f, 10f)
+    val steps = (maxServings / 0.25f).toInt() - 1
+
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Bottom) {
+            Column {
+                Text("Logged Quantity", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                if (foodItem != null) {
+                    Text(
+                        text = "Standard: ${foodItem.servings.toInt()}x ${foodItem.measurementServings.toInt()} ${foodItem.measurementType}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            Text("${totalServings.toTwoDecimals()} Servings", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
         }
+        
         Slider(
-            value = portion,
-            onValueChange = onPortionChange,
-            valueRange = 0f..10f,
-            steps = 39
+            value = totalServings,
+            onValueChange = { onPortionChange(it / baseServings) },
+            valueRange = 0f..maxServings,
+            steps = steps,
+            modifier = Modifier.padding(vertical = 8.dp)
         )
         
         if (foodItem != null) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                NutritionPreviewItem("Cals", (foodItem.caloriesPerServing * portion).toInt().toString())
-                NutritionPreviewItem("Prot", (foodItem.protein * portion).toInt().toString() + "g")
-                NutritionPreviewItem("Carb", (foodItem.carbs * portion).toInt().toString() + "g")
-                NutritionPreviewItem("Fat", (foodItem.fats * portion).toInt().toString() + "g")
+            Card(
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(12.dp), 
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    NutritionPreviewItem("Calories", (foodItem.totalCalories * portion).toInt().toString())
+                    NutritionPreviewItem("Protein", (foodItem.totalProtein * portion).toInt().toString() + "g")
+                    NutritionPreviewItem("Carbs", (foodItem.totalCarbs * portion).toInt().toString() + "g")
+                    NutritionPreviewItem("Fat", (foodItem.totalFats * portion).toInt().toString() + "g")
+                }
             }
         }
     }
