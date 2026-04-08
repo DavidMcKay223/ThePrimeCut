@@ -56,6 +56,10 @@ fun OverviewScreen(
     
     var currentMonth by remember { mutableStateOf(YearMonth.now()) }
     var selectedDate by remember { mutableStateOf<LocalDate?>(LocalDate.now()) }
+
+    LaunchedEffect(Unit) {
+        foodItemViewModel.clearFilters()
+    }
     
     LaunchedEffect(currentMonth, allProfiles) {
         if (allProfiles.isNotEmpty()) {

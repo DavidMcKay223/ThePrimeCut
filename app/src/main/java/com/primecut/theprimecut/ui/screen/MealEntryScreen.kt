@@ -117,6 +117,10 @@ fun MealEntryScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        foodItemViewModel.clearFilters()
+    }
+
     LaunchedEffect(userProfileViewModel) {
         userProfileViewModel.onUserSwitched = {
             mealEntryViewModel.refreshMealEntries(selectedDate)

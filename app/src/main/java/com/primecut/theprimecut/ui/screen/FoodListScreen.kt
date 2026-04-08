@@ -141,6 +141,21 @@ fun FoodListScreen(
                         .fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Filters", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                        TextButton(onClick = {
+                            viewModel.onBrandQueryChanged("")
+                            viewModel.onGroupQueryChanged("")
+                            selectedFilters.forEach { viewModel.toggleFilter(it) }
+                        }) {
+                            Text("Clear All", style = MaterialTheme.typography.labelSmall)
+                        }
+                    }
+
                     // Brand and Group Dropdowns
                     ResponsiveInputRow(
                         content1 = { modifier ->
@@ -198,20 +213,6 @@ fun FoodListScreen(
                                     shape = CircleShape
                                 )
                             }
-                        }
-                    }
-                    
-                    if (selectedFilters.isNotEmpty() || brandQuery.isNotEmpty() || groupQuery.isNotEmpty()) {
-                        TextButton(
-                            onClick = { 
-                                viewModel.onBrandQueryChanged("")
-                                viewModel.onGroupQueryChanged("")
-                                // viewModel doesn't have a clearFilters but we can toggle them off or add a clear function
-                                selectedFilters.forEach { viewModel.toggleFilter(it) }
-                            },
-                            modifier = Modifier.align(Alignment.End)
-                        ) {
-                            Text("Reset Filters", color = MaterialTheme.colorScheme.error)
                         }
                     }
                 }

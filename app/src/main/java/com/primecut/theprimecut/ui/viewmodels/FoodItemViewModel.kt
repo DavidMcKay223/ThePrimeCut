@@ -82,6 +82,13 @@ class FoodItemViewModel(
         refreshFoodItems()
     }
 
+    fun clearFilters() {
+        _nameQuery.value = ""
+        _brandQuery.value = ""
+        _groupQuery.value = ""
+        _selectedFilters.value = emptySet()
+    }
+
     private fun refreshFoodItems() {
         viewModelScope.launch {
             val items = repository.getAll()

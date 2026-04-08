@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen() {
     var currentScreen by remember { mutableStateOf<Screen>(Screen.Home) }
-    val tabs: List<Screen> = remember { listOf(Screen.Home, Screen.FoodList, Screen.Overview, Screen.MealEntry, Screen.Profile) }
+    val tabs: List<Screen> = remember { listOf(Screen.Home, Screen.FoodList, Screen.MealEntry, Screen.Overview) }
 
     Scaffold(
         bottomBar = {
