@@ -1,23 +1,19 @@
 package com.primecut.theprimecut.ui.screen
 
 import android.widget.Toast
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Restaurant
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -30,19 +26,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.primecut.theprimecut.PrimeCutApplication
-import com.primecut.theprimecut.ui.viewmodels.ViewModelFactory
 import com.primecut.theprimecut.data.model.FoodItem
 import com.primecut.theprimecut.data.model.MealEntry
-import com.primecut.theprimecut.ui.viewmodels.MealEntryViewModel
-import com.primecut.theprimecut.ui.viewmodels.FoodItemViewModel
-import java.time.LocalDate
-import java.text.SimpleDateFormat
-import java.util.*
-import com.primecut.theprimecut.ui.component.MealEntryCard
-import com.primecut.theprimecut.ui.component.DateSelector
+import com.primecut.theprimecut.data.model.UserProfile
 import com.primecut.theprimecut.ui.component.DropdownSelector
 import com.primecut.theprimecut.ui.component.ResponsiveInputRow
+import com.primecut.theprimecut.ui.viewmodels.FoodItemViewModel
+import com.primecut.theprimecut.ui.viewmodels.MealEntryViewModel
 import com.primecut.theprimecut.ui.viewmodels.UserProfileViewModel
+import com.primecut.theprimecut.ui.viewmodels.ViewModelFactory
+import java.text.SimpleDateFormat
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,6 +56,14 @@ fun MealEntryScreen(
     val mealEntries by mealEntryViewModel.mealEntries.collectAsState()
     val foodItems by foodItemViewModel.foodItems.collectAsState()
     val profile by userProfileViewModel.userProfile.collectAsState()
+    val allProfiles by userProfileViewModel.allProfiles.collectAsState()
+
+    val nameQuery by foodItemViewModel.nameQuery.collectAsState()
+    val brandQuery by foodItemViewModel.brandQuery.collectAsState()
+    val groupQuery by foodItemViewModel.groupQuery.collectAsState()
+    val selectedFilters by foodItemViewModel.selectedFilters.collectAsState()
+    val brands by foodItemViewModel.brands.collectAsState()
+    val groups by foodItemViewModel.groups.collectAsState()
 
     LaunchedEffect(userProfileViewModel) {
         userProfileViewModel.onUserSwitched = {
@@ -78,32 +80,20 @@ fun MealEntryScreen(
         mutableStateOf(SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date()))
     }
     
-    // UI State for the "Add Food" workflow
     var activeMealType by remember { mutableStateOf<String?>(null) }
-    var foodName by remember { mutableStateOf("") }
-    var portion by remember { mutableFloatStateOf(1f) }
     var showFoodSearchSheet by remember { mutableStateOf(false) }
+    var editingEntry by remember { mutableStateOf<MealEntry?>(null) }
 
-    val todayEntries = remember(mealEntries, selectedDate) {
-        mealEntries.filter { it.date == selectedDate }
-    }
-
-    val currentFoodItem by remember(foodName, foodItems) {
-        derivedStateOf {
-            foodItems.find { it.recipeName.equals(foodName, ignoreCase = true) }
-        }
-    }
-
-    val totalCalories = remember(todayEntries) { todayEntries.sumOf { it.calories.toInt() } }
-    val totalProtein = remember(todayEntries) { todayEntries.sumOf { it.protein.toInt() } }
-    val totalFiber = remember(todayEntries) { todayEntries.sumOf { it.fiber.toInt() } }
-    val totalCarbs = remember(todayEntries) { todayEntries.sumOf { it.carbs.toInt() } }
-    val totalFats = remember(todayEntries) { todayEntries.sumOf { it.fats.toInt() } }
+    val todayEntries = mealEntries.filter { it.date == selectedDate }
+    val totalCalories = todayEntries.sumOf { it.calories.toDouble() }.toInt()
+    val totalProtein = todayEntries.sumOf { it.protein.toDouble() }.toInt()
+    val totalCarbs = todayEntries.sumOf { it.carbs.toDouble() }.toInt()
+    val totalFats = todayEntries.sumOf { it.fats.toDouble() }.toInt()
+    val totalFiber = todayEntries.sumOf { it.fiber.toDouble() }.toInt()
 
     val calorieGoal = profile?.calorieGoal ?: 2000f
 
-    Column(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-        // Header
+    Column(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -127,9 +117,8 @@ fun MealEntryScreen(
                 )
             }
             
-            // Date Selector
             Surface(
-                onClick = { /* Future: Date Picker */ },
+                onClick = { },
                 shape = RoundedCornerShape(12.dp),
                 color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
             ) {
@@ -149,7 +138,6 @@ fun MealEntryScreen(
             contentPadding = PaddingValues(bottom = 32.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // MyFitnessPal-style Summary Header
             item {
                 CalorieBudgetCard(
                     goal = calorieGoal.toInt(),
@@ -158,7 +146,6 @@ fun MealEntryScreen(
                 )
             }
 
-            // Macro Strip
             item {
                 MacroStrip(
                     protein = totalProtein,
@@ -168,7 +155,6 @@ fun MealEntryScreen(
                 )
             }
 
-            // Meal Sections
             val groupedEntries = todayEntries.groupBy { it.mealType }
             val mealOrder = listOf("Breakfast", "Lunch", "Dinner", "Snack")
 
@@ -182,102 +168,465 @@ fun MealEntryScreen(
                             activeMealType = type
                             showFoodSearchSheet = true 
                         },
-                        onDeleteEntry = { mealEntryViewModel.deleteMealEntry(it) }
+                        onDeleteEntry = { mealEntryViewModel.deleteMealEntry(it) },
+                        onEntryClick = { editingEntry = it }
                     )
                 }
             }
         }
+
+        if (editingEntry != null) {
+            ModalBottomSheet(
+                onDismissRequest = { editingEntry = null },
+                containerColor = MaterialTheme.colorScheme.surface
+            ) {
+                val entry = editingEntry!!
+                val foodItem = foodItems.find { it.recipeName == entry.mealName }
+                var currentPortion by remember { mutableFloatStateOf(entry.portionEaten) }
+
+                Column(modifier = Modifier.padding(16.dp).padding(bottom = 32.dp)) {
+                    Text(
+                        text = "Edit Log: ${entry.mealType}",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = entry.mealName,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    
+                    Spacer(Modifier.height(16.dp))
+
+                    NutritionPortionSlider(
+                        foodItem = foodItem,
+                        portion = currentPortion,
+                        onPortionChange = { currentPortion = it },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(Modifier.height(24.dp))
+
+                    Button(
+                        onClick = {
+                            val updated = entry.copy(
+                                portionEaten = currentPortion,
+                                calories = (foodItem?.caloriesPerServing ?: (entry.calories / entry.portionEaten)) * currentPortion,
+                                protein = (foodItem?.protein ?: (entry.protein / entry.portionEaten)) * currentPortion,
+                                carbs = (foodItem?.carbs ?: (entry.carbs / entry.portionEaten)) * currentPortion,
+                                fats = (foodItem?.fats ?: (entry.fats / entry.portionEaten)) * currentPortion,
+                                fiber = (foodItem?.fiber ?: (entry.fiber / entry.portionEaten)) * currentPortion
+                            )
+                            mealEntryViewModel.updateMealEntry(updated)
+                            editingEntry = null
+                            Toast.makeText(context, "Log updated", Toast.LENGTH_SHORT).show()
+                        },
+                        modifier = Modifier.fillMaxWidth().height(56.dp),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Text("Update Entry", fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+        }
     }
 
-    // Add Food Workflow (Bottom Sheets)
-    if (showFoodSearchSheet) {
+    val allUsersEntries by mealEntryViewModel.allUsersEntries.collectAsState()
+
+    LaunchedEffect(showFoodSearchSheet, allProfiles) {
+        if (showFoodSearchSheet) {
+            mealEntryViewModel.loadAllUsersEntries(selectedDate, allProfiles.map { it.userName })
+        }
+    }
+
+    if (showFoodSearchSheet && activeMealType != null) {
         ModalBottomSheet(
             onDismissRequest = { 
                 showFoodSearchSheet = false
-                if (foodName.isEmpty()) activeMealType = null
+                activeMealType = null
             },
             containerColor = MaterialTheme.colorScheme.surface,
-            dragHandle = { BottomSheetDefaults.DragHandle() }
+            dragHandle = { BottomSheetDefaults.DragHandle() },
+            modifier = Modifier.fillMaxHeight(0.9f)
         ) {
-            FoodSearchSheetContent(
+            AdvancedFoodSelectionSheet(
                 foodItems = foodItems,
-                onFoodSelected = { selectedFood ->
-                    foodName = selectedFood.recipeName
-                    portion = selectedFood.servings
+                nameQuery = nameQuery,
+                brandQuery = brandQuery,
+                groupQuery = groupQuery,
+                selectedFilters = selectedFilters,
+                brands = brands,
+                groups = groups,
+                allProfiles = allProfiles,
+                allUsersEntries = allUsersEntries,
+                activeMealType = activeMealType,
+                onNameQueryChanged = { foodItemViewModel.onNameQueryChanged(it) },
+                onBrandQueryChanged = { foodItemViewModel.onBrandQueryChanged(it) },
+                onGroupQueryChanged = { foodItemViewModel.onGroupQueryChanged(it) },
+                onToggleFilter = { foodItemViewModel.toggleFilter(it) },
+                onAddEntries = { selectedEntries ->
+                    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+                    val dateObj = sdf.parse(selectedDate)
+                    val dayOfWeek = SimpleDateFormat("EEEE", Locale.US).format(dateObj ?: Date())
+
+                    val entriesToLog = selectedEntries.map { 
+                        it.copy(
+                            mealType = activeMealType!!, 
+                            date = selectedDate,
+                            day = dayOfWeek
+                        ) 
+                    }
+                    mealEntryViewModel.addMealEntries(entriesToLog)
                     showFoodSearchSheet = false
+                    activeMealType = null
+                    Toast.makeText(context, "${selectedEntries.size} items added", Toast.LENGTH_SHORT).show()
                 }
             )
         }
     }
+}
 
-    if (foodName.isNotEmpty() && activeMealType != null) {
-        ModalBottomSheet(
-            onDismissRequest = { 
-                foodName = ""
-                activeMealType = null
-            },
-            containerColor = MaterialTheme.colorScheme.surface,
-            dragHandle = { BottomSheetDefaults.DragHandle() }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AdvancedFoodSelectionSheet(
+    foodItems: List<FoodItem>,
+    nameQuery: String,
+    brandQuery: String,
+    groupQuery: String,
+    selectedFilters: Set<String>,
+    brands: List<String>,
+    groups: List<String>,
+    allProfiles: List<UserProfile>,
+    allUsersEntries: Map<String, List<MealEntry>> = emptyMap(),
+    activeMealType: String? = null,
+    onNameQueryChanged: (String) -> Unit,
+    onBrandQueryChanged: (String) -> Unit,
+    onGroupQueryChanged: (String) -> Unit,
+    onToggleFilter: (String) -> Unit,
+    onAddEntries: (List<MealEntry>) -> Unit
+) {
+    var selectedPortions by remember { mutableStateOf(mapOf<String, Float>()) }
+    var selectedPreviewIds by remember { mutableStateOf(setOf<Int>()) }
+
+    val selectedItems = foodItems.filter { selectedPortions.containsKey(it.recipeName) }
+    var showFilters by remember { mutableStateOf(false) }
+    var itemToAdjust by remember { mutableStateOf<FoodItem?>(null) }
+
+    val totalSelectedCount = selectedPortions.size + selectedPreviewIds.size
+
+    val topEntriesByCategory = remember(allUsersEntries) {
+        val allEntries = allUsersEntries.values.flatten()
+        val mealTypeOrder = listOf("Breakfast", "Lunch", "Dinner", "Snack")
+        
+        allEntries.groupBy { it.mealType }
+            .mapValues { (_, entries) ->
+                entries.groupBy { it.mealName }
+                    .toList()
+                    .sortedByDescending { it.second.size }
+                    .take(5)
+                    .map { it.second.first() }
+            }
+            .toList()
+            .filter { it.second.isNotEmpty() }
+            .sortedBy { (type, _) -> 
+                val index = mealTypeOrder.indexOf(type)
+                if (index == -1) 99 else index
+            }
+    }
+
+    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(modifier = Modifier.padding(16.dp).padding(bottom = 32.dp)) {
-                Text(
-                    text = "Log to $activeMealType",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = foodName,
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+            Text(
+                "Add to ${activeMealType ?: "Log"}",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold
+            )
+            
+            IconButton(
+                onClick = { showFilters = !showFilters },
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .background(if (showFilters || selectedFilters.isNotEmpty() || brandQuery.isNotEmpty() || groupQuery.isNotEmpty()) 
+                        MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+            ) {
+                Icon(Icons.Default.Tune, contentDescription = "Filters")
+            }
+        }
+
+        OutlinedTextField(
+            value = nameQuery,
+            onValueChange = onNameQueryChanged,
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = { Text("Search foods...") },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+            trailingIcon = {
+                if (nameQuery.isNotEmpty()) {
+                    IconButton(onClick = { onNameQueryChanged("") }) {
+                        Icon(Icons.Default.Close, contentDescription = "Clear Search")
+                    }
+                }
+            },
+            shape = RoundedCornerShape(12.dp)
+        )
+
+        AnimatedVisibility(visible = showFilters) {
+            Column(modifier = Modifier.padding(top = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Filters", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                    TextButton(onClick = {
+                        onBrandQueryChanged("")
+                        onGroupQueryChanged("")
+                        // Clear all selected filters one by one since we don't have a clearAll method
+                        selectedFilters.forEach { onToggleFilter(it) }
+                    }) {
+                        Text("Clear All", style = MaterialTheme.typography.labelSmall)
+                    }
+                }
+                
+                ResponsiveInputRow(
+                    content1 = { modifier ->
+                        DropdownSelector(
+                            label = "Brand",
+                            selected = brandQuery.ifEmpty { "All Brands" },
+                            options = listOf("All Brands") + brands,
+                            onSelected = { onBrandQueryChanged(if (it == "All Brands") "" else it) },
+                            modifier = modifier,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                    },
+                    content2 = { modifier ->
+                        DropdownSelector(
+                            label = "Group",
+                            selected = groupQuery.ifEmpty { "All Groups" },
+                            options = listOf("All Groups") + groups,
+                            onSelected = { onGroupQueryChanged(if (it == "All Groups") "" else it) },
+                            modifier = modifier,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                    }
                 )
                 
-                Spacer(Modifier.height(16.dp))
-
-                NutritionPortionSlider(
-                    foodItem = currentFoodItem,
-                    portion = portion,
-                    onPortionChange = { portion = it },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(Modifier.height(24.dp))
-
-                Button(
-                    onClick = {
-                        val foodItem = currentFoodItem
-                        if (foodItem != null) {
-                            val entry = MealEntry(
-                                userName = com.primecut.theprimecut.util.AppSession.userName,
-                                date = selectedDate,
-                                day = LocalDate.parse(selectedDate).dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() },
-                                mealType = activeMealType!!,
-                                mealName = foodItem.recipeName,
-                                groupName = foodItem.groupName,
-                                portionEaten = portion,
-                                measurementServings = foodItem.measurementServings,
-                                measurementType = foodItem.measurementType,
-                                calories = foodItem.caloriesPerServing * portion,
-                                protein = foodItem.protein * portion,
-                                carbs = foodItem.carbs * portion,
-                                fats = foodItem.fats * portion,
-                                fiber = foodItem.fiber * portion
+                val mealFilters = listOf("Breakfast", "Lunch", "Dinner", "Snack")
+                val macroFilters = listOf("High Protein", "Low Carb", "Keto", "Bulk", "Low Fiber", "Balanced", "High Fat")
+                
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Meal Type", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(mealFilters) { filter ->
+                            FilterChip(
+                                selected = selectedFilters.contains(filter),
+                                onClick = { onToggleFilter(filter) },
+                                label = { Text(filter) }
                             )
-                            mealEntryViewModel.addMealEntry(entry)
-                            foodName = ""
-                            activeMealType = null
-                            Toast.makeText(context, "Fuel Synchronized", Toast.LENGTH_SHORT).show()
                         }
-                    },
-                    modifier = Modifier.fillMaxWidth().height(56.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-                ) {
-                    Text("Confirm Intake", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    }
+                }
+
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Nutritional Profile", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(macroFilters) { filter ->
+                            FilterChip(
+                                selected = selectedFilters.contains(filter),
+                                onClick = { onToggleFilter(filter) },
+                                label = { Text(filter) }
+                            )
+                        }
+                    }
                 }
             }
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyColumn(modifier = Modifier.weight(1f)) {
+            val isSearching = nameQuery.isNotEmpty() || selectedFilters.isNotEmpty() || brandQuery.isNotEmpty() || groupQuery.isNotEmpty()
+            
+            if (foodItems.isEmpty() && isSearching) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 64.dp, horizontal = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = null,
+                            modifier = Modifier.size(64.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                        )
+                        Spacer(Modifier.height(16.dp))
+                        Text(
+                            "No matching foods found",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            "Try adjusting your filters or search terms",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
+                    }
+                }
+            }
+
+            if (!isSearching && !showFilters) {
+                if (topEntriesByCategory.isNotEmpty()) {
+                    item {
+                        Text(
+                            "Top Items Today",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    }
+                    topEntriesByCategory.forEach { (category, entries) ->
+                        item {
+                            Surface(
+                                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                                shape = RoundedCornerShape(8.dp),
+                                modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 4.dp)
+                            ) {
+                                Text(
+                                    category,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                                )
+                            }
+                        }
+                        items(entries) { entry ->
+                            val isSelected = selectedPreviewIds.contains(entry.id)
+                            ListItem(
+                                headlineContent = { Text(entry.mealName) },
+                                supportingContent = { Text("${entry.calories.toInt()} kcal") },
+                                leadingContent = {
+                                    Icon(
+                                        imageVector = if (isSelected) Icons.Default.CheckCircle else Icons.Outlined.Circle,
+                                        contentDescription = null,
+                                        tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                },
+                                modifier = Modifier.clickable {
+                                    selectedPreviewIds = if (isSelected) {
+                                        selectedPreviewIds - entry.id
+                                    } else {
+                                        selectedPreviewIds + entry.id
+                                    }
+                                }
+                            )
+                        }
+                    }
+                    item { Spacer(Modifier.height(16.dp)) }
+                }
+                item { Text("All Foods", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary) }
+            }
+
+            items(foodItems) { food ->
+                val isSelected = selectedPortions.containsKey(food.recipeName)
+                ListItem(
+                    headlineContent = { Text(food.recipeName, fontWeight = FontWeight.Bold) },
+                    supportingContent = { 
+                        val portionText = if (isSelected) "Portion: ${selectedPortions[food.recipeName]}x" else "${food.brandType} • ${food.caloriesPerServing.toInt()} kcal"
+                        Text(portionText) 
+                    },
+                    leadingContent = {
+                        Icon(
+                            imageVector = if (isSelected) Icons.Default.CheckCircle else Icons.Outlined.Circle,
+                            contentDescription = null,
+                            tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    },
+                    trailingContent = {
+                        if (isSelected) {
+                            IconButton(onClick = { itemToAdjust = food }) {
+                                Icon(Icons.Default.Tune, contentDescription = "Adjust Portion", tint = MaterialTheme.colorScheme.primary)
+                    }
+                        }
+                    },
+                    modifier = Modifier.clickable {
+                        selectedPortions = if (isSelected) {
+                            selectedPortions - food.recipeName
+                        } else {
+                            selectedPortions + (food.recipeName to 1.0f)
+                        }
+                    }
+                )
+                HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.1f))
+            }
+        }
+
+        if (totalSelectedCount > 0) {
+            Button(
+                onClick = {
+                    val searchEntries = selectedItems.map { food ->
+                        val portion = selectedPortions[food.recipeName] ?: 1.0f
+                        MealEntry(
+                            userName = "", 
+                            date = "", 
+                            day = "", 
+                            mealType = "", 
+                            mealName = food.recipeName,
+                            groupName = food.groupName,
+                            portionEaten = portion,
+                            measurementServings = food.measurementServings,
+                            measurementType = food.measurementType,
+                            calories = food.caloriesPerServing * portion,
+                            protein = food.protein * portion,
+                            carbs = food.carbs * portion,
+                            fats = food.fats * portion,
+                            fiber = food.fiber * portion
+                        )
+                    }
+                    val allPreselectedEntries = allUsersEntries.values.flatten()
+                    val previewSelectedEntries = allPreselectedEntries
+                        .filter { selectedPreviewIds.contains(it.id) }
+                        .distinctBy { it.id }
+
+                    onAddEntries(searchEntries + previewSelectedEntries)
+                },
+                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("Add $totalSelectedCount Items")
+            }
+        }
+    }
+
+    if (itemToAdjust != null) {
+        AlertDialog(
+            onDismissRequest = { itemToAdjust = null },
+            title = { Text("Adjust Portion: ${itemToAdjust?.recipeName}") },
+            text = {
+                val food = itemToAdjust!!
+                NutritionPortionSlider(
+                    foodItem = food,
+                    portion = selectedPortions[food.recipeName] ?: 1.0f,
+                    onPortionChange = { newPortion ->
+                        selectedPortions = selectedPortions + (food.recipeName to newPortion)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { itemToAdjust = null }) {
+                    Text("Done")
+                }
+            }
+        )
     }
 }
 
@@ -310,16 +659,8 @@ fun CalorieBudgetCard(goal: Int, food: Int, remaining: Int) {
 @Composable
 fun BudgetUnit(label: String, value: String, valueColor: Color = Color.Unspecified) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = value,
-            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-            color = if (valueColor == Color.Unspecified) MaterialTheme.colorScheme.onSurface else valueColor
-        )
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        Text(text = label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(text = value, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = valueColor)
     }
 }
 
@@ -329,18 +670,18 @@ fun MacroStrip(protein: Int, carbs: Int, fats: Int, fiber: Int) {
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        val macros = listOf(
-            "Protein" to "${protein}g",
-            "Carbs" to "${carbs}g",
-            "Fat" to "${fats}g",
-            "Fiber" to "${fiber}g"
-        )
-        macros.forEach { (label, value) ->
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
-                Text(value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.ExtraBold)
-                Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-        }
+        SummaryMacro("Protein", "${protein}g")
+        SummaryMacro("Carbs", "${carbs}g")
+        SummaryMacro("Fats", "${fats}g")
+        SummaryMacro("Fiber", "${fiber}g")
+    }
+}
+
+@Composable
+fun SummaryMacro(label: String, value: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -349,67 +690,65 @@ fun MealSection(
     title: String,
     entries: List<MealEntry>,
     onAddClick: () -> Unit,
-    onDeleteEntry: (MealEntry) -> Unit
+    onDeleteEntry: (MealEntry) -> Unit,
+    onEntryClick: (MealEntry) -> Unit
 ) {
-    val totalCals = entries.sumOf { it.calories.toInt() }
-
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
-            Text(
-                text = "$totalCals kcal",
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
         }
-
-        Surface(
+        
+        Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            color = MaterialTheme.colorScheme.surface,
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
         ) {
             Column {
-                entries.forEach { entry ->
-                    MealEntryRow(entry, onDeleteEntry)
-                    HorizontalDivider(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        thickness = 0.5.dp,
-                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
+                entries.forEachIndexed { index, entry ->
+                    MealEntryRow(
+                        entry = entry,
+                        onDelete = { onDeleteEntry(entry) },
+                        onClick = { onEntryClick(entry) }
                     )
+                    if (index < entries.size - 1) {
+                        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                    }
                 }
                 
-                // Add Food Button
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { onAddClick() }
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                Surface(
+                    onClick = onAddClick,
+                    color = Color.Transparent,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Icon(
-                        Icons.Default.Add,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Text(
-                        "ADD FOOD",
-                        style = MaterialTheme.typography.labelLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            Icons.Default.Add, 
+                            contentDescription = null, 
+                            modifier = Modifier.size(18.dp),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            "Add Item", 
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         }
@@ -417,91 +756,21 @@ fun MealSection(
 }
 
 @Composable
-fun MealEntryRow(entry: MealEntry, onDelete: (MealEntry) -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = entry.mealName,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "${entry.portionEaten.toOneDecimal()} x ${entry.measurementServings} ${entry.measurementType}",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = "${entry.calories.toInt()}",
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.ExtraBold
-            )
-            Spacer(Modifier.width(12.dp))
-            IconButton(
-                onClick = { onDelete(entry) },
-                modifier = Modifier.size(24.dp)
-            ) {
-                Icon(
-                    Icons.Default.Delete,
-                    contentDescription = "Delete",
-                    tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f),
-                    modifier = Modifier.size(20.dp)
-                )
+fun MealEntryRow(
+    entry: MealEntry,
+    onDelete: () -> Unit,
+    onClick: () -> Unit
+) {
+    ListItem(
+        modifier = Modifier.clickable { onClick() },
+        headlineContent = { Text(entry.mealName, fontWeight = FontWeight.Medium) },
+        supportingContent = { Text("${entry.portionEaten}x serving • ${entry.calories.toInt()} kcal") },
+        trailingContent = {
+            IconButton(onClick = onDelete) {
+                Icon(Icons.Default.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f), modifier = Modifier.size(20.dp))
             }
         }
-    }
-}
-
-
-@Composable
-private fun EmptyHistoryState() {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-    ) {
-        Column(
-            modifier = Modifier.padding(32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(Icons.Default.Restaurant, contentDescription = null, tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), modifier = Modifier.size(48.dp))
-            Spacer(Modifier.height(12.dp))
-            Text(
-                "The log is empty. Start the engine.",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}
-
-
-@Composable
-private fun SummaryMacro(label: String, value: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(value, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), color = MaterialTheme.colorScheme.onBackground)
-        Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onBackground.copy(0.7f))
-    }
-}
-
-private fun suggestDefaultMealType(): String {
-    val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-    return when (hour) {
-        in 6..10 -> "Breakfast"
-        in 11..15 -> "Lunch"
-        in 16..19 -> "Dinner"
-        else -> "Snack"
-    }
+    )
 }
 
 @Composable
@@ -511,157 +780,35 @@ fun NutritionPortionSlider(
     onPortionChange: (Float) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (foodItem == null) {
-        Card(
-            modifier = modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
-            )
-        ) {
-            Text(
-                text = "Select a food item above to adjust portion and preview nutrition",
-                modifier = Modifier.padding(16.dp),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+    Column(modifier = modifier) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text("Portion Size", style = MaterialTheme.typography.labelLarge)
+            Text("${portion.toOneDecimal()}x", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
         }
-        return
-    }
-
-    val calories = foodItem.caloriesPerServing * portion
-    val protein = foodItem.protein * portion
-    val carbs = foodItem.carbs * portion
-    val fats = foodItem.fats * portion
-    val fiber = foodItem.fiber * portion
-
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Portion",
-                    style = MaterialTheme.typography.titleSmall
-                )
-                Text(
-                    text = "${portion.toOneDecimal()} x ${foodItem.measurementServings} ${foodItem.measurementType}",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-
-            Slider(
-                value = portion,
-                onValueChange = { onPortionChange(it) },
-                valueRange = 0.25f..10f,
-                steps = 38,
-                modifier = Modifier.padding(vertical = 8.dp),
-                colors = SliderDefaults.colors(
-                    thumbColor = MaterialTheme.colorScheme.primary,
-                    activeTrackColor = MaterialTheme.colorScheme.primary,
-                    inactiveTrackColor = MaterialTheme.colorScheme.outlineVariant
-                )
-            )
-
-            // Live macro preview
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                NutritionPreviewItem("Cal", "${calories.toInt()}")
-                NutritionPreviewItem("Protein", "${protein.toOneDecimal()}g")
-                NutritionPreviewItem("Carbs", "${carbs.toOneDecimal()}g")
-                NutritionPreviewItem("Fat", "${fats.toOneDecimal()}g")
-                NutritionPreviewItem("Fiber", "${fiber.toOneDecimal()}g")
+        Slider(
+            value = portion,
+            onValueChange = onPortionChange,
+            valueRange = 0.1f..5f,
+            steps = 49
+        )
+        
+        if (foodItem != null) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                NutritionPreviewItem("Cals", (foodItem.caloriesPerServing * portion).toInt().toString())
+                NutritionPreviewItem("Prot", (foodItem.protein * portion).toInt().toString() + "g")
+                NutritionPreviewItem("Carb", (foodItem.carbs * portion).toInt().toString() + "g")
+                NutritionPreviewItem("Fat", (foodItem.fats * portion).toInt().toString() + "g")
             }
         }
     }
 }
 
 @Composable
-private fun NutritionPreviewItem(label: String, value: String) {
+fun NutritionPreviewItem(label: String, value: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = value,
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        Text(label, style = MaterialTheme.typography.labelSmall)
+        Text(value, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold)
     }
 }
 
-private fun Float.toOneDecimal(): String = "%.1f".format(this)
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun FoodSearchSheetContent(
-    foodItems: List<FoodItem>,
-    onFoodSelected: (FoodItem) -> Unit
-) {
-    var searchText by remember { mutableStateOf("") }
-
-    val filteredItems by remember(foodItems, searchText) {
-        derivedStateOf {
-            if (searchText.isBlank()) foodItems
-            else foodItems.filter {
-                it.recipeName.contains(searchText, ignoreCase = true)
-            }
-        }
-    }
-
-    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-        Text(
-            text = "Search Food",
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
-        OutlinedTextField(
-            value = searchText,
-            onValueChange = { searchText = it },
-            label = { Text("Food name") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max = 400.dp)
-        ) {
-            items(filteredItems) { food ->
-                ListItem(
-                    headlineContent = { Text(food.recipeName) },
-                    supportingContent = {
-                        Text("${food.caloriesPerServing.toInt()} cal • ${food.servings} servings")
-                    },
-                    modifier = Modifier.clickable { onFoodSelected(food) }
-                )
-                HorizontalDivider()
-            }
-
-            if (filteredItems.isEmpty()) {
-                item {
-                    Box(
-                        modifier = Modifier.fillMaxWidth().padding(32.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("No matching food found")
-                    }
-                }
-            }
-        }
-    }
-}
+fun Float.toOneDecimal() = "%.1f".format(this)

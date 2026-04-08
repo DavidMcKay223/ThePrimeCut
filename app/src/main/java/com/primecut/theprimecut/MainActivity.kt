@@ -27,6 +27,8 @@ import android.app.Application
 import androidx.compose.material.icons.filled.Add
 import com.primecut.theprimecut.ui.screen.MealEntryScreen
 import com.primecut.theprimecut.di.AppContainer
+import com.primecut.theprimecut.util.AppSession
+
 
 sealed class Screen(val title: String, val icon: ImageVector) {
     object Home : Screen("Home", Icons.Default.Home)
@@ -41,6 +43,7 @@ class PrimeCutApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        AppSession.init(this)
         container = AppContainer(this)
     }
 }

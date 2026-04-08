@@ -140,16 +140,24 @@ fun SettingsScreen(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                DropdownSelector(
-                    label = "Switch User",
-                    selected = AppSession.userName,
-                    options = allUsers,
-                    onSelected = { 
-                        userProfileViewModel.loadProfile(it)
-                    },
-                    modifier = Modifier.fillMaxWidth().padding(8.dp),
-                    leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) }
-                )
+                Column(modifier = Modifier.padding(8.dp)) {
+                    Text(
+                        text = "Active User",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
+                    )
+                    DropdownSelector(
+                        label = "Select User",
+                        selected = AppSession.userName,
+                        options = allUsers,
+                        onSelected = { 
+                            userProfileViewModel.loadProfile(it)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) }
+                    )
+                }
             }
         }
 
