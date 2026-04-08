@@ -25,6 +25,19 @@ class MealEntryViewModel(
     private val _allUsersEntries = MutableStateFlow<Map<String, List<MealEntry>>>(emptyMap())
     val allUsersEntries: StateFlow<Map<String, List<MealEntry>>> = _allUsersEntries
 
+    fun loadAllUsersEntriesRange(start: String, end: String, userNames: List<String>) {
+        viewModelScope.launch {
+            val map = mutableMapOf<String, List<MealEntry>>()
+            userNames.forEach { user ->
+                val items = withContext(Dispatchers.IO) {
+                    repository.getByDateRange(start, end, user)
+                }
+                map[user] = items
+            }
+            _allUsersEntries.value = map
+        }
+    }
+
     fun loadAllUsersEntries(date: String, userNames: List<String>) {
         viewModelScope.launch {
             val map = mutableMapOf<String, List<MealEntry>>()

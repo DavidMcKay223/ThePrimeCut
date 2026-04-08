@@ -32,6 +32,14 @@ class MealEntryRepository(private val dao: MealEntryDao) {
 
     suspend fun delete(id: Int) = dao.delete(id)
 
+    suspend fun getByDateRange(start: String, end: String, userName: String): List<MealEntry> {
+        return dao.getByDateRange(start, end, userName)
+            .sortedWith(
+                compareByDescending<MealEntry> { it.date }
+                    .thenBy { orderMap[it.mealType] ?: 4 }
+            )
+    }
+
     suspend fun getCaloriesByDay(userName: String, daysBack: Int = 6): Map<String, Float> {
         val since = LocalDate.now().minusDays(daysBack.toLong()).toString()
         return dao.getSince(since, userName)

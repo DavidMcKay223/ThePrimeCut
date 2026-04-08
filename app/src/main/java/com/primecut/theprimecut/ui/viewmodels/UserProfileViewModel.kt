@@ -28,16 +28,20 @@ class UserProfileViewModel(
 
     init {
         loadProfile(AppSession.userName)
-        loadAllUserNames()
+        refreshAllProfiles()
     }
 
-    fun loadAllUserNames() {
+    fun refreshAllProfiles() {
         viewModelScope.launch {
             val names = withContext(Dispatchers.IO) { repository.getAllUserNames() }
             _allUserNames.value = names
             val profiles = withContext(Dispatchers.IO) { repository.getAllProfiles() }
             _allProfiles.value = profiles
         }
+    }
+
+    fun loadAllUserNames() {
+        refreshAllProfiles()
     }
 
     fun loadProfile(userName: String) {
