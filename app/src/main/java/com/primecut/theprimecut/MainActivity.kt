@@ -215,7 +215,7 @@ fun MainScreen(
                 Screen.Settings -> SettingsScreen()
                 Screen.FoodList -> FoodListScreen()
                 Screen.MealEntry -> MealEntryScreen()
-                Screen.Overview -> OverviewScreen()
+                Screen.Overview -> OverviewScreen(currentProfile = profile)
             }
         }
     }
