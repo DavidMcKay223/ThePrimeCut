@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Person
@@ -15,7 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.primecut.theprimecut.PrimeCutApplication
@@ -49,6 +54,7 @@ fun SettingsScreen(
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
     val scope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
 
     val profile by userProfileViewModel.userProfile.collectAsState()
     val allUsers by userProfileViewModel.allUserNames.collectAsState()
@@ -183,6 +189,7 @@ fun SettingsScreen(
                     label = { Text("Name") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                     shape = RoundedCornerShape(12.dp)
                 )
 
@@ -194,6 +201,7 @@ fun SettingsScreen(
                             label = { Text("Age") },
                             modifier = modifier,
                             singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                             shape = RoundedCornerShape(12.dp)
                         )
                     },
@@ -217,6 +225,7 @@ fun SettingsScreen(
                             label = { Text("Height (in)") },
                             modifier = modifier,
                             singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next),
                             shape = RoundedCornerShape(12.dp)
                         )
                     },
@@ -227,6 +236,8 @@ fun SettingsScreen(
                             label = { Text("Weight (lbs)") },
                             modifier = modifier,
                             singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
+                            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                             shape = RoundedCornerShape(12.dp)
                         )
                     }
@@ -326,6 +337,44 @@ fun SettingsScreen(
             shape = RoundedCornerShape(12.dp)
         ) {
             Text("Sync Food Database")
+        }
+
+        var showDeleteDialog by remember { mutableStateOf(false) }
+
+        if (showDeleteDialog) {
+            AlertDialog(
+                onDismissRequest = { showDeleteDialog = false },
+                title = { Text("Delete All Food Items?") },
+                text = { Text("This will permanently remove all food items from your database. You will need to re-sync from assets to restore them.") },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            foodItemViewModel.deleteAllFoodItems {
+                                showDeleteDialog = false
+                                Toast.makeText(context, "All food items deleted", Toast.LENGTH_SHORT).show()
+                            }
+                        },
+                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                    ) {
+                        Text("Delete Everything")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDeleteDialog = false }) {
+                        Text("Cancel")
+                    }
+                }
+            )
+        }
+
+        OutlinedButton(
+            onClick = { showDeleteDialog = true },
+            modifier = Modifier.fillMaxWidth().height(48.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.5f))
+        ) {
+            Text("Clear Food Database")
         }
 
         // --- Current Targets Display ---

@@ -1,7 +1,7 @@
 [
   {
-    "recipeName": "Abbott: Ensure Complete Nutrition Shake - Strawberry",
-    "brandType": "Brand",
+    "recipeName": "Ensure Complete Nutrition Shake - Strawberry",
+    "brandType": "Abbott",
     "groupName": "Nutrition",
     "servings": 1.0,
     "caloriesPerServing": 350.0,
@@ -19,8 +19,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Abbott: Ensure Max Protein Nutrition Shake - Cafe Mocha",
-    "brandType": "Brand",
+    "recipeName": "Ensure Max Protein Nutrition Shake - Cafe Mocha",
+    "brandType": "Abbott",
     "groupName": "Nutrition",
     "servings": 1.0,
     "caloriesPerServing": 150.0,
@@ -38,8 +38,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Abbott: Ensure Max Protein Nutrition Shake - Creamy Strawberry",
-    "brandType": "Brand",
+    "recipeName": "Ensure Max Protein Nutrition Shake - Creamy Strawberry",
+    "brandType": "Abbott",
     "groupName": "Nutrition",
     "servings": 1.0,
     "caloriesPerServing": 150.0,
@@ -114,8 +114,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Arizona Lite: Arnold Palmer Half and Half Iced Tea Lemonade",
-    "brandType": "Brand",
+    "recipeName": "Arnold Palmer Half and Half Iced Tea Lemonade",
+    "brandType": "Arizona",
     "groupName": "Beverages",
     "servings": 1.0,
     "caloriesPerServing": 100.0,
@@ -133,8 +133,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Arizona: Iced Tea with Raspberry Flavor",
-    "brandType": "Brand",
+    "recipeName": "Iced Tea with Raspberry Flavor",
+    "brandType": "Arizona",
     "groupName": "Beverages",
     "servings": 2.0,
     "caloriesPerServing": 120.0,
@@ -152,8 +152,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Arizona: Watermelon Fruit Juice Cocktail",
-    "brandType": "Brand",
+    "recipeName": "Watermelon Fruit Juice Cocktail",
+    "brandType": "Arizona",
     "groupName": "Beverages",
     "servings": 3.0,
     "caloriesPerServing": 70.0,
@@ -266,8 +266,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "BelGioioso Burrata: Fresh Mozzarella Cheese Filled with Cream",
-    "brandType": "Brand",
+    "recipeName": "Fresh Mozzarella Cheese Filled with Cream",
+    "brandType": "BelGioioso Burrata",
     "groupName": "Dairy & Eggs",
     "servings": 2.0,
     "caloriesPerServing": 70.0,
@@ -304,8 +304,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Belvita: Chocolate Breakfast Biscuits",
-    "brandType": "Brand",
+    "recipeName": "Chocolate Breakfast Biscuits",
+    "brandType": "Belvita",
     "groupName": "Snacks",
     "servings": 1.0,
     "caloriesPerServing": 220.0,
@@ -323,8 +323,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Belvita: Cinnamon Brown Sugar Breakfast Biscuits",
-    "brandType": "Brand",
+    "recipeName": "Cinnamon Brown Sugar Breakfast Biscuits",
+    "brandType": "Belvita",
     "groupName": "Snacks",
     "servings": 1.0,
     "caloriesPerServing": 230.0,
@@ -342,8 +342,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Best Foods: Real Mayonnaise",
-    "brandType": "Brand",
+    "recipeName": "Real Mayonnaise",
+    "brandType": "Best Foods",
     "groupName": "Condiments & Sauces",
     "servings": 2.0,
     "caloriesPerServing": 90.0,
@@ -399,8 +399,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Bolthouse Farms: Dutch Chocolate Banana",
-    "brandType": "Brand",
+    "recipeName": "Dutch Chocolate Banana",
+    "brandType": "Bolthouse Farms",
     "groupName": "Nutrition",
     "servings": 1.0,
     "caloriesPerServing": 350.0,
@@ -475,8 +475,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Bumble Bee: Crackers",
-    "brandType": "Brand",
+    "recipeName": "Crackers",
+    "brandType": "Bumble Bee",
     "groupName": "Snacks",
     "servings": 1.0,
     "caloriesPerServing": 80.0,
@@ -494,8 +494,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Bumble Bee: Original Tuna Salad",
-    "brandType": "Brand",
+    "recipeName": "Original Tuna Salad",
+    "brandType": "Bumble Bee",
     "groupName": "Snacks",
     "servings": 1.0,
     "caloriesPerServing": 230.0,
@@ -513,8 +513,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Burger King: 16 Pc. Chicken Nuggets",
-    "brandType": "Brand",
+    "recipeName": "16 Pc. Chicken Nuggets",
+    "brandType": "Burger King",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 770.0,
@@ -532,8 +532,8 @@
     "pictureLink": "https://cdn.sanity.io/images/czqk28jt/prod_bk_us/b0dbcf7cf4cf7cea47f7b0a48efe8b5b56c8499b-1333x1333.png?w=437&q=75&fit=max&auto=format"
   },
   {
-    "recipeName": "Burger King: 4 Pc. Chicken Nuggets",
-    "brandType": "Brand",
+    "recipeName": "4 Pc. Chicken Nuggets",
+    "brandType": "Burger King",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 190.0,
@@ -551,8 +551,8 @@
     "pictureLink": "https://cdn.sanity.io/images/czqk28jt/prod_bk_us/ad8659fab6a7b8eb4f0b22ad064fe4223509ee49-1333x1333.png?w=437&q=75&fit=max&auto=format"
   },
   {
-    "recipeName": "Burger King: 8 Pc. Chicken Nuggets",
-    "brandType": "Brand",
+    "recipeName": "8 Pc. Chicken Nuggets",
+    "brandType": "Burger King",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 390.0,
@@ -570,8 +570,8 @@
     "pictureLink": "https://cdn.sanity.io/images/czqk28jt/prod_bk_us/b9505e36ae9ba22a3451259e575b9a2fa5608757-1333x1333.png?w=437&q=75&fit=max&auto=format"
   },
   {
-    "recipeName": "Burger King: Barbecue Dipping Sauce",
-    "brandType": "Brand",
+    "recipeName": "Barbecue Dipping Sauce",
+    "brandType": "Burger King",
     "groupName": "Condiments & Sauces",
     "servings": 1.0,
     "caloriesPerServing": 40.0,
@@ -589,8 +589,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Burger King: Medium Coca-Cola",
-    "brandType": "Brand",
+    "recipeName": "Medium Coca-Cola",
+    "brandType": "Burger King",
     "groupName": "Beverages",
     "servings": 1.0,
     "caloriesPerServing": 330.0,
@@ -608,8 +608,8 @@
     "pictureLink": "https://cdn.sanity.io/images/czqk28jt/prod_bk_us/101884a72a37be6bc3f99d69a340ea09594c020c-1333x1333.png?w=437&q=75&fit=max&auto=format"
   },
   {
-    "recipeName": "Burger King: Medium French Fries",
-    "brandType": "Brand",
+    "recipeName": "Medium French Fries",
+    "brandType": "Burger King",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 370.0,
@@ -627,8 +627,8 @@
     "pictureLink": "https://cdn.sanity.io/images/czqk28jt/prod_bk_us/e32bacde0ffa44d93964c39abab892022dccad63-1333x1333.png?w=437&q=75&fit=max&auto=format"
   },
   {
-    "recipeName": "Burger King: Medium Hash Browns",
-    "brandType": "Brand",
+    "recipeName": "Medium Hash Browns",
+    "brandType": "Burger King",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 540.0,
@@ -646,8 +646,8 @@
     "pictureLink": "https://cdn.sanity.io/images/czqk28jt/prod_bk_us/8c4136a9a1db80230e94e4e762dd0639d13d2d0a-1333x1333.png?w=437&q=75&fit=max&auto=format"
   },
   {
-    "recipeName": "Burger King: Medium Onion Rings",
-    "brandType": "Brand",
+    "recipeName": "Medium Onion Rings",
+    "brandType": "Burger King",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 360.0,
@@ -665,8 +665,8 @@
     "pictureLink": "https://cdn.sanity.io/images/czqk28jt/prod_bk_us/2f1f1c87c082b18cee83d286921162a24dc869bd-1333x1333.png?w=437&q=75&fit=max&auto=format"
   },
   {
-    "recipeName": "Burger King: Original Chicken Sandwich",
-    "brandType": "Brand",
+    "recipeName": "Original Chicken Sandwich",
+    "brandType": "Burger King",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 680.0,
@@ -684,8 +684,8 @@
     "pictureLink": "https://cdn.sanity.io/images/czqk28jt/prod_bk_us/48a959af020453214be04cadee9e53ecc51fb735-1333x1333.png?w=437&q=75&fit=max&auto=format"
   },
   {
-    "recipeName": "Burger King: Sausage, Egg, & Cheese Croissan'wich",
-    "brandType": "Brand",
+    "recipeName": "Sausage, Egg, & Cheese Croissan'wich",
+    "brandType": "Burger King",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 552.2,
@@ -703,8 +703,8 @@
     "pictureLink": "https://cdn.sanity.io/images/czqk28jt/prod_bk_us/6f0a0a0bbf2bb468ece53952d46adf2b9dec03b7-1333x1333.png?w=437&q=75&fit=max&auto=format"
   },
   {
-    "recipeName": "Burger King: Whopper",
-    "brandType": "Brand",
+    "recipeName": "Whopper",
+    "brandType": "Burger King",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 670.0,
@@ -722,8 +722,8 @@
     "pictureLink": "https://cdn.sanity.io/images/czqk28jt/prod_bk_us/11fcdbc136fcc22a02b921a44e99f3132a7f2a96-1333x1333.png?w=437&q=75&fit=max&auto=format"
   },
   {
-    "recipeName": "Burger King: Whopper Jr.",
-    "brandType": "Brand",
+    "recipeName": "Whopper Jr.",
+    "brandType": "Burger King",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 330.0,
@@ -760,8 +760,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Cafe Spice: Chicken Tikka Masala with Basmati Saffron Rice",
-    "brandType": "Brand",
+    "recipeName": "Chicken Tikka Masala with Basmati Saffron Rice",
+    "brandType": "Cafe Spice",
     "groupName": "Prepared Meals",
     "servings": 1.0,
     "caloriesPerServing": 370.0,
@@ -798,8 +798,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Campbell's: Cream of Mushroom Soup",
-    "brandType": "Brand",
+    "recipeName": "Cream of Mushroom Soup",
+    "brandType": "Campbell's",
     "groupName": "Soup",
     "servings": 2.5,
     "caloriesPerServing": 70.0,
@@ -817,8 +817,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Candy and Chocolate Co: Caramel Apples",
-    "brandType": "Brand",
+    "recipeName": "Caramel Apples",
+    "brandType": "Candy and Chocolate Co",
     "groupName": "Snacks",
     "servings": 1.0,
     "caloriesPerServing": 314.0,
@@ -836,8 +836,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Candy: Airheads - Xtremes Candy",
-    "brandType": "Brand",
+    "recipeName": "Xtremes Candy",
+    "brandType": "Airheads",
     "groupName": "Candy",
     "servings": 4.0,
     "caloriesPerServing": 120.0,
@@ -855,8 +855,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Candy: bettergoods - Sour Starws with Creamy Filling",
-    "brandType": "Brand",
+    "recipeName": "Sour Straws with Creamy Filling",
+    "brandType": "bettergoods",
     "groupName": "Candy",
     "servings": 2.0,
     "caloriesPerServing": 130.0,
@@ -874,8 +874,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Candy: Mamba - Fruit Chews",
-    "brandType": "Brand",
+    "recipeName": "Fruit Chews",
+    "brandType": "Mamba",
     "groupName": "Candy",
     "servings": 1.0,
     "caloriesPerServing": 110.0,
@@ -893,8 +893,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Candy: SweeTARTS Cherry Punch Soft and Chewy Ropes",
-    "brandType": "Brand",
+    "recipeName": "Cherry Punch Soft and Chewy Ropes",
+    "brandType": "SweeTARTS",
     "groupName": "Candy",
     "servings": 1.0,
     "caloriesPerServing": 100.0,
@@ -912,8 +912,8 @@
     "pictureLink": "https://www.sweetartscandy.com/sites/default/files/2025-02/00079200249113_A1N1_160523.png"
   },
   {
-    "recipeName": "Candy: SweeTARTS Twisted Rainbow Punch Soft and Chewy Ropes",
-    "brandType": "Brand",
+    "recipeName": "Twisted Rainbow Punch Soft and Chewy Ropes",
+    "brandType": "SweeTARTS",
     "groupName": "Candy",
     "servings": 1.0,
     "caloriesPerServing": 120.0,
@@ -951,7 +951,7 @@
   },
   {
     "recipeName": "Cheerios Cereal",
-    "brandType": "Brand",
+    "brandType": "kelloggs",
     "groupName": "Breads & Grains",
     "servings": 2.0,
     "caloriesPerServing": 100.0,
@@ -969,8 +969,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Cheerios: Protein - Cookies and Creme",
-    "brandType": "Brand",
+    "recipeName": "Cheerios Protein - Cookies and Creme",
+    "brandType": "kelloggs",
     "groupName": "Breads & Grains",
     "servings": 2.0,
     "caloriesPerServing": 150.0,
@@ -988,8 +988,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Cheetos: Flamin Hot Crunchy",
-    "brandType": "Brand",
+    "recipeName": "Cheetos Flamin Hot Crunchy",
+    "brandType": "PepsiCo",
     "groupName": "Snacks",
     "servings": 1.0,
     "caloriesPerServing": 160.0,
@@ -1007,8 +1007,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Cheetos: Puffs Flamin Hot",
-    "brandType": "Brand",
+    "recipeName": "Cheetos Puffs Flamin Hot",
+    "brandType": "PepsiCo",
     "groupName": "Snacks",
     "servings": 3.0,
     "caloriesPerServing": 160.0,
@@ -1045,8 +1045,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Chesters: Potato Crisps Original",
-    "brandType": "Brand",
+    "recipeName": "Chesters Potato Crisps Original",
+    "brandType": "PepsiCo",
     "groupName": "Snacks",
     "servings": 1.0,
     "caloriesPerServing": 160.0,
@@ -1102,8 +1102,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Chinese Food: Fried Wonton Strips",
-    "brandType": "Generic",
+    "recipeName": "Fried Wonton Strips",
+    "brandType": "Chinese Food",
     "groupName": "Fast Food",
     "servings": 2.0,
     "caloriesPerServing": 82.0,
@@ -1121,8 +1121,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Chinese Food: Kung Pao Shrimp",
-    "brandType": "Generic",
+    "recipeName": "Kung Pao Shrimp",
+    "brandType": "Chinese Food",
     "groupName": "Restaurant",
     "servings": 1.0,
     "caloriesPerServing": 304.0,
@@ -1140,8 +1140,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Chinese Food: Orange Chicken",
-    "brandType": "Generic",
+    "recipeName": "Orange Chicken",
+    "brandType": "Chinese Food",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 720.0,
@@ -1159,8 +1159,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Chinese Food: Shrimp Fried Rice",
-    "brandType": "Generic",
+    "recipeName": "Shrimp Fried Rice",
+    "brandType": "Chinese Food",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 244.0,
@@ -1178,7 +1178,7 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Chips Ahoy: Mini",
+    "recipeName": "Chips Ahoy Mini",
     "brandType": "Brand",
     "groupName": "Snacks",
     "servings": 1.0,
@@ -1197,8 +1197,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Chobani: High Protein Greek Yogurt - Cherry Berry",
-    "brandType": "Brand",
+    "recipeName": "High Protein Greek Yogurt - Cherry Berry",
+    "brandType": "Chobani",
     "groupName": "Yogurt",
     "servings": 1.0,
     "caloriesPerServing": 140.0,
@@ -1216,8 +1216,8 @@
     "pictureLink": "https://images.ctfassets.net/01to7kbtr3az/57HxminLnJcg5uQdnSRg7Q/3f747825e5733aa79243c7ca289fae98/CHBB.png?fm=webp&q=50"
   },
   {
-    "recipeName": "Chobani: High Protein Greek Yogurt - Mango",
-    "brandType": "Brand",
+    "recipeName": "High Protein Greek Yogurt - Mango",
+    "brandType": "Chobani",
     "groupName": "Yogurt",
     "servings": 1.0,
     "caloriesPerServing": 140.0,
@@ -1235,8 +1235,8 @@
     "pictureLink": "https://images.ctfassets.net/01to7kbtr3az/4OMpMfFBDP82lAdDgJc0Rt/7094738d7ce094f1df594a9965a96d13/MA.png?fm=webp&q=50"
   },
   {
-    "recipeName": "Chobani: High Protein Greek Yogurt - Raspberry Lemon",
-    "brandType": "Brand",
+    "recipeName": "High Protein Greek Yogurt - Raspberry Lemon",
+    "brandType": "Chobani",
     "groupName": "Yogurt",
     "servings": 1.0,
     "caloriesPerServing": 140.0,
@@ -1254,8 +1254,8 @@
     "pictureLink": "https://images.ctfassets.net/01to7kbtr3az/1x42e3MGUYaS8MGJrZkJeb/10d048530eb2aa9cd5bbc34291d9e1e5/RBLM.png?fm=webp&q=50"
   },
   {
-    "recipeName": "Chobani: High Protein Greek Yogurt - Strawberry Kiwi",
-    "brandType": "Brand",
+    "recipeName": "High Protein Greek Yogurt - Strawberry Kiwi",
+    "brandType": "Chobani",
     "groupName": "Yogurt",
     "servings": 1.0,
     "caloriesPerServing": 140.0,
@@ -1273,8 +1273,8 @@
     "pictureLink": "https://images.ctfassets.net/01to7kbtr3az/6lsAcBRXpQHqGopMNoYX7S/99e3df00ede849c85f56720a0f5e69fc/SWKW.png?fm=webp&q=50"
   },
   {
-    "recipeName": "Chobani: High Protein Greek Yogurt - Vanilla",
-    "brandType": "Brand",
+    "recipeName": "High Protein Greek Yogurt - Vanilla",
+    "brandType": "Chobani",
     "groupName": "Yogurt",
     "servings": 1.0,
     "caloriesPerServing": 140.0,
@@ -1501,8 +1501,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Dannon: Activia - Black Cherry Yogurt",
-    "brandType": "Brand",
+    "recipeName": "Activia - Black Cherry Yogurt",
+    "brandType": "Dannon",
     "groupName": "Yogurt",
     "servings": 1.0,
     "caloriesPerServing": 90.0,
@@ -1539,7 +1539,7 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Doritos: Nacho Cheese",
+    "recipeName": "Doritos Nacho Cheese",
     "brandType": "Brand",
     "groupName": "Snacks",
     "servings": 2.0,
@@ -1615,8 +1615,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Duncan Hines: Milk Chocolate Brownie",
-    "brandType": "Brand",
+    "recipeName": "Milk Chocolate Brownie",
+    "brandType": "Duncan Hines",
     "groupName": "Dessert",
     "servings": 2.0,
     "caloriesPerServing": 170.0,
@@ -1653,8 +1653,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Filibertos: California Burrito",
-    "brandType": "Brand",
+    "recipeName": "California Burrito",
+    "brandType": "Filibertos",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 718.0,
@@ -1729,8 +1729,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Foster Farms: Crispy Wings - Classic Buffalo Style",
-    "brandType": "Brand",
+    "recipeName": "Crispy Wings - Classic Buffalo Style",
+    "brandType": "Foster Farms",
     "groupName": "Prepared Meals",
     "servings": 1.0,
     "caloriesPerServing": 150.0,
@@ -1805,8 +1805,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Garden: Veggie Straws Cheddar Cheese",
-    "brandType": "Brand",
+    "recipeName": "Veggie Straws Cheddar Cheese",
+    "brandType": "Garden",
     "groupName": "Snacks",
     "servings": 1.0,
     "caloriesPerServing": 130.0,
@@ -1824,7 +1824,7 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Girl Scouts: Tagalongs",
+    "recipeName": "Girl Scouts - Tagalongs",
     "brandType": "Brand",
     "groupName": "Snacks",
     "servings": 3.5,
@@ -1881,8 +1881,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Great Value: Cream Soda",
-    "brandType": "Brand",
+    "recipeName": "Cream Soda",
+    "brandType": "Great Value",
     "groupName": "Beverages",
     "servings": 3.0,
     "caloriesPerServing": 180.0,
@@ -1900,8 +1900,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Great Value: Neapolitan Ice Cream Bar",
-    "brandType": "Brand",
+    "recipeName": "Neapolitan Ice Cream Bar",
+    "brandType": "Great Value",
     "groupName": "Dessert",
     "servings": 1.0,
     "caloriesPerServing": 150.0,
@@ -2033,8 +2033,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Harkins: Extra Large Popcorn",
-    "brandType": "Brand",
+    "recipeName": "Extra Large Popcorn",
+    "brandType": "Harkins",
     "groupName": "Movie Theater",
     "servings": 1.0,
     "caloriesPerServing": 1100.0,
@@ -2090,8 +2090,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Heinz: Tomato Ketchup",
-    "brandType": "Brand",
+    "recipeName": "Tomato Ketchup",
+    "brandType": "Heinz",
     "groupName": "Condiments & Sauces",
     "servings": 2.0,
     "caloriesPerServing": 20.0,
@@ -2109,8 +2109,8 @@
     "pictureLink": "https://res.cloudinary.com/kraft-heinz-whats-cooking-ca/image/upload/f_auto/q_auto/r_8/c_limit,w_1080/f_auto/q_auto/v1/dxp-images/heinz/products/00013000006408-tomato-ketchup/marketing-view-color-front_b0d1ae7504d2b41dbc5e497f601a05dfe572a0d8_bddbaed905e986d8b8033f7e418fbe12?_a=BAVAfVDW0"
   },
   {
-    "recipeName": "Heinz: Yellow Mustard",
-    "brandType": "Brand",
+    "recipeName": "Yellow Mustard",
+    "brandType": "Heinz",
     "groupName": "Condiments & Sauces",
     "servings": 2.0,
     "caloriesPerServing": 0.0,
@@ -2128,8 +2128,8 @@
     "pictureLink": "https://res.cloudinary.com/kraft-heinz-whats-cooking-ca/image/upload/f_auto/q_auto/r_8/c_limit,w_1080/f_auto/q_auto/v1/dxp-images/heinz/products/00013000002189-yellow-mustard/marketing-view-color-front_content-hub-8467540_92cf91209d1e1540d34c1ca951c62ce4?_a=BAVAfVDW0"
   },
   {
-    "recipeName": "Home Chef: Ricotta and Spinach Raviolis with Marinara Sauce",
-    "brandType": "Brand",
+    "recipeName": "Ricotta and Spinach Raviolis with Marinara Sauce",
+    "brandType": "Home Chef",
     "groupName": "Prepared Meals",
     "servings": 0.5,
     "caloriesPerServing": 550.0,
@@ -2147,7 +2147,7 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Homemade: Tacos",
+    "recipeName": "Homemade - Tacos",
     "brandType": "Brand",
     "groupName": "Homemade",
     "servings": 1.0,
@@ -2166,8 +2166,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Hostess: Coffee Cakes Cinnamon Streusel",
-    "brandType": "Brand",
+    "recipeName": "Coffee Cakes Cinnamon Streusel",
+    "brandType": "Hostess",
     "groupName": "Snacks",
     "servings": 1.0,
     "caloriesPerServing": 160.0,
@@ -2185,8 +2185,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Hostess: Meltamors",
-    "brandType": "Brand",
+    "recipeName": "Meltamors",
+    "brandType": "Hostess",
     "groupName": "Snacks",
     "servings": 1.0,
     "caloriesPerServing": 130.0,
@@ -2204,8 +2204,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Hot Pockets: Four Meat and Four Cheese Pizza",
-    "brandType": "Brand",
+    "recipeName": "Four Meat and Four Cheese Pizza",
+    "brandType": "Hot Pockets",
     "groupName": "Frozen Meals",
     "servings": 1.0,
     "caloriesPerServing": 290.0,
@@ -2223,8 +2223,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Hudson: Whole Kernel Golden Sweet Corn",
-    "brandType": "Brand",
+    "recipeName": "Whole Kernel Golden Sweet Corn",
+    "brandType": "Hudson",
     "groupName": "Canned",
     "servings": 1.0,
     "caloriesPerServing": 60.0,
@@ -2242,8 +2242,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "ICEE: Mountain Dew",
-    "brandType": "Brand",
+    "recipeName": "Mountain Dew",
+    "brandType": "ICEE",
     "groupName": "Beverages",
     "servings": 2.0,
     "caloriesPerServing": 95.0,
@@ -2261,8 +2261,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "IN-N-Out: Double Double W/Grilled Onion",
-    "brandType": "Brand",
+    "recipeName": "Double Double W/Grilled Onion",
+    "brandType": "IN-N-Out",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 610.0,
@@ -2280,8 +2280,8 @@
     "pictureLink": "https://www.in-n-out.com/Frontend-Assembly/Telerik.Sitefinity.Frontend/content/images/menu/double-double@2x.png?package=INNOUT&v=2023_9"
   },
   {
-    "recipeName": "IN-N-Out: Double Double, Protein Style",
-    "brandType": "Brand",
+    "recipeName": "Double Double, Protein Style",
+    "brandType": "IN-N-Out",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 450.0,
@@ -2299,8 +2299,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "IN-N-Out: French Fries",
-    "brandType": "Brand",
+    "recipeName": "French Fries",
+    "brandType": "IN-N-Out",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 360.0,
@@ -2318,8 +2318,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Izzio: Sourdough Grilled Cheese - Ham and Havarti",
-    "brandType": "Brand",
+    "recipeName": "Sourdough Grilled Cheese - Ham and Havarti",
+    "brandType": "Izzio",
     "groupName": "Sandwich",
     "servings": 1.0,
     "caloriesPerServing": 390.0,
@@ -2337,8 +2337,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Kellogg's: Corn Flakes",
-    "brandType": "Brand",
+    "recipeName": "Corn Flakes",
+    "brandType": "kelloggs",
     "groupName": "Breads & Grains",
     "servings": 1.5,
     "caloriesPerServing": 150.0,
@@ -2375,8 +2375,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Kirkland Signature: Beef Hot Dogs",
-    "brandType": "Brand",
+    "recipeName": "Beef Hot Dogs",
+    "brandType": "Kirkland Signature",
     "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 170.0,
@@ -2394,8 +2394,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Kirkland Signature: Hot Dog Buns",
-    "brandType": "Brand",
+    "recipeName": "Hot Dog Buns",
+    "brandType": "Kirkland Signature",
     "groupName": "Breads & Grains",
     "servings": 1.0,
     "caloriesPerServing": 200.0,
@@ -2413,8 +2413,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "LALA: Yogurt Smoothie",
-    "brandType": "Brand",
+    "recipeName": "Yogurt Smoothie",
+    "brandType": "LALA",
     "groupName": "Yogurt",
     "servings": 1.0,
     "caloriesPerServing": 130.0,
@@ -2432,8 +2432,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Larabar: Trail Mix Bar Dark Chocolate Peanut",
-    "brandType": "Brand",
+    "recipeName": "Trail Mix Bar Dark Chocolate Peanut",
+    "brandType": "Larabar",
     "groupName": "Nutrition",
     "servings": 1.0,
     "caloriesPerServing": 160.0,
@@ -2451,8 +2451,8 @@
     "pictureLink": "https://s3.amazonaws.com/jo.www.bucket/larabar/nodes/images/5122/retina/larabar-trail-mix-bar-dark-chocolate-peanut-bar.png?1716919588"
   },
   {
-    "recipeName": "Marketside: French Style Cheesecake Mousse",
-    "brandType": "Brand",
+    "recipeName": "French Style Cheesecake Mousse",
+    "brandType": "Marketside",
     "groupName": "Dessert",
     "servings": 1.0,
     "caloriesPerServing": 280.0,
@@ -2565,8 +2565,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Motor City Pizza Co: Double Pepperoni Detroit-Style Deep Dish Pizza",
-    "brandType": "Brand",
+    "recipeName": "Double Pepperoni Detroit-Style Deep Dish Pizza",
+    "brandType": "Motor City Pizza Co",
     "groupName": "Prepared Meals",
     "servings": 1.0,
     "caloriesPerServing": 380.0,
@@ -2584,8 +2584,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Murray's: Buffalo Mozzarella",
-    "brandType": "Brand",
+    "recipeName": "Buffalo Mozzarella",
+    "brandType": "Murrays",
     "groupName": "Dairy & Eggs",
     "servings": 1.0,
     "caloriesPerServing": 70.0,
@@ -2622,8 +2622,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Nabisco: Oreos Cookies",
-    "brandType": "Brand",
+    "recipeName": "Oreos Cookies",
+    "brandType": "Nabisco",
     "groupName": "Dessert",
     "servings": 2.0,
     "caloriesPerServing": 160.0,
@@ -2641,8 +2641,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Nature's Own: Thick Sliced Brioche Style Bread",
-    "brandType": "Brand",
+    "recipeName": "Thick Sliced Brioche Style Bread",
+    "brandType": "Natures Own",
     "groupName": "Breads & Grains",
     "servings": 2.0,
     "caloriesPerServing": 110.0,
@@ -2679,8 +2679,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Nesquik: Chocolate Milk Zero Sugar Added",
-    "brandType": "Brand",
+    "recipeName": "Chocolate Milk Zero Sugar Added",
+    "brandType": "Nesquik",
     "groupName": "Beverages",
     "servings": 1.0,
     "caloriesPerServing": 190.0,
@@ -2698,8 +2698,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Newman's Own: Uncured Pepperoni Thin and Crispy Crust Frozen Pizza",
-    "brandType": "Brand",
+    "recipeName": "Uncured Pepperoni Thin and Crispy Crust Frozen Pizza",
+    "brandType": "Newmans Own",
     "groupName": "Frozen Meals",
     "servings": 1.0,
     "caloriesPerServing": 370.0,
@@ -2717,8 +2717,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Nissin: Top Ramen - Chicken Flavor Bowl",
-    "brandType": "Brand",
+    "recipeName": "Top Ramen - Chicken Flavor Bowl",
+    "brandType": "Nissin",
     "groupName": "Soup",
     "servings": 1.0,
     "caloriesPerServing": 400.0,
@@ -2774,8 +2774,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Olive Garden: Breadsticks",
-    "brandType": "Brand",
+    "recipeName": "Breadsticks",
+    "brandType": "Olive Garden",
     "groupName": "Restaurant",
     "servings": 2.0,
     "caloriesPerServing": 140.0,
@@ -2793,8 +2793,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Olive Garden: Chicken and Shrimp Carbonara",
-    "brandType": "Brand",
+    "recipeName": "Chicken and Shrimp Carbonara",
+    "brandType": "Olive Garden",
     "groupName": "Restaurant",
     "servings": 1.0,
     "caloriesPerServing": 1390.0,
@@ -2812,8 +2812,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Olive Garden: Chicken Gnocchi Soup",
-    "brandType": "Brand",
+    "recipeName": "Chicken Gnocchi Soup",
+    "brandType": "Olive Garden",
     "groupName": "Restaurant",
     "servings": 1.0,
     "caloriesPerServing": 230.0,
@@ -2831,8 +2831,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Olive Garden: Eggplant Parmesan",
-    "brandType": "Brand",
+    "recipeName": "Eggplant Parmesan",
+    "brandType": "Olive Garden",
     "groupName": "Restaurant",
     "servings": 1.0,
     "caloriesPerServing": 1060.0,
@@ -2850,8 +2850,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Olive Garden: Spaghetti with Meat Sauce",
-    "brandType": "Brand",
+    "recipeName": "Spaghetti with Meat Sauce",
+    "brandType": "Olive Garden",
     "groupName": "Restaurant",
     "servings": 1.0,
     "caloriesPerServing": 635.0,
@@ -2908,7 +2908,7 @@
   },
   {
     "recipeName": "Orgain Milk Protein Shake",
-    "brandType": "Brand",
+    "brandType": "Orgain",
     "groupName": "Nutrition",
     "servings": 1.0,
     "caloriesPerServing": 160.0,
@@ -2927,7 +2927,7 @@
   },
   {
     "recipeName": "Orgain Protein Shake",
-    "brandType": "Brand",
+    "brandType": "Orgain",
     "groupName": "Nutrition",
     "servings": 1.0,
     "caloriesPerServing": 160.0,
@@ -2983,8 +2983,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Panera Bread: Croque Monsieur on Croissant Toast",
-    "brandType": "Brand",
+    "recipeName": "Croque Monsieur on Croissant Toast",
+    "brandType": "Panera Bread",
     "groupName": "Restaurant",
     "servings": 1.0,
     "caloriesPerServing": 440.0,
@@ -3002,8 +3002,8 @@
     "pictureLink": "https://www.panerabread.com/content/dam/panerabread/menu-omni/integrated-web/grid/rect/croque-monsieur-croissant-toast-whole.jpg.transform/rect-grid-image/image.20250503.jpg"
   },
   {
-    "recipeName": "Panera Bread: Fromage Croissant Toast",
-    "brandType": "Brand",
+    "recipeName": "Fromage Croissant Toast",
+    "brandType": "Panera Bread",
     "groupName": "Restaurant",
     "servings": 1.0,
     "caloriesPerServing": 540.0,
@@ -3021,8 +3021,8 @@
     "pictureLink": "https://www.panerabread.com/content/dam/panerabread/menu-omni/integrated-web/grid/rect/fromage-croissant-toast-whole.jpg.transform/rect-grid-image/image.20250503.jpg"
   },
   {
-    "recipeName": "Panera Bread: Mac & Cheese - Small",
-    "brandType": "Brand",
+    "recipeName": "Mac & Cheese - Small",
+    "brandType": "Panera Bread",
     "groupName": "Restaurant",
     "servings": 1.0,
     "caloriesPerServing": 480.0,
@@ -3040,8 +3040,8 @@
     "pictureLink": "https://www.panerabread.com/content/dam/panerabread/menu-omni/integrated-web/grid/rect/mac-and-cheese-large.jpg.transform/rect-grid-image/image.20250503.jpg"
   },
   {
-    "recipeName": "Panera Bread: Vegetarian Creamy Tomato Soup - Bowl",
-    "brandType": "Brand",
+    "recipeName": "Vegetarian Creamy Tomato Soup - Bowl",
+    "brandType": "Panera Bread",
     "groupName": "Restaurant",
     "servings": 1.0,
     "caloriesPerServing": 370.0,
@@ -3116,8 +3116,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Pepperidge Farm: Farmhouse - Sourdough Bread",
-    "brandType": "Brand",
+    "recipeName": "Farmhouse - Sourdough Bread",
+    "brandType": "Pepperidge Farm",
     "groupName": "Breads & Grains",
     "servings": 1.0,
     "caloriesPerServing": 130.0,
@@ -3173,8 +3173,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Popeyes: Biscuit",
-    "brandType": "Brand",
+    "recipeName": "Biscuit",
+    "brandType": "Popeyes",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 210.0,
@@ -3192,8 +3192,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Popeyes: Chicken Breast",
-    "brandType": "Brand",
+    "recipeName": "Chicken Breast",
+    "brandType": "Popeyes",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 380.0,
@@ -3211,8 +3211,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Popeyes: Chicken Leg",
-    "brandType": "Brand",
+    "recipeName": "Chicken Leg",
+    "brandType": "Popeyes",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 160.0,
@@ -3230,8 +3230,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Popeyes: Chicken Thigh",
-    "brandType": "Brand",
+    "recipeName": "Chicken Thigh",
+    "brandType": "Popeyes",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 280.0,
@@ -3249,8 +3249,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Popeyes: Chicken Wing",
-    "brandType": "Brand",
+    "recipeName": "Chicken Wing",
+    "brandType": "Popeyes",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 210.0,
@@ -3268,8 +3268,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Popeyes: Coleslaw",
-    "brandType": "Brand",
+    "recipeName": "Coleslaw",
+    "brandType": "Popeyes",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 140.0,
@@ -3287,8 +3287,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Popeyes: Mashed Potatoes with Gravy",
-    "brandType": "Brand",
+    "recipeName": "Mashed Potatoes with Gravy",
+    "brandType": "Popeyes",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 110.0,
@@ -3363,8 +3363,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Premier Protein: Bananas and Cream",
-    "brandType": "Brand",
+    "recipeName": "Protein Shake - Bananas and Cream",
+    "brandType": "Premier Protein",
     "groupName": "Nutrition",
     "servings": 1.0,
     "caloriesPerServing": 160.0,
@@ -3382,8 +3382,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Premier Protein: Cafe Latte",
-    "brandType": "Brand",
+    "recipeName": "Protein Shake - Cafe Latte",
+    "brandType": "Premier Protein",
     "groupName": "Nutrition",
     "servings": 1.0,
     "caloriesPerServing": 160.0,
@@ -3401,8 +3401,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Premier Protein: Cookie Dough",
-    "brandType": "Brand",
+    "recipeName": "Protein Shake - Cookie Dough",
+    "brandType": "Premier Protein",
     "groupName": "Nutrition",
     "servings": 1.0,
     "caloriesPerServing": 160.0,
@@ -3420,8 +3420,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Pringles: Original",
-    "brandType": "Brand",
+    "recipeName": "Pringles - Original",
+    "brandType": "Pringles",
     "groupName": "Snacks",
     "servings": 1.0,
     "caloriesPerServing": 150.0,
@@ -3439,8 +3439,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Pure Protein: Strawberry Milkshake",
-    "brandType": "Brand",
+    "recipeName": "Protein Shake - Strawberry Milkshake",
+    "brandType": "Pure Protein",
     "groupName": "Nutrition",
     "servings": 1.0,
     "caloriesPerServing": 140.0,
@@ -3572,8 +3572,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Ritz: Crisp and Thins - Original with creamy onion and sea salt",
-    "brandType": "Brand",
+    "recipeName": "Crisp and Thins - Original with creamy onion and sea salt",
+    "brandType": "Ritz",
     "groupName": "Snacks",
     "servings": 1.0,
     "caloriesPerServing": 130.0,
@@ -3591,8 +3591,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Roncadin: Mushroom Truffle Pizza",
-    "brandType": "Brand",
+    "recipeName": "Mushroom Truffle Pizza",
+    "brandType": "Roncadin",
     "groupName": "Pizza",
     "servings": 1.0,
     "caloriesPerServing": 360.0,
@@ -3610,8 +3610,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Rosati's: Antipasto Salad",
-    "brandType": "Brand",
+    "recipeName": "Antipasto Salad",
+    "brandType": "Rosatis",
     "groupName": "Restaurant",
     "servings": 1.0,
     "caloriesPerServing": 640.0,
@@ -3629,8 +3629,8 @@
     "pictureLink": "https://s3.us-east-2.amazonaws.com/arrowpos-menu-images/be1476b16b5e4b4b95d767e9df6e6b2e.jpg"
   },
   {
-    "recipeName": "Rosati's: Monster Pizza",
-    "brandType": "Brand",
+    "recipeName": "Monster Pizza",
+    "brandType": "Rosatis",
     "groupName": "Restaurant",
     "servings": 1.0,
     "caloriesPerServing": 480.0,
@@ -3648,8 +3648,8 @@
     "pictureLink": "https://s3.us-east-2.amazonaws.com/arrowpos-menu-images/7d7851cb57a84ec0b1114212ca572a1e.jpg"
   },
   {
-    "recipeName": "Rosati's: Sweet Italian Dressing",
-    "brandType": "Brand",
+    "recipeName": "Sweet Italian Dressing",
+    "brandType": "Rosatis",
     "groupName": "Restaurant",
     "servings": 1.0,
     "caloriesPerServing": 430.0,
@@ -3667,8 +3667,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Ruffles: Flamin Hot Potato Chips",
-    "brandType": "Brand",
+    "recipeName": "Ruffles - Flamin Hot Potato Chips",
+    "brandType": "Ruffles",
     "groupName": "Snacks",
     "servings": 3.0,
     "caloriesPerServing": 150.0,
@@ -3819,8 +3819,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Simply Fresh: Shakers Caprese Pasta",
-    "brandType": "Brand",
+    "recipeName": "Shakers Caprese Pasta",
+    "brandType": "Simply Fresh",
     "groupName": "Salad",
     "servings": 2.0,
     "caloriesPerServing": 250.0,
@@ -3838,8 +3838,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Simply Fresh: Shakers Ultimate Chicken BLT Salad",
-    "brandType": "Brand",
+    "recipeName": "Shakers Ultimate Chicken BLT Salad",
+    "brandType": "Simply Fresh",
     "groupName": "Salad",
     "servings": 1.0,
     "caloriesPerServing": 350.0,
@@ -3876,8 +3876,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Southgate: Chicken Chili with Beans",
-    "brandType": "Brand",
+    "recipeName": "Chicken Chili with Beans",
+    "brandType": "Southgate",
     "groupName": "Canned",
     "servings": 1.0,
     "caloriesPerServing": 260.0,
@@ -3933,8 +3933,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "StarKist: Solid White Albacore Tuna",
-    "brandType": "Brand",
+    "recipeName": "Solid White Albacore Tuna",
+    "brandType": "StarKist",
     "groupName": "Canned",
     "servings": 1.0,
     "caloriesPerServing": 110.0,
@@ -4104,8 +4104,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Sweet Baby Ray's: Barbecue Sauce",
-    "brandType": "Brand",
+    "recipeName": "Barbecue Sauce",
+    "brandType": "Sweet Baby Rays",
     "groupName": "Condiments & Sauces",
     "servings": 2.0,
     "caloriesPerServing": 70.0,
@@ -4123,8 +4123,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Taco Bell: Bean Burrito",
-    "brandType": "Brand",
+    "recipeName": "Bean Burrito",
+    "brandType": "Taco Bell",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 360.0,
@@ -4142,8 +4142,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Taco Bell: Breakfast Crunchwrap - Bacon",
-    "brandType": "Brand",
+    "recipeName": "Breakfast Crunchwrap - Bacon",
+    "brandType": "Taco Bell",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 670.0,
@@ -4161,8 +4161,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Taco Bell: Breakfast Crunchwrap - Sausage Patty",
-    "brandType": "Brand",
+    "recipeName": "Breakfast Crunchwrap - Sausage Patty",
+    "brandType": "Taco Bell",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 750.0,
@@ -4180,8 +4180,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Taco Bell: Breakfast Crunchwrap - Steak",
-    "brandType": "Brand",
+    "recipeName": "Breakfast Crunchwrap - Steak",
+    "brandType": "Taco Bell",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 660.0,
@@ -4199,8 +4199,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Taco Bell: Burrito Supreme – Beef",
-    "brandType": "Brand",
+    "recipeName": "Burrito Supreme – Beef",
+    "brandType": "Taco Bell",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 390.0,
@@ -4218,8 +4218,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Taco Bell: Burrito Supreme – Chicken",
-    "brandType": "Brand",
+    "recipeName": "Burrito Supreme – Chicken",
+    "brandType": "Taco Bell",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 370.0,
@@ -4237,8 +4237,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Taco Bell: Burrito Supreme – Steak",
-    "brandType": "Brand",
+    "recipeName": "Burrito Supreme – Steak",
+    "brandType": "Taco Bell",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 380.0,
@@ -4256,8 +4256,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Taco Bell: Chips and Cheese",
-    "brandType": "Brand",
+    "recipeName": "Chips and Cheese",
+    "brandType": "Taco Bell",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 220.0,
@@ -4275,8 +4275,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Taco Bell: Hard Taco",
-    "brandType": "Brand",
+    "recipeName": "Hard Taco",
+    "brandType": "Taco Bell",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 170.0,
@@ -4294,8 +4294,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Taco Bell: Hash Brown",
-    "brandType": "Brand",
+    "recipeName": "Hash Brown",
+    "brandType": "Taco Bell",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 160.0,
@@ -4313,8 +4313,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "The Habit: French Fries",
-    "brandType": "Brand",
+    "recipeName": "French Fries",
+    "brandType": "The Habit",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 440.0,
@@ -4332,8 +4332,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "The Habit: Portabella Charburger",
-    "brandType": "Brand",
+    "recipeName": "Portabella Charburger",
+    "brandType": "The Habit",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 760.0,
@@ -4351,8 +4351,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Tillamook: Cookies and Cream Ice Cream",
-    "brandType": "Brand",
+    "recipeName": "Cookies and Cream Ice Cream",
+    "brandType": "Tillamook",
     "groupName": "Dessert",
     "servings": 1.0,
     "caloriesPerServing": 230.0,
@@ -4370,8 +4370,8 @@
     "pictureLink": "https://images.ctfassets.net/j8tkpy1gjhi5/2OiZ3hEtwa9vCP2kWUBN1J/0abd20183ed2e56bf644948d71a12937/BR22_48oz_Carton_Cookies_Cream_Rndr_FNL.png?w=768&fm=webp&q=80"
   },
   {
-    "recipeName": "Tillamook: Malted Moo Shake Ice Cream",
-    "brandType": "Brand",
+    "recipeName": "Malted Moo Shake Ice Cream",
+    "brandType": "Tillamook",
     "groupName": "Dessert",
     "servings": 1.0,
     "caloriesPerServing": 180.0,
@@ -4389,8 +4389,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Trader Joe's: Cheeseburger Burrito",
-    "brandType": "Brand",
+    "recipeName": "Cheeseburger Burrito",
+    "brandType": "Trader Joes",
     "groupName": "Burrito",
     "servings": 1.0,
     "caloriesPerServing": 610.0,
@@ -4408,8 +4408,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Trader Joe's: Sweet Chili Mango Salad",
-    "brandType": "Brand",
+    "recipeName": "Sweet Chili Mango Salad",
+    "brandType": "Trader Joes",
     "groupName": "Salad",
     "servings": 1.0,
     "caloriesPerServing": 130.0,
@@ -4427,8 +4427,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Trader's Joes: Organic Southwest Style Chicken Wrap",
-    "brandType": "Brand",
+    "recipeName": "Organic Southwest Style Chicken Wrap",
+    "brandType": "Trader Joes",
     "groupName": "Sandwich",
     "servings": 0.5,
     "caloriesPerServing": 550.0,
@@ -4503,8 +4503,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Walmart: Macaroni Salad Original",
-    "brandType": "Brand",
+    "recipeName": "Macaroni Salad Original",
+    "brandType": "Walmart",
     "groupName": "Prepared Meals",
     "servings": 1.0,
     "caloriesPerServing": 310.0,
@@ -4522,8 +4522,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Walmart: Supreme Super Sub Sandwich",
-    "brandType": "Brand",
+    "recipeName": "Supreme Super Sub Sandwich",
+    "brandType": "Walmart",
     "groupName": "Sandwich",
     "servings": 1.0,
     "caloriesPerServing": 420.0,
@@ -4541,8 +4541,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Avocado Chicken Club",
-    "brandType": "Wendy's",
+    "recipeName": "Avocado Chicken Club",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 583.0,
@@ -4560,8 +4560,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Avocado Chicken Salad",
-    "brandType": "Wendy's",
+    "recipeName": "Avocado Chicken Salad",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 485.0,
@@ -4579,8 +4579,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Bacon & Cheese Muffin",
-    "brandType": "Wendy's",
+    "recipeName": "Bacon & Cheese Muffin",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 384.0,
@@ -4598,8 +4598,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Bacon & Cheese Potato",
-    "brandType": "Wendy's",
+    "recipeName": "Bacon & Cheese Potato",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 405.0,
@@ -4617,8 +4617,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Bacon Cheeseburger",
-    "brandType": "Wendy's",
+    "recipeName": "Bacon Cheeseburger",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 524.0,
@@ -4636,8 +4636,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Bacon, Egg, & Cheese Croissant",
-    "brandType": "Wendy's",
+    "recipeName": "Bacon, Egg, & Cheese Croissant",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 403.0,
@@ -4655,8 +4655,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Baconator",
-    "brandType": "Wendy's",
+    "recipeName": "Baconator",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 1001.0,
@@ -4674,8 +4674,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Baconator Fries",
-    "brandType": "Wendy's",
+    "recipeName": "Baconator Fries",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 459.0,
@@ -4693,8 +4693,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Baked Plain Potato",
-    "brandType": "Wendy's",
+    "recipeName": "Baked Plain Potato",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 232.0,
@@ -4712,8 +4712,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Breakfast Baconator",
-    "brandType": "Wendy's",
+    "recipeName": "Breakfast Baconator",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 704.0,
@@ -4731,8 +4731,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Caesar Chicken Salad",
-    "brandType": "Wendy's",
+    "recipeName": "Caesar Chicken Salad",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 411.0,
@@ -4750,8 +4750,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Cappuccino",
-    "brandType": "Wendy's",
+    "recipeName": "Cappuccino",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 95.0,
@@ -4769,8 +4769,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Cheeseburger Deluxe",
-    "brandType": "Wendy's",
+    "recipeName": "Cheeseburger Deluxe",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 524.0,
@@ -4788,8 +4788,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Cheesy Topped Fries",
-    "brandType": "Wendy's",
+    "recipeName": "Cheesy Topped Fries",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 351.0,
@@ -4807,8 +4807,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Chicken Nuggets",
-    "brandType": "Wendy's",
+    "recipeName": "Chicken Nuggets",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 196.0,
@@ -4826,8 +4826,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Chili",
-    "brandType": "Wendy's",
+    "recipeName": "Chili",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 253.0,
@@ -4845,8 +4845,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Chili Cheese Baked Potato",
-    "brandType": "Wendy's",
+    "recipeName": "Chili Cheese Baked Potato",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 428.0,
@@ -4864,8 +4864,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Chili Cheese Fries",
-    "brandType": "Wendy's",
+    "recipeName": "Chili Cheese Fries",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 481.0,
@@ -4883,8 +4883,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Classic Chicken",
-    "brandType": "Wendy's",
+    "recipeName": "Classic Chicken",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 404.0,
@@ -4902,8 +4902,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Coca-Cola Small",
-    "brandType": "Wendy's",
+    "recipeName": "Coca-Cola Small",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 152.0,
@@ -4921,8 +4921,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Dave's Double",
-    "brandType": "Wendy's",
+    "recipeName": "Dave's Double",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 879.0,
@@ -4940,8 +4940,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Dave's Single",
-    "brandType": "Wendy's",
+    "recipeName": "Dave's Single",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 524.0,
@@ -4959,8 +4959,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Dave's Triple",
-    "brandType": "Wendy's",
+    "recipeName": "Dave's Triple",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 1195.0,
@@ -4978,8 +4978,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Double Cheeseburger with Bacon",
-    "brandType": "Wendy's",
+    "recipeName": "Double Cheeseburger with Bacon",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 910.0,
@@ -4997,8 +4997,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Egg & Cheese Muffin",
-    "brandType": "Wendy's",
+    "recipeName": "Egg & Cheese Muffin",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 319.0,
@@ -5016,8 +5016,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Flat White",
-    "brandType": "Wendy's",
+    "recipeName": "Flat White",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 153.0,
@@ -5035,8 +5035,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Grilled Chicken",
-    "brandType": "Wendy's",
+    "recipeName": "Grilled Chicken",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 337.0,
@@ -5054,8 +5054,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Hot Chocolate",
-    "brandType": "Wendy's",
+    "recipeName": "Hot Chocolate",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 245.0,
@@ -5073,8 +5073,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Jr. Chocolate Frosty",
-    "brandType": "Wendy's",
+    "recipeName": "Jr. Chocolate Frosty",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 174.0,
@@ -5092,8 +5092,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Jr. Vanilla Frosty",
-    "brandType": "Wendy's",
+    "recipeName": "Jr. Vanilla Frosty",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 179.0,
@@ -5111,8 +5111,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Kid's Cheeseburger",
-    "brandType": "Wendy's",
+    "recipeName": "Kid's Cheeseburger",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 317.0,
@@ -5130,8 +5130,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Kid's Hamburger",
-    "brandType": "Wendy's",
+    "recipeName": "Kid's Hamburger",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 278.0,
@@ -5149,8 +5149,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Large Breakfast Potatoes",
-    "brandType": "Wendy's",
+    "recipeName": "Large Breakfast Potatoes",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 215.0,
@@ -5168,8 +5168,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Large Chocolate Frosty",
-    "brandType": "Wendy's",
+    "recipeName": "Large Chocolate Frosty",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 407.0,
@@ -5187,8 +5187,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Large Vanilla Frosty",
-    "brandType": "Wendy's",
+    "recipeName": "Large Vanilla Frosty",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 424.0,
@@ -5206,8 +5206,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Latte",
-    "brandType": "Wendy's",
+    "recipeName": "Latte",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 153.0,
@@ -5225,8 +5225,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Medium Breakfast Potatoes",
-    "brandType": "Wendy's",
+    "recipeName": "Medium Breakfast Potatoes",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 168.0,
@@ -5244,8 +5244,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Mocha",
-    "brandType": "Wendy's",
+    "recipeName": "Mocha",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 190.0,
@@ -5263,8 +5263,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Premium Bun",
-    "brandType": "Wendy's",
+    "recipeName": "Premium Bun",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 183.0,
@@ -5282,8 +5282,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Regular Chocolate Frosty",
-    "brandType": "Wendy's",
+    "recipeName": "Regular Chocolate Frosty",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 299.0,
@@ -5301,8 +5301,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Regular Vanilla Frosty",
-    "brandType": "Wendy's",
+    "recipeName": "Regular Vanilla Frosty",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 311.0,
@@ -5320,8 +5320,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Sausage & Cheese Muffin",
-    "brandType": "Wendy's",
+    "recipeName": "Sausage & Cheese Muffin",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 477.0,
@@ -5339,8 +5339,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Sausage, Egg, & Cheese Croissant",
-    "brandType": "Wendy's",
+    "recipeName": "Sausage, Egg, & Cheese Croissant",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 492.0,
@@ -5358,8 +5358,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Small Breakfast Potatoes",
-    "brandType": "Wendy's",
+    "recipeName": "Small Breakfast Potatoes",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 118.0,
@@ -5377,8 +5377,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Small Fries",
-    "brandType": "Wendy's",
+    "recipeName": "Small Fries",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 222.0,
@@ -5396,8 +5396,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Sour Cream & Chives Potato",
-    "brandType": "Wendy's",
+    "recipeName": "Sour Cream & Chives Potato",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 233.0,
@@ -5415,8 +5415,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Sprite Small",
-    "brandType": "Wendy's",
+    "recipeName": "Sprite Small",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 44.0,
@@ -5434,8 +5434,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wendy's: Value Bun",
-    "brandType": "Wendy's",
+    "recipeName": "Value Bun",
+    "brandType": "Wendys",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 149.0,
@@ -5472,8 +5472,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "White Castle: Cheese Slider",
-    "brandType": "Brand",
+    "recipeName": "Cheese Slider",
+    "brandType": "White Castle",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 170.0,
@@ -5491,8 +5491,8 @@
     "pictureLink": "https://www.whitecastle.com/dA/f1bb83713f/original-cheese-slider.png"
   },
   {
-    "recipeName": "White Castle: French Fries - Medium",
-    "brandType": "Brand",
+    "recipeName": "French Fries - Medium",
+    "brandType": "White Castle",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 600.0,
@@ -5510,8 +5510,8 @@
     "pictureLink": "https://www.whitecastle.com/dA/4750d394b6/fries.png"
   },
   {
-    "recipeName": "White Castle: French Fries - Sack",
-    "brandType": "Brand",
+    "recipeName": "French Fries - Sack",
+    "brandType": "White Castle",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 770.0,
@@ -5529,8 +5529,8 @@
     "pictureLink": "https://www.whitecastle.com/dA/4750d394b6/fries.png"
   },
   {
-    "recipeName": "White Castle: French Fries - Small",
-    "brandType": "Brand",
+    "recipeName": "French Fries - Small",
+    "brandType": "White Castle",
     "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 330.0,
@@ -5586,8 +5586,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wingstop: Chicken Wings",
-    "brandType": "Brand",
+    "recipeName": "Chicken Wings",
+    "brandType": "Wingstop",
     "groupName": "Fast Food",
     "servings": 10.0,
     "caloriesPerServing": 80.0,
@@ -5605,8 +5605,8 @@
     "pictureLink": null
   },
   {
-    "recipeName": "Wish-Bone: Italian Dressing",
-    "brandType": "Brand",
+    "recipeName": "Italian Dressing",
+    "brandType": "Wish-Bone",
     "groupName": "Condiments & Sauces",
     "servings": 2.0,
     "caloriesPerServing": 80.0,

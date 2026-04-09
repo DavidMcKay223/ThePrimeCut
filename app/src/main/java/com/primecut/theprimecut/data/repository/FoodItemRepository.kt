@@ -9,4 +9,5 @@ class FoodItemRepository(
     suspend fun getAll(): List<FoodItem> = dao.getAll()
     suspend fun getFoodItemByName(name: String) = dao.getFoodItemByName(name)
     suspend fun insertAll(items: List<FoodItem>) = items.forEach { dao.insert(it) }
+    suspend fun deleteAll() = dao.deleteAll()
 }

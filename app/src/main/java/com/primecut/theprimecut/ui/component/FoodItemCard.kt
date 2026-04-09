@@ -96,12 +96,22 @@ fun FoodItemCard(
                     )
                 }
 
-                // Food Name on Header
+                // Food Name & Info on Header
                 Column(
                     modifier = Modifier
                         .align(Alignment.BottomStart)
                         .padding(12.dp)
                 ) {
+                    foodItem.groupName?.let {
+                        Text(
+                            text = it.uppercase(),
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.ExtraBold,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f),
+                                letterSpacing = 1.2.sp
+                            )
+                        )
+                    }
                     Text(
                         text = foodItem.recipeName,
                         style = MaterialTheme.typography.titleMedium.copy(
@@ -110,6 +120,13 @@ fun FoodItemCard(
                         ),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        text = foodItem.brandType,
+                        style = MaterialTheme.typography.labelMedium.copy(
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
+                        )
                     )
                 }
             }

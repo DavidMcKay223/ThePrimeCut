@@ -47,8 +47,15 @@ class FoodItemViewModel(
         _selectedFilters
     ) { items, name, brand, group, filters ->
         items.filter { item ->
-            // Search Logic
-            val matchesName = if (name.isEmpty()) true else item.recipeName.contains(name, ignoreCase = true)
+            // Search Logic: Combined search for name OR brand in the main search bar
+            val matchesNameOrBrand = if (name.isEmpty()) {
+                true 
+            } else {
+                item.recipeName.contains(name, ignoreCase = true) || 
+                item.brandType.contains(name, ignoreCase = true)
+            }
+            
+            // Explicit dropdown filters (remain as AND conditions)
             val matchesBrand = if (brand.isEmpty()) true else item.brandType.contains(brand, ignoreCase = true)
             val matchesGroup = if (group.isEmpty()) true else (item.groupName?.contains(group, ignoreCase = true) == true)
 
@@ -70,7 +77,7 @@ class FoodItemViewModel(
                 }
             }
 
-            matchesName && matchesBrand && matchesGroup && matchesFilters
+            matchesNameOrBrand && matchesBrand && matchesGroup && matchesFilters
         }
     }.stateIn(
         scope = viewModelScope,
@@ -124,6 +131,14 @@ class FoodItemViewModel(
     ) {
         viewModelScope.launch {
             repository.insertAll(newItems)
+            refreshFoodItems()
+            onComplete?.invoke()
+        }
+    }
+
+    fun deleteAllFoodItems(onComplete: (() -> Unit)? = null) {
+        viewModelScope.launch {
+            repository.deleteAll()
             refreshFoodItems()
             onComplete?.invoke()
         }
