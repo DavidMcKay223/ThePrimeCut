@@ -69,7 +69,7 @@ fun OverviewScreen(
     
     LaunchedEffect(currentMonth, allProfiles) {
         if (allProfiles.isNotEmpty()) {
-            val start = currentMonth.atDay(1).toString()
+            val start = currentMonth.atDay(1).minusDays(7).toString()
             val end = currentMonth.atEndOfMonth().toString()
             mealEntryViewModel.loadAllUsersEntriesRange(start, end, allProfiles.map { it.userName })
         } else {
@@ -155,7 +155,7 @@ fun UnifiedInsightsSection(
         if (insightMode == "Daily" && selectedDate != null) {
             allEntries.values.flatten().filter { it.date == selectedDate.toString() }
         } else {
-            allEntries.values.flatten()
+            allEntries.values.flatten().filter { it.date.startsWith(currentMonth.toString()) }
         }
     }
 
@@ -508,8 +508,7 @@ fun DailyDetailSection(
                 val entries = if (viewMode == "Daily") {
                     allEntries[profile.userName]?.filter { it.date == date.toString() } ?: emptyList()
                 } else {
-                    val startOfWeek = date.minusDays(date.dayOfWeek.value.toLong() % 7)
-                    val weekDates = (0..6).map { startOfWeek.plusDays(it.toLong()).toString() }
+                    val weekDates = (0..6).map { date.minusDays(it.toLong()).toString() }
                     allEntries[profile.userName]?.filter { it.date in weekDates } ?: emptyList()
                 }
 
@@ -563,11 +562,10 @@ fun MonthlyTeamStats(month: YearMonth, profiles: List<UserProfile>, allEntries: 
         }
 
         profiles.forEach { profile ->
-            val userEntriesByDay = allEntries[profile.userName]?.groupBy { it.date } ?: emptyMap()
-            val daysOnTrack = userEntriesByDay.count { (_, entries) ->
-                val total = entries.sumOf { it.calories.toDouble() }
-                total >= profile.calorieGoal - 200 && total <= profile.calorieGoal + 100
-            }
+            val userEntriesByDay = allEntries[profile.userName]
+                ?.filter { it.date.startsWith(month.toString()) }
+                ?.groupBy { it.date } ?: emptyMap()
+            val daysOnTrack = userEntriesByDay.size
             
             val progress = if (month.monthValue == LocalDate.now().monthValue) LocalDate.now().dayOfMonth else month.lengthOfMonth()
             val percentage = (daysOnTrack.toFloat() / progress.toFloat()).coerceIn(0f, 1f)
@@ -575,7 +573,7 @@ fun MonthlyTeamStats(month: YearMonth, profiles: List<UserProfile>, allEntries: 
             Column(modifier = Modifier.padding(vertical = 4.dp).then(if (profile.userName == activeUser) Modifier.background(MaterialTheme.colorScheme.primary.copy(alpha = 0.05f), RoundedCornerShape(4.dp)) else Modifier)) {
                 Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp), horizontalArrangement = Arrangement.SpaceBetween) {
                     Text(profile.userName, style = MaterialTheme.typography.labelMedium, fontWeight = if (profile.userName == activeUser) FontWeight.Bold else FontWeight.Normal)
-                    Text("$daysOnTrack days on target", style = MaterialTheme.typography.labelSmall)
+                    Text("$daysOnTrack days logged", style = MaterialTheme.typography.labelSmall)
                 }
                 Spacer(Modifier.height(4.dp))
                 LinearProgressIndicator(

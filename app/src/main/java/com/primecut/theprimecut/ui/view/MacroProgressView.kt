@@ -10,14 +10,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.LocalFireDepartment
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Analytics
 import androidx.compose.material3.*
-import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.Alignment
@@ -26,19 +25,24 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.primecut.theprimecut.PrimeCutApplication
 import com.primecut.theprimecut.data.model.MacroSummary
+import com.primecut.theprimecut.data.model.MealEntry
 import com.primecut.theprimecut.data.model.UserProfile
-import com.primecut.theprimecut.ui.component.CalorieProgressCircle
-import com.primecut.theprimecut.ui.component.MacroProgressRow
+import com.primecut.theprimecut.ui.component.MultiMacroProgressCircle
 import com.primecut.theprimecut.ui.viewmodels.MacroViewModel
+import com.primecut.theprimecut.ui.viewmodels.MealEntryViewModel
 import com.primecut.theprimecut.ui.viewmodels.UserProfileViewModel
 import com.primecut.theprimecut.ui.viewmodels.ViewModelFactory
 import com.primecut.theprimecut.util.AppSession
+import java.time.LocalDate
+import java.time.format.TextStyle
 import java.util.Calendar
+import java.util.Locale
 
 @Composable
 fun MacroProgressView(
@@ -49,17 +53,28 @@ fun MacroProgressView(
     ),
     macroViewModel: MacroViewModel = viewModel(
         factory = ViewModelFactory((LocalContext.current.applicationContext as PrimeCutApplication).container)
+    ),
+    mealEntryViewModel: MealEntryViewModel = viewModel(
+        factory = ViewModelFactory((LocalContext.current.applicationContext as PrimeCutApplication).container)
     )
 ) {
     val profile by userProfileViewModel.userProfile.collectAsState()
     val allUserNames by userProfileViewModel.allUserNames.collectAsState()
     val allProfiles by userProfileViewModel.allProfiles.collectAsState()
     val summary by macroViewModel.summary.collectAsState()
-    val allUsersSummaries by macroViewModel.allUsersSummaries.collectAsState()
+    val allUsersEntries by mealEntryViewModel.allUsersEntries.collectAsState()
 
     LaunchedEffect(allUserNames) {
         if (allUserNames.isNotEmpty()) {
             macroViewModel.loadAllUsersSummaries(allUserNames)
+            
+            // Load current week (Sunday to Saturday)
+            val today = LocalDate.now()
+            val currentSunday = today.minusDays(today.dayOfWeek.value % 7.toLong())
+            val start = currentSunday.toString()
+            val end = currentSunday.plusDays(6).toString()
+            
+            mealEntryViewModel.loadAllUsersEntriesRange(start, end, allUserNames)
         }
     }
 
@@ -87,53 +102,27 @@ fun MacroProgressView(
                 contentPadding = PaddingValues(start = 20.dp, end = 20.dp, bottom = 32.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
-                // Competition Leaderboard Section
+                // Greeting and Date Section
                 item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    Column(modifier = Modifier.padding(top = 16.dp)) {
                         Text(
-                            text = "Competition Leaderboard",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 4.dp)
+                            text = "${getFriendlyGreeting()}, ${userProfile.userName}",
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold
                         )
-                        Icon(
-                            imageVector = Icons.Default.LocalFireDepartment,
-                            contentDescription = null,
-                            tint = Color(0xFFFF4500)
+                        Text(
+                            text = java.text.SimpleDateFormat("EEEE, MMMM d", java.util.Locale.getDefault()).format(java.util.Date()),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                    }
-                    
-                    Spacer(modifier = Modifier.height(12.dp))
-                    
-                    val leaderboardData = allProfiles.map { userProfile ->
-                        val userSummary = allUsersSummaries[userProfile.userName] ?: MacroSummary()
-                        val percent = if (userProfile.calorieGoal > 0) (userSummary.calories / userProfile.calorieGoal) else 0f
-                        // Consistency Score: 100 - absolute deviation from goal percentage
-                        val score = (100f - kotlin.math.abs(100f - (percent * 100f))).coerceAtLeast(0f)
-                        Triple(userProfile, userSummary, score)
-                    }.sortedByDescending { it.third }
-
-                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        leaderboardData.forEachIndexed { index, (user, userSummary, score) ->
-                            LeaderboardCard(
-                                rank = index + 1,
-                                profile = user,
-                                summary = userSummary,
-                                score = score
-                            )
-                        }
                     }
                 }
 
-                // Main Calorie Card
+                // Main Calorie & Macro Card
                 item {
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                     ) {
@@ -144,7 +133,7 @@ fun MacroProgressView(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "Calories",
+                                text = "Daily Progress",
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -152,12 +141,34 @@ fun MacroProgressView(
                             
                             Spacer(modifier = Modifier.height(24.dp))
 
-                            CalorieProgressCircle(
-                                current = summary.calories,
-                                goal = userProfile.calorieGoal,
-                                size = 200.dp,
-                                strokeWidth = 12.dp
+                            MultiMacroProgressCircle(
+                                caloriesCurrent = summary.calories,
+                                caloriesGoal = userProfile.calorieGoal,
+                                proteinCurrent = summary.protein,
+                                proteinGoal = userProfile.proteinGoal,
+                                carbsCurrent = summary.carbs,
+                                carbsGoal = userProfile.carbsGoal,
+                                fatCurrent = summary.fats,
+                                fatGoal = userProfile.fatGoal,
+                                fiberCurrent = summary.fiber,
+                                fiberGoal = userProfile.fiberGoal,
+                                size = 240.dp,
+                                strokeWidth = 10.dp,
+                                spacing = 8.dp
                             )
+
+                            Spacer(modifier = Modifier.height(24.dp))
+
+                            // Legend for the circle
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceAround
+                            ) {
+                                LegendItem("Prot", Color(0xFFE91E63))
+                                LegendItem("Carb", Color(0xFF03A9F4))
+                                LegendItem("Fat", Color(0xFFFFC107))
+                                LegendItem("Fib", Color(0xFF4CAF50))
+                            }
                         }
                     }
                 }
@@ -165,7 +176,7 @@ fun MacroProgressView(
                 // Nutrient Details Section
                 item {
                     Text(
-                        text = "Nutrients",
+                        text = "Macro Breakdown",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 4.dp)
@@ -181,15 +192,81 @@ fun MacroProgressView(
                     ) {
                         Column(
                             modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(0.dp)
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            MacroProgressRow("Protein", summary.protein, userProfile.proteinGoal, "g")
-                            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-                            MacroProgressRow("Carbohydrates", summary.carbs, userProfile.carbsGoal, "g")
-                            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-                            MacroProgressRow("Fat", summary.fats, userProfile.fatGoal, "g")
-                            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-                            MacroProgressRow("Fiber", summary.fiber, userProfile.fiberGoal, "g")
+                            MacroRow("Protein", summary.protein, userProfile.proteinGoal, Color(0xFFE91E63))
+                            MacroRow("Carbs", summary.carbs, userProfile.carbsGoal, Color(0xFF03A9F4))
+                            MacroRow("Fat", summary.fats, userProfile.fatGoal, Color(0xFFFFC107))
+                            MacroRow("Fiber", summary.fiber, userProfile.fiberGoal, Color(0xFF4CAF50))
+                        }
+                    }
+                }
+
+                // Daily Standings Section (7-Day Consistency)
+                item {
+                    Column {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "7-Day Activity",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(horizontal = 4.dp)
+                            )
+                            Icon(
+                                imageVector = Icons.Default.Analytics,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                        
+                        Spacer(modifier = Modifier.height(16.dp))
+                        
+                        // Calculate week bounds: Start of current week (Sunday) to End of week (Saturday)
+                        val today = LocalDate.now()
+                        val currentSunday = today.minusDays(today.dayOfWeek.value % 7.toLong())
+                        val weekDates = (0..6).map { currentSunday.plusDays(it.toLong()).toString() }
+                        
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                // Header row with dates
+                                Row(modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)) {
+                                    Spacer(modifier = Modifier.width(80.dp))
+                                    weekDates.forEach { dateStr ->
+                                        val date = LocalDate.parse(dateStr)
+                                        Text(
+                                            text = date.dayOfWeek.getDisplayName(java.time.format.TextStyle.NARROW, Locale.getDefault()),
+                                            modifier = Modifier.weight(1f),
+                                            textAlign = TextAlign.Center,
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = FontWeight.Bold,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+
+                                allProfiles.forEach { userProfile ->
+                                    val userEntries = allUsersEntries[userProfile.userName] ?: emptyList()
+                                    ActivityRow(
+                                        userName = userProfile.userName,
+                                        isActiveUser = userProfile.userName == AppSession.userName,
+                                        dates = weekDates,
+                                        userEntries = userEntries
+                                    )
+                                    if (userProfile != allProfiles.last()) {
+                                        Spacer(modifier = Modifier.height(12.dp))
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -202,6 +279,76 @@ fun MacroProgressView(
                 CircularProgressIndicator(strokeWidth = 3.dp, color = MaterialTheme.colorScheme.primary)
             }
         }
+    }
+}
+
+@Composable
+fun ActivityRow(
+    userName: String,
+    isActiveUser: Boolean,
+    dates: List<String>,
+    userEntries: List<MealEntry>
+) {
+    val entriesByDate = userEntries.groupBy { it.date }
+    
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = userName,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = if (isActiveUser) FontWeight.Bold else FontWeight.Normal,
+            modifier = Modifier.width(80.dp),
+            maxLines = 1,
+            color = if (isActiveUser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+        )
+        
+        Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            dates.forEach { date ->
+                val hasLogged = entriesByDate.containsKey(date)
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(20.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(
+                            if (hasLogged) MaterialTheme.colorScheme.primary 
+                            else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                        )
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun LegendItem(label: String, color: Color) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(color))
+        Spacer(Modifier.width(4.dp))
+        Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+@Composable
+fun MacroRow(label: String, current: Float, goal: Float, color: Color) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(label, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
+            Text("${current.toInt()}g / ${goal.toInt()}g", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        val progress = if (goal > 0) (current / goal).coerceIn(0f, 1f) else 0f
+        LinearProgressIndicator(
+            progress = { progress },
+            modifier = Modifier.width(100.dp).height(8.dp).clip(CircleShape),
+            color = color,
+            trackColor = color.copy(alpha = 0.1f)
+        )
     }
 }
 
@@ -278,7 +425,7 @@ fun LeaderboardCard(
                         color = MaterialTheme.colorScheme.primary
                     )
                     Icon(
-                        imageVector = Icons.Default.KeyboardArrowDown,
+                        imageVector = Icons.Default.ExpandMore,
                         contentDescription = null,
                         modifier = Modifier
                             .size(20.dp)
@@ -348,4 +495,3 @@ private fun getFriendlyGreeting(): String {
         else -> "Good Evening"
     }
 }
-

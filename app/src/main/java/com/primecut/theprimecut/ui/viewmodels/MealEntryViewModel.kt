@@ -73,8 +73,16 @@ class MealEntryViewModel(
 
     fun addMealEntries(entries: List<MealEntry>, onComplete: (() -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
+            val existing = if (entries.isNotEmpty()) {
+                repository.getByDate(entries.first().date, AppSession.userName)
+            } else emptyList()
+            
+            val existingNames = existing.map { it.mealName }.toSet()
+
             entries.forEach { entry ->
-                repository.add(entry.copy(id = 0, userName = AppSession.userName))
+                if (!existingNames.contains(entry.mealName)) {
+                    repository.add(entry.copy(id = 0, userName = AppSession.userName))
+                }
             }
             if (entries.isNotEmpty()) {
                 refreshMealEntries(entries.first().date)
@@ -94,9 +102,14 @@ class MealEntryViewModel(
 
     fun copyEntries(fromUser: String, fromDate: String, toDate: String, onComplete: (() -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
-            val entries = repository.getByDate(fromDate, fromUser)
-            entries.forEach { entry ->
-                repository.add(entry.copy(id = 0, userName = AppSession.userName, date = toDate))
+            val sourceEntries = repository.getByDate(fromDate, fromUser)
+            val existingEntries = repository.getByDate(toDate, AppSession.userName)
+            val existingNames = existingEntries.map { it.mealName }.toSet()
+
+            sourceEntries.forEach { entry ->
+                if (!existingNames.contains(entry.mealName)) {
+                    repository.add(entry.copy(id = 0, userName = AppSession.userName, date = toDate))
+                }
             }
             refreshMealEntries(toDate)
             onComplete?.let { withContext(Dispatchers.Main) { it() } }
