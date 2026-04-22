@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.abs
 
+import com.primecut.theprimecut.ui.theme.*
+
 @Composable
 fun MultiMacroProgressCircle(
     caloriesCurrent: Float,
@@ -37,11 +39,11 @@ fun MultiMacroProgressCircle(
     spacing: Dp = 6.dp
 ) {
     val macros = listOf(
-        MacroData("Calories", caloriesCurrent, caloriesGoal, Color(0xFF6750A4)), // Primary
-        MacroData("Protein", proteinCurrent, proteinGoal, Color(0xFFE91E63)), // Pink
-        MacroData("Carbs", carbsCurrent, carbsGoal, Color(0xFF03A9F4)), // Blue
-        MacroData("Fat", fatCurrent, fatGoal, Color(0xFFFFC107)), // Amber
-        MacroData("Fiber", fiberCurrent, fiberGoal, Color(0xFF4CAF50)) // Green
+        MacroData("Calories", caloriesCurrent, caloriesGoal, macroPurple), 
+        MacroData("Protein", proteinCurrent, proteinGoal, macroPink), 
+        MacroData("Carbs", carbsCurrent, carbsGoal, macroBlue), 
+        MacroData("Fat", fatCurrent, fatGoal, macroAmber), 
+        MacroData("Fiber", fiberCurrent, fiberGoal, macroGreen)
     )
 
     Box(
@@ -75,28 +77,7 @@ fun MultiMacroProgressCircle(
             }
         }
 
-        // Center Text (Mainly for Calories)
-        val remaining = caloriesGoal - caloriesCurrent
-        val isOverLimit = caloriesCurrent > caloriesGoal
-        
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = abs(remaining).toInt().toString(),
-                style = MaterialTheme.typography.headlineLarge.copy(
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 36.sp
-                ),
-                color = if (isOverLimit) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
-            )
-            Text(
-                text = if (isOverLimit) "Over kcal" else "Left kcal",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        // Center text is now handled by the caller to allow better customization
     }
 }
 

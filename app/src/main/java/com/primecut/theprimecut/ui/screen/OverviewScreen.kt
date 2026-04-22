@@ -42,6 +42,8 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
+import com.primecut.theprimecut.ui.theme.*
+
 @Composable
 fun OverviewScreen(
     currentProfile: UserProfile? = null,
@@ -415,7 +417,7 @@ fun DayCell(
                     val color = when {
                         isSelected -> MaterialTheme.colorScheme.onPrimary
                         totalCals > profile.calorieGoal + 50 -> MaterialTheme.colorScheme.error
-                        totalCals < profile.calorieGoal - 150 -> MaterialTheme.colorScheme.tertiary
+                        totalCals < profile.calorieGoal - 150 -> macroAmber
                         else -> MaterialTheme.colorScheme.primary
                     }
                     Box(
@@ -531,7 +533,7 @@ fun DailyDetailSection(
                         val target = profile.calorieGoal
                         val color = when {
                             avgCals > target + 50 -> MaterialTheme.colorScheme.error
-                            avgCals < target - 150 -> MaterialTheme.colorScheme.tertiary
+                            avgCals < target - 150 -> macroAmber
                             else -> MaterialTheme.colorScheme.primary
                         }
                         

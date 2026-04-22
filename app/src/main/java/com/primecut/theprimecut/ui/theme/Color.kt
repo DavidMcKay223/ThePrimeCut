@@ -26,7 +26,13 @@ val surfaceVariantLight = Color(0xFFE7E0EC)
 val onSurfaceVariantLight = Color(0xFF49454F)
 val outlineLight = Color(0xFF79747E)
 
-// MyFitnessPal specific branding colors
+// Modern Macro Palette
+val macroPurple = Color(0xFF6750A4)
+val macroPink = Color(0xFFE91E63)
+val macroBlue = Color(0xFF03A9F4)
+val macroAmber = Color(0xFFFFC107)
+val macroGreen = Color(0xFF4CAF50)
+
 val mfpBlue = Color(0xFF0066EE)
 val mfpTeal = Color(0xFF00A3AD)
 val mfpGreen = Color(0xFF4CAF50)

@@ -44,6 +44,8 @@ import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Locale
 
+import com.primecut.theprimecut.ui.theme.*
+
 @Composable
 fun MacroProgressView(
     onProfileClick: () -> Unit = {},
@@ -118,114 +120,9 @@ fun MacroProgressView(
                     }
                 }
 
-                // Main Calorie & Macro Card
-                item {
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(24.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "Daily Progress",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            
-                            Spacer(modifier = Modifier.height(24.dp))
-
-                            MultiMacroProgressCircle(
-                                caloriesCurrent = summary.calories,
-                                caloriesGoal = userProfile.calorieGoal,
-                                proteinCurrent = summary.protein,
-                                proteinGoal = userProfile.proteinGoal,
-                                carbsCurrent = summary.carbs,
-                                carbsGoal = userProfile.carbsGoal,
-                                fatCurrent = summary.fats,
-                                fatGoal = userProfile.fatGoal,
-                                fiberCurrent = summary.fiber,
-                                fiberGoal = userProfile.fiberGoal,
-                                size = 240.dp,
-                                strokeWidth = 10.dp,
-                                spacing = 8.dp
-                            )
-
-                            Spacer(modifier = Modifier.height(24.dp))
-
-                            // Legend for the circle
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceAround
-                            ) {
-                                LegendItem("Prot", Color(0xFFE91E63))
-                                LegendItem("Carb", Color(0xFF03A9F4))
-                                LegendItem("Fat", Color(0xFFFFC107))
-                                LegendItem("Fib", Color(0xFF4CAF50))
-                            }
-                        }
-                    }
-                }
-
-                // Nutrient Details Section
-                item {
-                    Text(
-                        text = "Macro Breakdown",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = 4.dp)
-                    )
-                    
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            MacroRow("Protein", summary.protein, userProfile.proteinGoal, Color(0xFFE91E63))
-                            MacroRow("Carbs", summary.carbs, userProfile.carbsGoal, Color(0xFF03A9F4))
-                            MacroRow("Fat", summary.fats, userProfile.fatGoal, Color(0xFFFFC107))
-                            MacroRow("Fiber", summary.fiber, userProfile.fiberGoal, Color(0xFF4CAF50))
-                        }
-                    }
-                }
-
-                // Daily Standings Section (7-Day Consistency)
+                // Daily Standings Section (7-Day Consistency) - Now at the Top
                 item {
                     Column {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "7-Day Activity",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(horizontal = 4.dp)
-                            )
-                            Icon(
-                                imageVector = Icons.Default.Analytics,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                        
-                        Spacer(modifier = Modifier.height(16.dp))
-                        
                         // Calculate week bounds: Start of current week (Sunday) to End of week (Saturday)
                         val today = LocalDate.now()
                         val currentSunday = today.minusDays(today.dayOfWeek.value % 7.toLong())
@@ -270,6 +167,73 @@ fun MacroProgressView(
                         }
                     }
                 }
+
+                // Main Calorie & Macro Card
+                item {
+                    val calorieGoal = profile?.calorieGoal ?: 2000f
+                    val remaining = calorieGoal - summary.calories
+                    val isOverLimit = summary.calories > calorieGoal
+
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(24.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            // Top: Circle
+                            Box(contentAlignment = Alignment.Center) {
+                                MultiMacroProgressCircle(
+                                    caloriesCurrent = summary.calories,
+                                    caloriesGoal = calorieGoal,
+                                    proteinCurrent = summary.protein,
+                                    proteinGoal = profile?.proteinGoal ?: 150f,
+                                    carbsCurrent = summary.carbs,
+                                    carbsGoal = profile?.carbsGoal ?: 200f,
+                                    fatCurrent = summary.fats,
+                                    fatGoal = profile?.fatGoal ?: 65f,
+                                    fiberCurrent = summary.fiber,
+                                    fiberGoal = profile?.fiberGoal ?: 30f,
+                                    size = 200.dp,
+                                    strokeWidth = 8.dp,
+                                    spacing = 6.dp
+                                )
+                                
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Text(
+                                        text = "${kotlin.math.abs(remaining).toInt()}",
+                                        style = MaterialTheme.typography.headlineMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = if (isOverLimit) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                                    )
+                                    Text(
+                                        text = if (isOverLimit) "over kcal" else "left kcal",
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(24.dp))
+
+                            // Bottom: Breakdown
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                CompactMacroRow("Protein", summary.protein, profile?.proteinGoal ?: 150f, macroPink)
+                                CompactMacroRow("Carbs", summary.carbs, profile?.carbsGoal ?: 200f, macroBlue)
+                                CompactMacroRow("Fat", summary.fats, profile?.fatGoal ?: 65f, macroAmber)
+                                CompactMacroRow("Fiber", summary.fiber, profile?.fiberGoal ?: 30f, macroGreen)
+                            }
+                        }
+                    }
+                }
             }
         } else {
             Box(
@@ -279,6 +243,28 @@ fun MacroProgressView(
                 CircularProgressIndicator(strokeWidth = 3.dp, color = MaterialTheme.colorScheme.primary)
             }
         }
+    }
+}
+
+@Composable
+fun CompactMacroRow(label: String, current: Float, goal: Float, color: Color) {
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(label, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
+            Text("${current.toInt()} / ${goal.toInt()}g", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        val progress = if (goal > 0) (current / goal).coerceIn(0f, 1f) else 0f
+        Spacer(modifier = Modifier.height(2.dp))
+        LinearProgressIndicator(
+            progress = { progress },
+            modifier = Modifier.fillMaxWidth().height(4.dp).clip(CircleShape),
+            color = color,
+            trackColor = color.copy(alpha = 0.1f)
+        )
     }
 }
 
