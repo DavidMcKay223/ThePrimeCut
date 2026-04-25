@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Fastfood
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -30,6 +31,7 @@ import kotlin.math.roundToInt
 @Composable
 fun FoodItemCard(
     foodItem: FoodItem,
+    isHistorical: Boolean = false,
     remainingCalories: Float? = null,
     onLogClick: (FoodItem, Float) -> Unit = { _, _ -> }
 ) {
@@ -102,15 +104,25 @@ fun FoodItemCard(
                         .align(Alignment.BottomStart)
                         .padding(12.dp)
                 ) {
-                    foodItem.groupName?.let {
-                        Text(
-                            text = it.uppercase(),
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontWeight = FontWeight.ExtraBold,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f),
-                                letterSpacing = 1.2.sp
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        if (isHistorical) {
+                            Icon(
+                                imageVector = Icons.Default.History,
+                                contentDescription = "Historical",
+                                modifier = Modifier.size(14.dp).padding(end = 4.dp),
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f)
                             )
-                        )
+                        }
+                        foodItem.groupName?.let {
+                            Text(
+                                text = it.uppercase(),
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    fontWeight = FontWeight.ExtraBold,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f),
+                                    letterSpacing = 1.2.sp
+                                )
+                            )
+                        }
                     }
                     Text(
                         text = foodItem.recipeName,

@@ -10,7 +10,7 @@ class ViewModelFactory(private val container: AppContainer) : ViewModelProvider.
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(FoodItemViewModel::class.java) -> {
-                FoodItemViewModel(container.foodItemRepository) as T
+                FoodItemViewModel(container.foodItemRepository, container.mealEntryRepository) as T
             }
             modelClass.isAssignableFrom(MealEntryViewModel::class.java) -> {
                 MealEntryViewModel(container.mealEntryRepository) as T

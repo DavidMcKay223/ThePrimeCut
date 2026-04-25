@@ -100,6 +100,24 @@ class MealEntryViewModel(
         }
     }
 
+    fun getEntriesForRange(start: String, end: String, userName: String, onResult: (List<MealEntry>) -> Unit) {
+        viewModelScope.launch {
+            val items = withContext(Dispatchers.IO) {
+                repository.getByDateRange(start, end, userName)
+            }
+            onResult(items)
+        }
+    }
+
+    fun getAllEntriesForUser(userName: String, onResult: (List<MealEntry>) -> Unit) {
+        viewModelScope.launch {
+            val items = withContext(Dispatchers.IO) {
+                repository.getAll(userName)
+            }
+            onResult(items)
+        }
+    }
+
     fun copyEntries(fromUser: String, fromDate: String, toDate: String, onComplete: (() -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             val sourceEntries = repository.getByDate(fromDate, fromUser)

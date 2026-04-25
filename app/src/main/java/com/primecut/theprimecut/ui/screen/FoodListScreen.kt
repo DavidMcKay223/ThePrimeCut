@@ -61,6 +61,10 @@ fun FoodListScreen(
     val selectedFilters by viewModel.selectedFilters.collectAsState()
     val brands by viewModel.brands.collectAsState()
     val groups by viewModel.groups.collectAsState()
+
+    LaunchedEffect(Unit) {
+        // No longer needed as ViewModel handles its own historical tracking
+    }
     
     val profile by userProfileViewModel.userProfile.collectAsState()
     val summary by macroViewModel.summary.collectAsState()
@@ -231,9 +235,10 @@ fun FoodListScreen(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = 32.dp)
         ) {
-            items(foodItems, key = { it.recipeName + it.brandType }) { item ->
+            items(foodItems, key = { it.item.recipeName + it.item.brandType }) { historicalItem ->
                 FoodItemCard(
-                    foodItem = item,
+                    foodItem = historicalItem.item,
+                    isHistorical = historicalItem.isHistorical,
                     remainingCalories = remainingCalories,
                     onLogClick = { food, multiplier ->
                         val today = LocalDate.now().toString()

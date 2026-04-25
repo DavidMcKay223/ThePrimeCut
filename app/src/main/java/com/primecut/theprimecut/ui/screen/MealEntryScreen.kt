@@ -2,6 +2,8 @@ package com.primecut.theprimecut.ui.screen
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,6 +36,7 @@ import com.primecut.theprimecut.data.model.FoodItem
 import com.primecut.theprimecut.data.model.MealEntry
 import com.primecut.theprimecut.data.model.UserProfile
 import com.primecut.theprimecut.ui.component.DropdownSelector
+import com.primecut.theprimecut.ui.component.InlineFoodSearch
 import com.primecut.theprimecut.ui.component.ResponsiveInputRow
 import com.primecut.theprimecut.ui.viewmodels.FoodItemViewModel
 import com.primecut.theprimecut.ui.viewmodels.MealEntryViewModel
@@ -236,15 +239,75 @@ fun MealEntryScreen(
             mealOrder.forEach { type ->
                 item(key = type) {
                     val entries = groupedEntries[type] ?: emptyList()
+                    val isSearchActive = activeMealType == type
+                    
                     MealSection(
                         title = type,
                         entries = entries,
                         onAddClick = { 
-                            activeMealType = type
-                            showFoodSearchSheet = true 
+                            if (activeMealType == type) {
+                                activeMealType = null
+                            } else {
+                                activeMealType = type
+                            }
                         },
                         onDeleteEntry = { mealEntryViewModel.deleteMealEntry(it) },
-                        onEntryClick = { editingEntry = it }
+                        onEntryClick = { editingEntry = it },
+                        inlineSearchContent = {
+                            AnimatedVisibility(
+                                visible = isSearchActive,
+                                enter = expandVertically(),
+                                exit = shrinkVertically()
+                            ) {
+                                InlineFoodSearch(
+                                    filteredFoodItems = foodItems,
+                                    recentEntries = mealEntries,
+                                    brands = brands,
+                                    groups = groups,
+                                    nameQuery = nameQuery,
+                                    onNameQueryChanged = { foodItemViewModel.onNameQueryChanged(it) },
+                                    brandQuery = brandQuery,
+                                    onBrandQueryChanged = { foodItemViewModel.onBrandQueryChanged(it) },
+                                    groupQuery = groupQuery,
+                                    onGroupQueryChanged = { foodItemViewModel.onGroupQueryChanged(it) },
+                                    selectedFilters = selectedFilters,
+                                    onToggleFilter = { foodItemViewModel.toggleFilter(it) },
+                                    onClearAllFilters = {
+                                        foodItemViewModel.onNameQueryChanged("")
+                                        foodItemViewModel.onBrandQueryChanged("")
+                                        foodItemViewModel.onGroupQueryChanged("")
+                                        selectedFilters.forEach { foodItemViewModel.toggleFilter(it) }
+                                    },
+                                    onFoodSelected = { historical ->
+                                        val food = historical.item
+                                        val dateObj = LocalDate.parse(selectedDate)
+                                        val dayOfWeek = dateObj.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }
+                                        
+                                        val entry = MealEntry(
+                                            userName = profile?.userName ?: "",
+                                            date = selectedDate,
+                                            day = dayOfWeek,
+                                            mealType = type,
+                                            mealName = food.recipeName,
+                                            groupName = food.groupName,
+                                            portionEaten = food.servings,
+                                            measurementServings = food.measurementServings,
+                                            measurementType = food.measurementType,
+                                            calories = food.totalCalories,
+                                            protein = food.totalProtein,
+                                            carbs = food.totalCarbs,
+                                            fats = food.totalFats,
+                                            fiber = food.totalFiber
+                                        )
+                                        mealEntryViewModel.addMealEntries(listOf(entry))
+                                        Toast.makeText(context, "${food.recipeName} added", Toast.LENGTH_SHORT).show()
+                                        // Keep search open or close it? User said "easier", maybe keep it open for multiple adds?
+                                        // But usually one add at a time is fine. Let's keep it open for "easier" multiple entries.
+                                    },
+                                    onClose = { activeMealType = null }
+                                )
+                            }
+                        }
                     )
                 }
             }
@@ -256,7 +319,7 @@ fun MealEntryScreen(
                 containerColor = MaterialTheme.colorScheme.surface
             ) {
                 val entry = editingEntry!!
-                val foodItem = foodItems.find { it.recipeName == entry.mealName }
+                val foodItem = foodItems.find { it.item.recipeName == entry.mealName }?.item
                 val baseServings = foodItem?.servings ?: 1f
                 var currentMultiplier by remember { mutableFloatStateOf(entry.portionEaten / baseServings) }
 
@@ -385,7 +448,7 @@ fun MealEntryScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdvancedFoodSelectionSheet(
-    foodItems: List<FoodItem>,
+    foodItems: List<com.primecut.theprimecut.ui.viewmodels.FoodItemViewModel.HistoricalFoodItem>,
     nameQuery: String,
     brandQuery: String,
     groupQuery: String,
@@ -405,7 +468,7 @@ fun AdvancedFoodSelectionSheet(
     var selectedPortions by remember { mutableStateOf(mapOf<String, Float>()) }
     var selectedPreviewIds by remember { mutableStateOf(setOf<Int>()) }
 
-    val selectedItems = foodItems.filter { selectedPortions.containsKey(it.recipeName) }
+    val selectedItems = foodItems.filter { selectedPortions.containsKey(it.item.recipeName) }
     var showFilters by remember { mutableStateOf(false) }
     var itemToAdjust by remember { mutableStateOf<FoodItem?>(null) }
 
@@ -637,11 +700,25 @@ fun AdvancedFoodSelectionSheet(
                 item { Text("All Foods", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary) }
             }
 
-            items(foodItems) { food ->
+            items(foodItems) { historical ->
+                val food = historical.item
+                val isHistorical = historical.isHistorical
                 val isSelected = selectedPortions.containsKey(food.recipeName)
                 val currentPortion = selectedPortions[food.recipeName] ?: 1.0f
                 ListItem(
-                    headlineContent = { Text(food.recipeName, fontWeight = FontWeight.Bold) },
+                    headlineContent = { 
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            if (isHistorical) {
+                                Icon(
+                                    imageVector = Icons.Default.History,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(14.dp).padding(end = 4.dp),
+                                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+                                )
+                            }
+                            Text(food.recipeName, fontWeight = FontWeight.Bold)
+                        }
+                    },
                     supportingContent = { 
                         if (isSelected) {
                             Column {
@@ -687,7 +764,8 @@ fun AdvancedFoodSelectionSheet(
         if (totalSelectedCount > 0) {
             Button(
                 onClick = {
-                    val searchEntries = selectedItems.map { food ->
+                    val searchEntries = selectedItems.map { historical ->
+                        val food = historical.item
                         val portion = selectedPortions[food.recipeName] ?: 1.0f
                         MealEntry(
                             userName = "", 
@@ -806,7 +884,8 @@ fun MealSection(
     entries: List<MealEntry>,
     onAddClick: () -> Unit,
     onDeleteEntry: (MealEntry) -> Unit,
-    onEntryClick: (MealEntry) -> Unit
+    onEntryClick: (MealEntry) -> Unit,
+    inlineSearchContent: @Composable (() -> Unit)? = null
 ) {
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
         Row(
@@ -865,6 +944,8 @@ fun MealSection(
                         )
                     }
                 }
+
+                inlineSearchContent?.invoke()
             }
         }
     }

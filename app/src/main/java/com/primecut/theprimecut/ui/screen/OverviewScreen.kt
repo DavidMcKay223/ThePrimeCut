@@ -137,7 +137,7 @@ fun OverviewScreen(
                     selectedDate = selectedDate,
                     currentMonth = currentMonth,
                     allEntries = allUsersEntries,
-                    foodItems = allFoodItems
+                    foodItems = allFoodItems.map { it.item }
                 )
             }
         }
