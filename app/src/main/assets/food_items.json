@@ -6006,7 +6006,7 @@
   {
     "recipeName": "Strawberry",
     "brandType": "Generic",
-    "groupName": "Berries",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 50,
     "measurementServings": 1.0,
@@ -6025,7 +6025,7 @@
   {
     "recipeName": "Blueberry",
     "brandType": "Generic",
-    "groupName": "Berries",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 85,
     "measurementServings": 1.0,
@@ -6044,7 +6044,7 @@
   {
     "recipeName": "Raspberry",
     "brandType": "Generic",
-    "groupName": "Berries",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 65,
     "measurementServings": 1.0,
@@ -6063,7 +6063,7 @@
   {
     "recipeName": "Blackberry",
     "brandType": "Generic",
-    "groupName": "Berries",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 62,
     "measurementServings": 1.0,
@@ -6082,7 +6082,7 @@
   {
     "recipeName": "Cranberry",
     "brandType": "Generic",
-    "groupName": "Berries",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 50,
     "measurementServings": 1.0,
@@ -6101,7 +6101,7 @@
   {
     "recipeName": "Lemon",
     "brandType": "Generic",
-    "groupName": "Citrus",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 17,
     "measurementServings": 1.0,
@@ -6120,7 +6120,7 @@
   {
     "recipeName": "Lime",
     "brandType": "Generic",
-    "groupName": "Citrus",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 20,
     "measurementServings": 1.0,
@@ -6139,7 +6139,7 @@
   {
     "recipeName": "Grapefruit",
     "brandType": "Generic",
-    "groupName": "Citrus",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 52,
     "measurementServings": 1.0,
@@ -6158,7 +6158,7 @@
   {
     "recipeName": "Tangerine",
     "brandType": "Generic",
-    "groupName": "Citrus",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 47,
     "measurementServings": 1.0,
@@ -6177,7 +6177,7 @@
   {
     "recipeName": "Clementine",
     "brandType": "Generic",
-    "groupName": "Citrus",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 35,
     "measurementServings": 1.0,
@@ -6291,7 +6291,7 @@
   {
     "recipeName": "Lettuce",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 10,
     "measurementServings": 1.0,
@@ -6310,7 +6310,7 @@
   {
     "recipeName": "Spinach",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 7,
     "measurementServings": 1.0,
@@ -6329,7 +6329,7 @@
   {
     "recipeName": "Kale",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 33,
     "measurementServings": 1.0,
@@ -6348,7 +6348,7 @@
   {
     "recipeName": "Arugula",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 5,
     "measurementServings": 1.0,
@@ -6367,7 +6367,7 @@
   {
     "recipeName": "Cabbage",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 22,
     "measurementServings": 1.0,
@@ -6386,7 +6386,7 @@
   {
     "recipeName": "Collard Greens",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 49,
     "measurementServings": 1.0,
@@ -6405,7 +6405,7 @@
   {
     "recipeName": "Broccoli",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 31,
     "measurementServings": 1.0,
@@ -6424,7 +6424,7 @@
   {
     "recipeName": "Cauliflower",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 25,
     "measurementServings": 1.0,
@@ -6443,7 +6443,7 @@
   {
     "recipeName": "Brussels Sprouts",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 38,
     "measurementServings": 1.0,
@@ -6462,7 +6462,7 @@
   {
     "recipeName": "Carrot",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 52,
     "measurementServings": 1.0,
@@ -6481,7 +6481,7 @@
   {
     "recipeName": "Potato",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 130,
     "measurementServings": 1.0,
@@ -6500,7 +6500,7 @@
   {
     "recipeName": "Sweet Potato",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 103,
     "measurementServings": 1.0,
@@ -6519,7 +6519,7 @@
   {
     "recipeName": "Yam",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 118,
     "measurementServings": 1.0,
@@ -6538,7 +6538,7 @@
   {
     "recipeName": "Beet",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 44,
     "measurementServings": 1.0,
@@ -6557,7 +6557,7 @@
   {
     "recipeName": "Radish",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 19,
     "measurementServings": 1.0,
@@ -6576,7 +6576,7 @@
   {
     "recipeName": "Turnip",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 34,
     "measurementServings": 1.0,
@@ -6595,7 +6595,7 @@
   {
     "recipeName": "Onion",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 44,
     "measurementServings": 1.0,
@@ -6614,7 +6614,7 @@
   {
     "recipeName": "Garlic",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 4,
     "measurementServings": 1.0,
@@ -6633,7 +6633,7 @@
   {
     "recipeName": "Shallot",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 7,
     "measurementServings": 1.0,
@@ -6652,7 +6652,7 @@
   {
     "recipeName": "Leek",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 54,
     "measurementServings": 1.0,
@@ -6671,7 +6671,7 @@
   {
     "recipeName": "Green Onion",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 5,
     "measurementServings": 1.0,
@@ -6690,7 +6690,7 @@
   {
     "recipeName": "Green Beans",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 31,
     "measurementServings": 1.0,
@@ -6709,7 +6709,7 @@
   {
     "recipeName": "Peas",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 118,
     "measurementServings": 1.0,
@@ -6728,7 +6728,7 @@
   {
     "recipeName": "Edamame",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 120,
     "measurementServings": 1.0,
@@ -6747,7 +6747,7 @@
   {
     "recipeName": "Okra",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 33,
     "measurementServings": 1.0,
@@ -6766,7 +6766,7 @@
   {
     "recipeName": "Zucchini",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 21,
     "measurementServings": 1.0,
@@ -6785,7 +6785,7 @@
   {
     "recipeName": "Cucumber",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 16,
     "measurementServings": 1.0,
@@ -6804,7 +6804,7 @@
   {
     "recipeName": "Pumpkin",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 30,
     "measurementServings": 1.0,
@@ -6823,7 +6823,7 @@
   {
     "recipeName": "Butternut Squash",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 82,
     "measurementServings": 1.0,
@@ -6842,7 +6842,7 @@
   {
     "recipeName": "Tomato",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 22,
     "measurementServings": 1.0,
@@ -6861,7 +6861,7 @@
   {
     "recipeName": "Bell Pepper",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 24,
     "measurementServings": 1.0,
@@ -6880,7 +6880,7 @@
   {
     "recipeName": "Celery",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 16,
     "measurementServings": 1.0,
@@ -6899,7 +6899,7 @@
   {
     "recipeName": "Eggplant",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 20,
     "measurementServings": 1.0,
@@ -6918,7 +6918,7 @@
   {
     "recipeName": "Corn",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 132,
     "measurementServings": 1.0,
@@ -6937,7 +6937,7 @@
   {
     "recipeName": "Mushroom",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 15,
     "measurementServings": 1.0,
@@ -6956,7 +6956,7 @@
   {
     "recipeName": "Asparagus",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 27,
     "measurementServings": 1.0,
@@ -6975,7 +6975,7 @@
   {
     "recipeName": "Artichoke",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 60,
     "measurementServings": 1.0,
@@ -6994,7 +6994,7 @@
   {
     "recipeName": "Avocado",
     "brandType": "Generic",
-    "groupName": "Vegetables",
+    "groupName": "Fruits & Vegetables",
     "servings": 1.0,
     "caloriesPerServing": 234,
     "measurementServings": 1.0,
@@ -7013,7 +7013,7 @@
   {
     "recipeName": "Beef",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 250,
     "measurementServings": 1.0,
@@ -7032,7 +7032,7 @@
   {
     "recipeName": "Ground Beef",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 240,
     "measurementServings": 1.0,
@@ -7051,7 +7051,7 @@
   {
     "recipeName": "Steak",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 230,
     "measurementServings": 1.0,
@@ -7070,7 +7070,7 @@
   {
     "recipeName": "Chicken Breast",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 165,
     "measurementServings": 1.0,
@@ -7089,7 +7089,7 @@
   {
     "recipeName": "Chicken Thigh",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 210,
     "measurementServings": 1.0,
@@ -7108,7 +7108,7 @@
   {
     "recipeName": "Salmon",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 206,
     "measurementServings": 1.0,
@@ -7127,7 +7127,7 @@
   {
     "recipeName": "Tuna",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 130,
     "measurementServings": 1.0,
@@ -7146,7 +7146,7 @@
   {
     "recipeName": "Eggs",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 70,
     "measurementServings": 1.0,
@@ -7203,7 +7203,7 @@
   {
     "recipeName": "Almond Milk",
     "brandType": "Generic",
-    "groupName": "Milk Alternatives",
+    "groupName": "Dairy & Eggs",
     "servings": 1.0,
     "caloriesPerServing": 30,
     "measurementServings": 1.0,
@@ -7222,7 +7222,7 @@
   {
     "recipeName": "White Rice",
     "brandType": "Generic",
-    "groupName": "Grains & Carbs",
+    "groupName": "Breads & Grains",
     "servings": 1.0,
     "caloriesPerServing": 205,
     "measurementServings": 1.0,
@@ -7241,7 +7241,7 @@
   {
     "recipeName": "Oats",
     "brandType": "Generic",
-    "groupName": "Grains & Carbs",
+    "groupName": "Breads & Grains",
     "servings": 1.0,
     "caloriesPerServing": 150,
     "measurementServings": 1.0,
@@ -7260,7 +7260,7 @@
   {
     "recipeName": "Hamburger",
     "brandType": "Generic",
-    "groupName": "Fast Food / Common Meals",
+    "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 250,
     "measurementServings": 1.0,
@@ -7279,7 +7279,7 @@
   {
     "recipeName": "Pizza",
     "brandType": "Generic",
-    "groupName": "Fast Food / Common Meals",
+    "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 285,
     "measurementServings": 1.0,
@@ -7298,7 +7298,7 @@
   {
     "recipeName": "French Fries",
     "brandType": "Generic",
-    "groupName": "Fast Food / Common Meals",
+    "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 365,
     "measurementServings": 1.0,
@@ -7317,7 +7317,7 @@
   {
     "recipeName": "Soda",
     "brandType": "Generic",
-    "groupName": "Drinks",
+    "groupName": "Beverages",
     "servings": 1.0,
     "caloriesPerServing": 150,
     "measurementServings": 1.0,
@@ -7374,7 +7374,7 @@
   {
     "recipeName": "Roast Beef",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 210,
     "measurementServings": 1.0,
@@ -7393,7 +7393,7 @@
   {
     "recipeName": "Beef Ribs",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 310,
     "measurementServings": 1.0,
@@ -7412,7 +7412,7 @@
   {
     "recipeName": "Beef Liver",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 135,
     "measurementServings": 1.0,
@@ -7431,7 +7431,7 @@
   {
     "recipeName": "Chicken Wing",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 220,
     "measurementServings": 1.0,
@@ -7450,7 +7450,7 @@
   {
     "recipeName": "Ground Chicken",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 190,
     "measurementServings": 1.0,
@@ -7469,7 +7469,7 @@
   {
     "recipeName": "Turkey Breast",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 120,
     "measurementServings": 1.0,
@@ -7488,7 +7488,7 @@
   {
     "recipeName": "Ground Turkey",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 170,
     "measurementServings": 1.0,
@@ -7507,7 +7507,7 @@
   {
     "recipeName": "Bacon",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 43,
     "measurementServings": 1.0,
@@ -7526,7 +7526,7 @@
   {
     "recipeName": "Ham",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 120,
     "measurementServings": 1.0,
@@ -7545,7 +7545,7 @@
   {
     "recipeName": "Pork Chop",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 210,
     "measurementServings": 1.0,
@@ -7564,7 +7564,7 @@
   {
     "recipeName": "Sausage",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 180,
     "measurementServings": 1.0,
@@ -7583,7 +7583,7 @@
   {
     "recipeName": "Pulled Pork",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 250,
     "measurementServings": 1.0,
@@ -7602,7 +7602,7 @@
   {
     "recipeName": "Shrimp",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 100,
     "measurementServings": 1.0,
@@ -7621,7 +7621,7 @@
   {
     "recipeName": "Crab",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 80,
     "measurementServings": 1.0,
@@ -7640,7 +7640,7 @@
   {
     "recipeName": "Lobster",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 90,
     "measurementServings": 1.0,
@@ -7659,7 +7659,7 @@
   {
     "recipeName": "Cod",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 90,
     "measurementServings": 1.0,
@@ -7678,7 +7678,7 @@
   {
     "recipeName": "Tilapia",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 110,
     "measurementServings": 1.0,
@@ -7697,7 +7697,7 @@
   {
     "recipeName": "Sardines",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 200,
     "measurementServings": 1.0,
@@ -7716,7 +7716,7 @@
   {
     "recipeName": "Lamb",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 280,
     "measurementServings": 1.0,
@@ -7735,7 +7735,7 @@
   {
     "recipeName": "Duck",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 230,
     "measurementServings": 1.0,
@@ -7754,7 +7754,7 @@
   {
     "recipeName": "Venison",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 150,
     "measurementServings": 1.0,
@@ -7773,7 +7773,7 @@
   {
     "recipeName": "Bison",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 140,
     "measurementServings": 1.0,
@@ -7792,7 +7792,7 @@
   {
     "recipeName": "Egg White",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 17,
     "measurementServings": 1.0,
@@ -7811,7 +7811,7 @@
   {
     "recipeName": "Egg Yolk",
     "brandType": "Generic",
-    "groupName": "Meats & Protein",
+    "groupName": "Meat & Seafood",
     "servings": 1.0,
     "caloriesPerServing": 55,
     "measurementServings": 1.0,
@@ -7925,7 +7925,7 @@
   {
     "recipeName": "Milk",
     "brandType": "Generic",
-    "groupName": "Milk",
+    "groupName": "Dairy & Eggs",
     "servings": 1.0,
     "caloriesPerServing": 150,
     "measurementServings": 1.0,
@@ -7944,7 +7944,7 @@
   {
     "recipeName": "Cheese",
     "brandType": "Generic",
-    "groupName": "Milk",
+    "groupName": "Dairy & Eggs",
     "servings": 1.0,
     "caloriesPerServing": 110,
     "measurementServings": 1.0,
@@ -7963,7 +7963,7 @@
   {
     "recipeName": "Yogurt",
     "brandType": "Generic",
-    "groupName": "Milk",
+    "groupName": "Yogurt",
     "servings": 1.0,
     "caloriesPerServing": 150,
     "measurementServings": 1.0,
@@ -7982,7 +7982,7 @@
   {
     "recipeName": "Butter",
     "brandType": "Generic",
-    "groupName": "Milk",
+    "groupName": "Dairy & Eggs",
     "servings": 1.0,
     "caloriesPerServing": 102,
     "measurementServings": 1.0,
@@ -8001,7 +8001,7 @@
   {
     "recipeName": "Cottage Cheese",
     "brandType": "Generic",
-    "groupName": "Milk",
+    "groupName": "Dairy & Eggs",
     "servings": 1.0,
     "caloriesPerServing": 110,
     "measurementServings": 1.0,
@@ -8020,7 +8020,7 @@
   {
     "recipeName": "Sour Cream",
     "brandType": "Generic",
-    "groupName": "Milk",
+    "groupName": "Dairy & Eggs",
     "servings": 1.0,
     "caloriesPerServing": 30,
     "measurementServings": 1.0,
@@ -8039,7 +8039,7 @@
   {
     "recipeName": "Cream Cheese",
     "brandType": "Generic",
-    "groupName": "Milk",
+    "groupName": "Dairy & Eggs",
     "servings": 1.0,
     "caloriesPerServing": 50,
     "measurementServings": 1.0,
@@ -8058,7 +8058,7 @@
   {
     "recipeName": "Ice Cream",
     "brandType": "Generic",
-    "groupName": "Desserts",
+    "groupName": "Dessert",
     "servings": 1.0,
     "caloriesPerServing": 210,
     "measurementServings": 1.0,
@@ -8077,7 +8077,7 @@
   {
     "recipeName": "Oat Milk",
     "brandType": "Generic",
-    "groupName": "Milk Alternatives",
+    "groupName": "Dairy & Eggs",
     "servings": 1.0,
     "caloriesPerServing": 120,
     "measurementServings": 1.0,
@@ -8096,7 +8096,7 @@
   {
     "recipeName": "Soy Milk",
     "brandType": "Generic",
-    "groupName": "Milk Alternatives",
+    "groupName": "Dairy & Eggs",
     "servings": 1.0,
     "caloriesPerServing": 80,
     "measurementServings": 1.0,
@@ -8115,7 +8115,7 @@
   {
     "recipeName": "Coconut Milk",
     "brandType": "Generic",
-    "groupName": "Milk Alternatives",
+    "groupName": "Dairy & Eggs",
     "servings": 1.0,
     "caloriesPerServing": 140,
     "measurementServings": 1.0,
@@ -8134,7 +8134,7 @@
   {
     "recipeName": "White Bread",
     "brandType": "Generic",
-    "groupName": "Grains & Carbs",
+    "groupName": "Breads & Grains",
     "servings": 1.0,
     "caloriesPerServing": 80,
     "measurementServings": 1.0,
@@ -8153,7 +8153,7 @@
   {
     "recipeName": "Wheat Bread",
     "brandType": "Generic",
-    "groupName": "Grains & Carbs",
+    "groupName": "Breads & Grains",
     "servings": 1.0,
     "caloriesPerServing": 70,
     "measurementServings": 1.0,
@@ -8172,7 +8172,7 @@
   {
     "recipeName": "Sourdough",
     "brandType": "Generic",
-    "groupName": "Grains & Carbs",
+    "groupName": "Breads & Grains",
     "servings": 1.0,
     "caloriesPerServing": 90,
     "measurementServings": 1.0,
@@ -8191,7 +8191,7 @@
   {
     "recipeName": "Bagel",
     "brandType": "Generic",
-    "groupName": "Grains & Carbs",
+    "groupName": "Breads & Grains",
     "servings": 1.0,
     "caloriesPerServing": 280,
     "measurementServings": 1.0,
@@ -8210,7 +8210,7 @@
   {
     "recipeName": "Brown Rice",
     "brandType": "Generic",
-    "groupName": "Grains & Carbs",
+    "groupName": "Breads & Grains",
     "servings": 1.0,
     "caloriesPerServing": 215,
     "measurementServings": 1.0,
@@ -8229,7 +8229,7 @@
   {
     "recipeName": "Quinoa",
     "brandType": "Generic",
-    "groupName": "Grains & Carbs",
+    "groupName": "Breads & Grains",
     "servings": 1.0,
     "caloriesPerServing": 220,
     "measurementServings": 1.0,
@@ -8248,7 +8248,7 @@
   {
     "recipeName": "Barley",
     "brandType": "Generic",
-    "groupName": "Grains & Carbs",
+    "groupName": "Breads & Grains",
     "servings": 1.0,
     "caloriesPerServing": 190,
     "measurementServings": 1.0,
@@ -8267,7 +8267,7 @@
   {
     "recipeName": "Spaghetti",
     "brandType": "Generic",
-    "groupName": "Grains & Carbs",
+    "groupName": "Breads & Grains",
     "servings": 1.0,
     "caloriesPerServing": 200,
     "measurementServings": 1.0,
@@ -8286,7 +8286,7 @@
   {
     "recipeName": "Granola",
     "brandType": "Generic",
-    "groupName": "Breakfast Cereals",
+    "groupName": "Breads & Grains",
     "servings": 1.0,
     "caloriesPerServing": 270,
     "measurementServings": 1.0,
@@ -8343,7 +8343,7 @@
   {
     "recipeName": "Cheeseburger",
     "brandType": "Generic",
-    "groupName": "Fast Food / Common Meals",
+    "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 300,
     "measurementServings": 1.0,
@@ -8362,7 +8362,7 @@
   {
     "recipeName": "Hot Dog",
     "brandType": "Generic",
-    "groupName": "Fast Food / Common Meals",
+    "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 150,
     "measurementServings": 1.0,
@@ -8381,7 +8381,7 @@
   {
     "recipeName": "Chicken Nuggets",
     "brandType": "Generic",
-    "groupName": "Fast Food / Common Meals",
+    "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 250,
     "measurementServings": 1.0,
@@ -8400,7 +8400,7 @@
   {
     "recipeName": "Lasagna",
     "brandType": "Generic",
-    "groupName": "Fast Food / Common Meals",
+    "groupName": "Fast Food",
     "servings": 1.0,
     "caloriesPerServing": 350,
     "measurementServings": 1.0,
@@ -8419,7 +8419,7 @@
   {
     "recipeName": "Taco",
     "brandType": "Generic",
-    "groupName": "Mexican",
+    "groupName": "Restaurant",
     "servings": 1.0,
     "caloriesPerServing": 170,
     "measurementServings": 1.0,
@@ -8438,7 +8438,7 @@
   {
     "recipeName": "Burrito",
     "brandType": "Generic",
-    "groupName": "Mexican",
+    "groupName": "Restaurant",
     "servings": 1.0,
     "caloriesPerServing": 450,
     "measurementServings": 1.0,
@@ -8457,7 +8457,7 @@
   {
     "recipeName": "Sushi",
     "brandType": "Generic",
-    "groupName": "Asian",
+    "groupName": "Restaurant",
     "servings": 1.0,
     "caloriesPerServing": 250,
     "measurementServings": 1.0,
