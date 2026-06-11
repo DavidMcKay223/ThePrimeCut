@@ -17,7 +17,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -45,8 +44,6 @@ import com.primecut.theprimecut.ui.viewmodels.ViewModelFactory
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,7 +78,7 @@ fun MealEntryScreen(
     
     var showDatePicker by remember { mutableStateOf(false) }
     var showCopyDayDialog by remember { mutableStateOf(false) }
-    
+
     if (showCopyDayDialog) {
         CopyDayDialog(
             allProfiles = allProfiles,
@@ -140,7 +137,6 @@ fun MealEntryScreen(
     }
 
     var activeMealType by remember { mutableStateOf<String?>(null) }
-
 
     var showFoodSearchSheet by remember { mutableStateOf(false) }
     var editingEntry by remember { mutableStateOf<MealEntry?>(null) }
@@ -244,12 +240,8 @@ fun MealEntryScreen(
                     MealSection(
                         title = type,
                         entries = entries,
-                        onAddClick = { 
-                            if (activeMealType == type) {
-                                activeMealType = null
-                            } else {
-                                activeMealType = type
-                            }
+                        onAddClick = {
+                            activeMealType = if(activeMealType == type) null else type
                         },
                         onDeleteEntry = { mealEntryViewModel.deleteMealEntry(it) },
                         onEntryClick = { editingEntry = it },
@@ -301,8 +293,6 @@ fun MealEntryScreen(
                                         )
                                         mealEntryViewModel.addMealEntries(listOf(entry))
                                         Toast.makeText(context, "${food.recipeName} added", Toast.LENGTH_SHORT).show()
-                                        // Keep search open or close it? User said "easier", maybe keep it open for multiple adds?
-                                        // But usually one add at a time is fine. Let's keep it open for "easier" multiple entries.
                                     },
                                     onClose = { activeMealType = null }
                                 )
@@ -352,6 +342,7 @@ fun MealEntryScreen(
                                 NutritionPreviewItem("Protein", (foodItem.totalProtein * currentMultiplier).toInt().toString() + "g")
                                 NutritionPreviewItem("Carbs", (foodItem.totalCarbs * currentMultiplier).toInt().toString() + "g")
                                 NutritionPreviewItem("Fat", (foodItem.totalFats * currentMultiplier).toInt().toString() + "g")
+                                NutritionPreviewItem("Fiber", (foodItem.totalFiber * currentMultiplier).toInt().toString() + "g")
                             }
                         }
                     }
@@ -389,16 +380,6 @@ fun MealEntryScreen(
         }
     }
 
-    val allUsersEntries by mealEntryViewModel.allUsersEntries.collectAsState()
-
-    LaunchedEffect(showFoodSearchSheet, allProfiles) {
-        if (showFoodSearchSheet) {
-            val end = LocalDate.now().toString()
-            val start = LocalDate.now().minusDays(30).toString()
-            mealEntryViewModel.loadAllUsersEntriesRange(start, end, allProfiles.map { it.userName })
-        }
-    }
-
     if (showFoodSearchSheet && activeMealType != null) {
         ModalBottomSheet(
             onDismissRequest = { 
@@ -417,8 +398,6 @@ fun MealEntryScreen(
                 selectedFilters = selectedFilters,
                 brands = brands,
                 groups = groups,
-                allProfiles = allProfiles,
-                allUsersEntries = allUsersEntries,
                 activeMealType = activeMealType,
                 onNameQueryChanged = { foodItemViewModel.onNameQueryChanged(it) },
                 onBrandQueryChanged = { foodItemViewModel.onBrandQueryChanged(it) },
@@ -448,15 +427,13 @@ fun MealEntryScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdvancedFoodSelectionSheet(
-    foodItems: List<com.primecut.theprimecut.ui.viewmodels.FoodItemViewModel.HistoricalFoodItem>,
+    foodItems: List<FoodItemViewModel.HistoricalFoodItem>,
     nameQuery: String,
     brandQuery: String,
     groupQuery: String,
     selectedFilters: Set<String>,
     brands: List<String>,
     groups: List<String>,
-    allProfiles: List<UserProfile>,
-    allUsersEntries: Map<String, List<MealEntry>> = emptyMap(),
     activeMealType: String? = null,
     onNameQueryChanged: (String) -> Unit,
     onBrandQueryChanged: (String) -> Unit,
@@ -473,29 +450,6 @@ fun AdvancedFoodSelectionSheet(
     var itemToAdjust by remember { mutableStateOf<FoodItem?>(null) }
 
     val totalSelectedCount = selectedPortions.size + selectedPreviewIds.size
-
-    val topEntriesByCategory = remember(allUsersEntries) {
-        val allEntries = allUsersEntries.values.flatten()
-        val mealTypeOrder = listOf("Breakfast", "Lunch", "Dinner", "Snack")
-        
-        allEntries.groupBy { it.mealType }
-            .mapValues { (_, entries) ->
-                entries.groupBy { it.mealName }
-                    .toList()
-                    .sortedByDescending { it.second.size }
-                    .take(5)
-                    .map { group ->
-                        // Return the most recent entry of this name to preserve its macros/portion
-                        group.second.first()
-                    }
-            }
-            .toList()
-            .filter { it.second.isNotEmpty() }
-            .sortedBy { (type, _) -> 
-                val index = mealTypeOrder.indexOf(type)
-                if (index == -1) 99 else index
-            }
-    }
 
     Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
         Row(
@@ -550,7 +504,6 @@ fun AdvancedFoodSelectionSheet(
                     TextButton(onClick = {
                         onBrandQueryChanged("")
                         onGroupQueryChanged("")
-                        // Clear all selected filters one by one since we don't have a clearAll method
                         selectedFilters.forEach { onToggleFilter(it) }
                     }) {
                         Text("Clear All", style = MaterialTheme.typography.labelSmall)
@@ -646,119 +599,6 @@ fun AdvancedFoodSelectionSheet(
                     }
                 }
             }
-
-            if (!isSearching && !showFilters) {
-                if (topEntriesByCategory.isNotEmpty()) {
-                    item {
-                        Text(
-                            "Frequently Logged (Last 30 Days)",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(vertical = 8.dp)
-                        )
-                    }
-                    topEntriesByCategory.forEach { (category, entries) ->
-                        item {
-                            Surface(
-                                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                                shape = RoundedCornerShape(8.dp),
-                                modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 4.dp)
-                            ) {
-                                Text(
-                                    category,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
-                                )
-                            }
-                        }
-                        items(entries) { entry ->
-                            val isSelected = selectedPreviewIds.contains(entry.id)
-                            ListItem(
-                                headlineContent = { Text(entry.mealName) },
-                                supportingContent = { Text("${entry.portionEaten}x • ${entry.calories.toInt()} kcal") },
-                                leadingContent = {
-                                    Icon(
-                                        imageVector = if (isSelected) Icons.Default.CheckCircle else Icons.Outlined.Circle,
-                                        contentDescription = null,
-                                        tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                },
-                                modifier = Modifier.clickable {
-                                    selectedPreviewIds = if (isSelected) {
-                                        selectedPreviewIds - entry.id
-                                    } else {
-                                        selectedPreviewIds + entry.id
-                                    }
-                                }
-                            )
-                        }
-                    }
-                    item { Spacer(Modifier.height(16.dp)) }
-                }
-                item { Text("All Foods", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary) }
-            }
-
-            items(foodItems) { historical ->
-                val food = historical.item
-                val isHistorical = historical.isHistorical
-                val isSelected = selectedPortions.containsKey(food.recipeName)
-                val currentPortion = selectedPortions[food.recipeName] ?: 1.0f
-                ListItem(
-                    headlineContent = { 
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            if (isHistorical) {
-                                Icon(
-                                    imageVector = Icons.Default.History,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(14.dp).padding(end = 4.dp),
-                                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
-                                )
-                            }
-                            Text(food.recipeName, fontWeight = FontWeight.Bold)
-                        }
-                    },
-                    supportingContent = { 
-                        if (isSelected) {
-                            Column {
-                                val portion = selectedPortions[food.recipeName] ?: 1.0f
-                                Text("Portion: ${currentPortion.toTwoDecimals()}x (${food.servings.toInt()}x ${food.measurementServings.toInt()} ${food.measurementType})")
-                                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    Text("${(food.totalCalories * portion).toInt()} kcal", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
-                                    Text("P: ${(food.totalProtein * portion).toInt()}g", style = MaterialTheme.typography.labelSmall)
-                                    Text("C: ${(food.totalCarbs * portion).toInt()}g", style = MaterialTheme.typography.labelSmall)
-                                    Text("F: ${(food.totalFats * portion).toInt()}g", style = MaterialTheme.typography.labelSmall)
-                                }
-                            }
-                        } else {
-                            Text("${food.brandType} • ${food.servings.toInt()}x ${food.measurementServings.toInt()} ${food.measurementType} • ${food.totalCalories.toInt()} kcal")
-                        }
-                    },
-                    leadingContent = {
-                        Icon(
-                            imageVector = if (isSelected) Icons.Default.CheckCircle else Icons.Outlined.Circle,
-                            contentDescription = null,
-                            tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    },
-                    trailingContent = {
-                        if (isSelected) {
-                            IconButton(onClick = { itemToAdjust = food }) {
-                                Icon(Icons.Default.Tune, contentDescription = "Adjust Portion", tint = MaterialTheme.colorScheme.primary)
-                    }
-                        }
-                    },
-                    modifier = Modifier.clickable {
-                        selectedPortions = if (isSelected) {
-                            selectedPortions - food.recipeName
-                        } else {
-                            selectedPortions + (food.recipeName to 1.0f)
-                        }
-                    }
-                )
-                HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.1f))
-            }
         }
 
         if (totalSelectedCount > 0) {
@@ -784,12 +624,7 @@ fun AdvancedFoodSelectionSheet(
                             fiber = food.totalFiber * portion
                         )
                     }
-                    val allPreselectedEntries = allUsersEntries.values.flatten()
-                    val previewSelectedEntries = allPreselectedEntries
-                        .filter { selectedPreviewIds.contains(it.id) }
-                        .distinctBy { it.id }
-
-                    onAddEntries(searchEntries + previewSelectedEntries)
+                    onAddEntries(searchEntries)
                 },
                 modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
                 shape = RoundedCornerShape(12.dp)
@@ -979,14 +814,13 @@ fun MealEntryRow(
 @Composable
 fun NutritionPortionSlider(
     foodItem: FoodItem?,
-    portion: Float, // Multiplier (1.0 = whole item)
+    portion: Float,
     onPortionChange: (Float) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val baseServings = foodItem?.servings ?: 1f
     val totalServings = portion * baseServings
-    
-    // Determine max range: at least 10 servings or 3x the default item size
+
     val maxServings = maxOf(baseServings * 3f, 10f)
     val steps = (maxServings / 0.25f).toInt() - 1
 
@@ -1026,6 +860,7 @@ fun NutritionPortionSlider(
                     NutritionPreviewItem("Protein", (foodItem.totalProtein * portion).toInt().toString() + "g")
                     NutritionPreviewItem("Carbs", (foodItem.totalCarbs * portion).toInt().toString() + "g")
                     NutritionPreviewItem("Fat", (foodItem.totalFats * portion).toInt().toString() + "g")
+                    NutritionPreviewItem("Fiber", (foodItem.totalFiber * portion).toInt().toString() + "g")
                 }
             }
         }

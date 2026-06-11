@@ -77,10 +77,10 @@ class MealEntryViewModel(
                 repository.getByDate(entries.first().date, AppSession.userName)
             } else emptyList()
             
-            val existingNames = existing.map { it.mealName }.toSet()
+            val existingNames = existing.map { it.mealName to it.mealType }.toSet()
 
             entries.forEach { entry ->
-                if (!existingNames.contains(entry.mealName)) {
+                if (!existingNames.contains(entry.mealName to entry.mealType)) {
                     repository.add(entry.copy(id = 0, userName = AppSession.userName))
                 }
             }
